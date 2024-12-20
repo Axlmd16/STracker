@@ -1,0 +1,39 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+virtual/
+
+# Cachés de Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Archivos y carpetas de herramientas de prueba y linting
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+coverage.*
+
+# Configuración de editores/IDEs
+.vscode/
+.idea/
+
+# Archivos generados por compilación
+build/
+dist/
+*.egg-info/
+
+# Archivos temporales del sistema operativo
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Logs y archivos temporales
+*.log
+*.tmp
+
+# Archivos específicos de FastAPI o frameworks
+alembic/
