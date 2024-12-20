@@ -37,3 +37,7 @@ Thumbs.db
 
 # Archivos específicos de FastAPI o frameworks
 alembic/
+
+#Archivo de la base de datos SQLite
+*.sqlite3
+*.db
