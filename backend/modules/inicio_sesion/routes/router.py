@@ -71,24 +71,26 @@ def cambiar_estado_cuenta(id: int, activar: bool):
 @router.post("/usuarios/", response_model=UsuarioResponse)
 def guardar_usuario(usuario: UsuarioCreate):
     try:
-        usr_found = uc.obtener_usuario_por_cedula(usuario.cedula)
-        if usr_found:
-            raise HTTPException(status_code=409, detail="La cedula ya se encuentra registrada")
-        
-        response = uc.crear_usuario(usuario)
-        
-        if response:
-            username = cc.generar_username(response)
-            cuenta = CuentaCreate(
-                username=username, 
-                password=response.cedula, 
-                usuario_id=response.id
-            )
-            response_cc = cc.crear_cuenta(cuenta)
-            
-            if response_cc:
-                return {"message": "Usuario y cuenta registrados correctamente", "data": response}
-        
+        # Validar usuario único
+        uc.validar_usuario_unico(usuario.cedula, usuario.email)
+
+        usuario_creado = uc.crear_usuario(usuario)
+        if not usuario_creado:
+            raise HTTPException(status_code=500, detail="Error al crear el usuario")
+
+        username = cc.generar_username(usuario_creado)
+
+        # Crear cuenta 
+        cuenta = CuentaCreate(
+            username=username,
+            password=usuario_creado.cedula,  
+            usuario_id=usuario_creado.id
+        )
+        cuenta_creada = cc.crear_cuenta(cuenta)
+        if not cuenta_creada:
+            raise HTTPException(status_code=500, detail="Error al crear la cuenta")
+
+        return {"message": "Usuario y cuenta registrados correctamente", "data": usuario_creado}
     except HTTPException as http_exc:
         raise http_exc
     except Exception as e:
@@ -122,4 +124,10 @@ def remover_usuario(id: int):
     else:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
+#* Obtener docentes ----------------------------------------------------------------------------------------------------
+@router.get("/docentes/")
+def get_docentes():
+    docentes = uc.obtener_docentes()
+    print(type(docentes))
+    return {"message": "All teachers", "data": docentes}
 

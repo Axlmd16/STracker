@@ -14,11 +14,13 @@
         "jwt-decode": "^4.0.0",
         "lucide-react": "^0.468.0",
         "react": "^18.3.1",
+        "react-data-table-component": "^7.6.2",
         "react-dom": "^18.3.1",
         "react-hook-form": "^7.54.1",
         "react-hot-toast": "^2.4.1",
         "react-router-dom": "^7.0.2",
-        "react-tooltip": "^5.28.0"
+        "react-tooltip": "^5.28.0",
+        "styled-components": "^6.1.13"
     },
     "devDependencies": {
         "@babel/core": "^7.26.0",
