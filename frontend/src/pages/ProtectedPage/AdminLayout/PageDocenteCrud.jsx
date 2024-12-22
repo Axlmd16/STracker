@@ -1,12 +1,13 @@
-import React, { useRef, useState } from "react";
-import TableDocente from "../../../components/Tables/TableDocente";
-import ModalForm from "../../../components/Modals/ModalForm";
-import DocenteForm from "../../../components/Forms/DocenteForm";
 import { Import, UserRoundPlus } from "lucide-react";
+import React, { useRef, useState } from "react";
+import DocenteForm from "../../../components/Forms/DocenteForm";
 import Modal from "../../../components/Modals/Modal";
+import ModalForm from "../../../components/Modals/ModalForm";
+import TableDocente from "../../../components/Tables/TableDocente";
 import ImportDocentePage from "./ImportDataPage";
 
 function PageDocenteCrud({ actions, store }) {
+    //* Referencias y estados
     const modalFormRef = useRef(null);
     const modalRef = useRef(null);
     const formRef = useRef(null);
@@ -45,18 +46,6 @@ function PageDocenteCrud({ actions, store }) {
         setData(row);
         setUpdate(true);
         modalFormRef.current.openModal();
-    };
-
-    //* Funcion para eliminar
-    const handleDelete = async (row) => {
-        try {
-            await actions.deleteDocente(row.id);
-            if (tableRef.current) {
-                await tableRef.current.reload();
-            }
-        } catch (error) {
-            console.log(error);
-        }
     };
 
     return (

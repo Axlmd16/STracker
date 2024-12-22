@@ -1,4 +1,13 @@
-import { Pencil, Trash2Icon } from "lucide-react";
+import {
+    IdCard,
+    Mail,
+    Pencil,
+    Phone,
+    Trash2Icon,
+    UsersRound,
+    LayoutGrid,
+    ListOrdered,
+} from "lucide-react";
 import React, {
     useEffect,
     useState,
@@ -10,6 +19,7 @@ import React, {
 import { toast } from "react-hot-toast";
 import CustomDataTable from "./CustomDataTable";
 import SearchBar from "../Navigation/search_bar";
+import Swal from "sweetalert2";
 
 const TableDocente = forwardRef(({ actions, handleUpdate }, ref) => {
     const [data, setData] = useState([]);
@@ -34,7 +44,6 @@ const TableDocente = forwardRef(({ actions, handleUpdate }, ref) => {
         fetchDocentes();
     }, [fetchDocentes]);
 
-    // Exponemos fetchDocentes para que se pueda llamar desde el padre
     useImperativeHandle(ref, () => ({
         reload: fetchDocentes,
     }));
@@ -58,42 +67,101 @@ const TableDocente = forwardRef(({ actions, handleUpdate }, ref) => {
         handleUpdate(row);
     };
 
+    //* Funcion para eliminar
+    async function handleDeleteClick(row) {
+        Swal.fire({
+            title: "Estás seguro?",
+            text: "No podrás revertir esto!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#8da579",
+            cancelButtonColor: "#ccb078",
+            confirmButtonText: "Sí, borrar!",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await actions.deleteDocente(row.id);
+                    fetchDocentes();
+                    toast.success("Docente eliminado correctamente");
+                } catch (error) {
+                    console.log(error);
+                    toast.error("Error al eliminar el docente");
+                }
+            }
+        });
+    }
+
     //* Columnas de la tabla
     const columns = useMemo(
         () => [
             {
-                name: "Nro.",
+                name: (
+                    <div className="flex justify-center">
+                        <ListOrdered className="mr-2" size={20} />
+                        <span>Nro</span>
+                    </div>
+                ),
                 selector: (row) => filteredData.indexOf(row) + 1,
                 sortable: true,
-                width: "150px",
+                width: "130px",
             },
             {
-                name: "Nombres",
+                name: (
+                    <div className="flex justify-center">
+                        <UsersRound className="mr-2" size={20} />
+                        <span>Nombres</span>
+                    </div>
+                ),
                 selector: (row) => row.nombres,
                 sortable: true,
             },
             {
-                name: "Apellidos",
+                name: (
+                    <div className="flex justify-center">
+                        <UsersRound className="mr-2" size={20} />
+                        <span>Apellidos</span>
+                    </div>
+                ),
                 selector: (row) => row.apellidos,
                 sortable: true,
             },
             {
-                name: "Cedula",
+                name: (
+                    <div className="flex justify-center">
+                        <IdCard className="mr-2" size={20} />
+                        <span>Cédula</span>
+                    </div>
+                ),
                 selector: (row) => row.cedula,
                 sortable: true,
             },
             {
-                name: "Email",
+                name: (
+                    <div className="flex justify-center">
+                        <Mail className="mr-2" size={20} />
+                        <span>Email</span>
+                    </div>
+                ),
                 selector: (row) => row.email,
                 sortable: true,
             },
             {
-                name: "Telefono",
+                name: (
+                    <div className="flex justify-center">
+                        <Phone className="mr-2" size={20} />
+                        <span>Telefono</span>
+                    </div>
+                ),
                 selector: (row) => row.telefono,
                 sortable: true,
             },
             {
-                name: "Acciones",
+                name: (
+                    <div className="flex justify-center">
+                        <LayoutGrid className="mr-2" size={20} />
+                        <span>Acciones</span>
+                    </div>
+                ),
                 cell: (row) => (
                     <div className="flex">
                         <button

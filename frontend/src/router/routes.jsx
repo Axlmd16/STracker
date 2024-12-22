@@ -1,20 +1,20 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "../pages/PublicPages/LandingPage";
-import LoginPage from "../pages/PublicPages/LoginPage";
-import HomeAdminPage from "../pages/ProtectedPage/AdminLayout/HomeAdminPage";
-import HomeDocentePage from "../pages/ProtectedPage/DocenteLayout/HomeDocentePage";
-import HomeEstudiantePage from "../pages/ProtectedPage/EstudianteLayout/HomeEstudiantePage";
-import ProtectedRoute from "../components/Navigation/ProtectedRoute";
-import Navbar from "../components/Navigation/navbar";
-import Sidebar from "../components/Navigation/Sidebar";
 import { Toaster } from "react-hot-toast";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
-    buttons_docente,
     buttons_admin,
+    buttons_docente,
     buttons_estudiante,
 } from "../assets/ButtonsNav/BtnsSidebar";
+import Navbar from "../components/Navigation/navbar";
+import ProtectedRoute from "../components/Navigation/ProtectedRoute";
+import Sidebar from "../components/Navigation/Sidebar";
+import HomeAdminPage from "../pages/ProtectedPage/AdminLayout/HomeAdminPage";
 import PageDocenteCrud from "../pages/ProtectedPage/AdminLayout/PageDocenteCrud";
+import HomeDocentePage from "../pages/ProtectedPage/DocenteLayout/HomeDocentePage";
+import HomeEstudiantePage from "../pages/ProtectedPage/EstudianteLayout/HomeEstudiantePage";
+import LandingPage from "../pages/PublicPages/LandingPage";
+import LoginPage from "../pages/PublicPages/LoginPage";
 
 function Rutas({ store, actions }) {
     const rol = store.access_role;
@@ -26,7 +26,7 @@ function Rutas({ store, actions }) {
                 {store.isAuthenticated && (
                     <>
                         <div className="z-50 w-full fixed top-0">
-                            <Navbar actions={actions} store={store} />
+                            <Navbar actions={actions} store={store} rol={rol} />
                         </div>
                         <div className="fixed left-0 top-16 h-full bg-gray-800">
                             <Sidebar

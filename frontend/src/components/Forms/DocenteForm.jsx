@@ -27,7 +27,7 @@ function DocenteForm({
             : actions.createDocente(data);
 
         toast.promise(promise, {
-            loading: "Cargando...",
+            loading: <span className="loading loading-spinner"></span>,
             success: update ? (
                 <b>Docente actualizado correctamente</b>
             ) : (

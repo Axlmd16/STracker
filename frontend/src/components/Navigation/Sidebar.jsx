@@ -21,7 +21,7 @@ function Sidebar({ buttons }) {
                     key={index}
                     id={`tooltip-${index}`}
                     anchorSelect={`[data-tooltip-id="tooltip-${index}"]`}
-                    place="top"
+                    place="right"
                 >
                     {button.tooltip}
                 </Tooltip>

@@ -18,7 +18,7 @@ const CustomDataTable = ({ columns, data, pending }) => {
     const customStyles = {
         headCells: {
             style: {
-                fontSize: "12px",
+                fontSize: "14px",
                 fontWeight: "bold",
                 textTransform: "uppercase",
                 color: "var(--text-primary)",
