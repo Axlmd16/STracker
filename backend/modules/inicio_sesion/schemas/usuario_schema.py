@@ -1,6 +1,6 @@
 
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
 
 
 class UsuarioBase(BaseModel):
@@ -10,7 +10,7 @@ class UsuarioBase(BaseModel):
     email: str
     telefono: Optional[str] = None
     cedula: str
-    rol: str
+    rol: Optional[str] = None
     
     class Config:
         from_attributes = True
@@ -30,5 +30,10 @@ class UsuarioInDB(UsuarioBase):
 class UsuarioResponse(BaseModel):
     message: str
     data: UsuarioBase
+    class Config:
+        from_attributes = True
+        
+class ImportarUsuariosRequest(BaseModel):
+    data: List[UsuarioBase]
     class Config:
         from_attributes = True

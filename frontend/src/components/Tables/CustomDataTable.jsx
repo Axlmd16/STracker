@@ -11,6 +11,9 @@ const CustomDataTable = ({ columns, data, pending }) => {
         selectAllRowsItemText: "Todos",
     };
 
+    // Establece 5 filas por página
+    const paginationPerPage = 5;
+
     // Estilos personalizados para la tabla
     const customStyles = {
         headCells: {
@@ -40,8 +43,8 @@ const CustomDataTable = ({ columns, data, pending }) => {
             columns={columns}
             data={data}
             pagination
+            paginationPerPage={paginationPerPage}
             highlightOnHover
-            selectableRows
             progressPending={pending}
             progressComponent={<h1>Cargando...</h1>}
             noDataComponent={

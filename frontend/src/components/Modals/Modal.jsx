@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import React, { useRef, forwardRef, useImperativeHandle } from "react";
 
 const Modal = forwardRef(({ children }, ref) => {
@@ -15,11 +16,13 @@ const Modal = forwardRef(({ children }, ref) => {
     return (
         <div>
             <dialog ref={modalRef} className="modal">
-                <div className="modal-box w-5/12 max-w-3xl text-gray-700">
-                    {children}
+                <div className="modal-box w-10/12 max-w-4xl text-gray-700">
                     <form method="dialog">
-                        <button className="btn">Close</button>
+                        <button className="btn absolute top-2 right-2 btn-sm">
+                            <X size={24} />
+                        </button>
                     </form>
+                    {children}
                 </div>
             </dialog>
         </div>

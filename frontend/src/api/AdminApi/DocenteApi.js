@@ -9,6 +9,17 @@ const DocenteApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data;
     },
 
+    importarDocentes: async (data) => {
+        const requestData = {
+            data: data,
+        };
+        console.log("Datos a enviar:", requestData);
+
+        const response = await api.post("/usuarios/importar", requestData);
+        console.log(response);
+        return response;
+    },
+
     updateDocente: async (id, docente) => {
         const response = await api.put(`/docentes/${id}`, docente);
         return response.data;

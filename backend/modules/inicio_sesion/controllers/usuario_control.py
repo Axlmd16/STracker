@@ -36,6 +36,20 @@ class UsuarioControl:
             db.commit()
             db.refresh(db_usuario)
             return db_usuario
+        
+    def importar_usuarios(self, usuarios):
+    
+        for usuario in usuarios:
+            self.validar_usuario_unico(usuario.cedula, usuario.email)
+
+        with SessionLocal() as db:
+            for usuario in usuarios:
+                print("entra")
+                db_usuario = Usuario(**usuario.dict())
+                db.add(db_usuario)
+            db.commit()
+            return True
+
 
     def actualizar_usuario(self, id: int, usuario):
         with SessionLocal() as db:
@@ -53,7 +67,7 @@ class UsuarioControl:
             else:
                 return False
             
-    def obtener_docentes(self):  # Retorna todos los docentes en formato JSON
+    def obtener_docentes(self):  
         with SessionLocal() as db:
             docentes = db.query(Usuario).filter(Usuario.rol == "DOCENTE").all()
             return docentes

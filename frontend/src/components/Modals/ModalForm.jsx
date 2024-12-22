@@ -11,7 +11,6 @@ const ModalForm = forwardRef(({ children, formRef }, ref) => {
         closeModal: () => {
             modalRef.current.close();
             if (formRef && formRef.current) {
-                // Este código ahora se asegura de que el formulario se resetee solo después de que el modal se haya cerrado
                 setTimeout(() => {
                     formRef.current.reset();
                 }, 300);
