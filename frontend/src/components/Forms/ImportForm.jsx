@@ -1,7 +1,7 @@
 import React from "react";
 import ExcelJS from "exceljs";
 
-function ImportForm({ onNext, onDataLoad }) {
+function ImportForm({ onNext, onDataLoad, modalRef }) {
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -56,6 +56,14 @@ function ImportForm({ onNext, onDataLoad }) {
                     />
                 </div>
             </form>
+            <div className="flex justify-end mt-6">
+                <button
+                    className="btn btn-warning mt-4"
+                    onClick={() => modalRef.current.closeModal()}
+                >
+                    Cancelar
+                </button>
+            </div>
         </div>
     );
 }

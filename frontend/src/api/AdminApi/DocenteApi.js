@@ -20,8 +20,8 @@ const DocenteApi = ({ getStore, getActions, setStore, api }) => ({
         return response;
     },
 
-    updateDocente: async (id, docente) => {
-        const response = await api.put(`/docentes/${id}`, docente);
+    updateDocente: async (id, data) => {
+        const response = await api.put(`/usuarios/${id}`, data);
         return response.data;
     },
 

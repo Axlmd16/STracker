@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from middlewares.verify_token_route import VerifyTokenRoute
 from modules.inicio_sesion.controllers.usuario_control import UsuarioControl
-from modules.inicio_sesion.schemas.usuario_schema import ImportarUsuariosRequest, UsuarioCreate, UsuarioResponse, UsuarioUpdate
+from modules.inicio_sesion.schemas.usuario_schema import ImportarUsuariosRequest, UsuarioBase, UsuarioCreate, UsuarioResponse, UsuarioUpdate
 from modules.inicio_sesion.controllers.cuenta_control import CuentaControl
 from modules.inicio_sesion.schemas.cuenta_schema import CuentaCreate, CuentaResponse, CuentaUpdate
 
@@ -111,7 +111,7 @@ def get_usuario(id: int):
 
 
 @router.put("/usuarios/{id}", response_model=UsuarioResponse)
-def editar_usuario(id: int, usuario: UsuarioUpdate):
+def editar_usuario(id: int, usuario: UsuarioBase):
     response = uc.actualizar_usuario(id, usuario)
     if not response:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")

@@ -54,7 +54,11 @@ function ImportDocentePage({ actions, store, modalRef }) {
             {!loading && (
                 <div>
                     {step === 0 && (
-                        <ImportForm onNext={handleNext} onDataLoad={setData} />
+                        <ImportForm
+                            onNext={handleNext}
+                            onDataLoad={setData}
+                            modalRef={modalRef}
+                        />
                     )}
                     {step === 1 && (
                         <TablePreviewDocente

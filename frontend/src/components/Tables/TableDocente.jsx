@@ -4,7 +4,8 @@ import { toast } from "react-hot-toast";
 import CustomDataTable from "./CustomDataTable";
 import SearchBar from "../Navigation/search_bar";
 
-const TableDocente = ({ actions }) => {
+const TableDocente = ({ actions, handleUpdate }) => {
+    // Recibimos la función desde el padre
     const [data, setData] = useState([]);
     const [pending, setPending] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
@@ -41,6 +42,16 @@ const TableDocente = ({ actions }) => {
         [data]
     );
 
+    //* Funcion para actualizar
+    const handleUpdateClick = (row) => {
+        handleUpdate(row);
+    };
+
+    //* Funcion para eliminar
+    const handleDeleteClick = (row) => {
+        console.log(row);
+    };
+
     //* Columnas de la tabla
     const columns = useMemo(
         () => [
@@ -64,7 +75,6 @@ const TableDocente = ({ actions }) => {
                 name: "Cedula",
                 selector: (row) => row.cedula,
                 sortable: true,
-                width: "200px",
             },
             {
                 name: "Email",
@@ -81,16 +91,16 @@ const TableDocente = ({ actions }) => {
                 cell: (row) => (
                     <div className="">
                         <button
-                            id="btn-update"
-                            className="btn-ghost btn btn-sm text-blue-700"
-                            onClick={() => console.log(row)}
+                            className="btn-ghost btn btn-sm btn-circle text-blue-700"
+                            onClick={() => handleUpdateClick(row)}
                         >
                             <Pencil size={20} />
                         </button>
                         <button
-                            id="btn-delete"
-                            className="btn-ghost btn btn-sm text-red-500"
-                            onClick={() => console.log(row)}
+                            className="btn-ghost btn btn-sm btn-circle mx-5 text-red-500"
+                            onClick={() => {
+                                handleDelete(row);
+                            }}
                         >
                             <Trash2Icon size={20} />
                         </button>

@@ -1,47 +1,77 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import ImputForm from "./Fields/ImputForm";
 import { IdCard, Mail, Phone, UserIcon } from "lucide-react";
 
-function DocenteForm({ update = false, data, actions, formRef, modalRef }) {
+function DocenteForm({
+    update = false,
+    row,
+    actions,
+    formRef,
+    modalRef,
+    handleCloseModal,
+}) {
     const {
         register,
         handleSubmit,
         formState: { errors },
         setValue,
         clearErrors,
+        watch,
     } = useForm();
 
+    //* Funcion para enviar los datos
     const onSubmit = async (data) => {
-        console.log(data);
-        try {
-            if (update) {
-                await actions.updateDocente(data);
-                toast.success("Docente actualizado correctamente");
-            } else {
-                await actions.createDocente(data);
-                toast.success("Docente registrado correctamente");
-            }
+        const promise = update
+            ? actions.updateDocente(row.id, { ...data, id: row.id })
+            : actions.createDocente(data);
 
+        toast.promise(promise, {
+            loading: "Cargando...",
+            success: update ? (
+                <b>Docente actualizado correctamente</b>
+            ) : (
+                <b>Docente registrado correctamente</b>
+            ),
+            error: (err) => {
+                if (err.response) {
+                    const { status, data } = err.response;
+                    if (status === 409) {
+                        return <b>{data.detail}</b>;
+                    } else {
+                        return <b>Error al registrar el docente</b>;
+                    }
+                }
+                return <b>Error inesperado al registrar el docente</b>;
+            },
+        });
+
+        try {
+            await promise;
             if (modalRef && modalRef.current) {
-                modalRef.current.closeModal();
+                handleCloseModal();
             }
         } catch (error) {
-            if (error.response) {
-                const { status, data } = error.response;
-
-                if (status === 409) {
-                    toast.error(data.detail);
-                } else {
-                    toast.error("Error al registrar el docente");
-                }
-            } else {
-                toast.error("Error inesperado al registrar el docente");
-            }
-
             console.log(error);
         }
+    };
+
+    //* Funcion para setear los datos
+    useEffect(() => {
+        if (update) {
+            setValue("nombres", row.nombres);
+            setValue("apellidos", row.apellidos);
+            setValue("email", row.email);
+            setValue("telefono", row.telefono);
+            setValue("cedula", row.cedula);
+        }
+    }, [update, row, setValue]);
+
+    //* Limpiar errores al cancelar
+    const handleCancel = () => {
+        clearErrors();
+        handleCloseModal();
     };
 
     return (
@@ -107,8 +137,15 @@ function DocenteForm({ update = false, data, actions, formRef, modalRef }) {
                     {...register("rol", { required: true })}
                 />
 
-                <div className="flex justify-center mt-6">
-                    <button type="submit" className="btn btn-primary">
+                <div className="flex justify-center mt-6 flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                    <button
+                        type="button"
+                        onClick={handleCancel}
+                        className="btn btn-warning"
+                    >
+                        Cancelar
+                    </button>
+                    <button type="submit" className="btn btn-success">
                         {update ? "Actualizar" : "Registrar"}
                     </button>
                 </div>
