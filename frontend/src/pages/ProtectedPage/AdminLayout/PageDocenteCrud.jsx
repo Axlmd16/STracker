@@ -10,6 +10,7 @@ function PageDocenteCrud({ actions, store }) {
     const modalFormRef = useRef(null);
     const modalRef = useRef(null);
     const formRef = useRef(null);
+    const tableRef = useRef(null);
     const [data, setData] = useState(null);
     const [update, setUpdate] = useState(false);
 
@@ -24,10 +25,19 @@ function PageDocenteCrud({ actions, store }) {
     };
 
     //* Funcion para cerrar el modal
-    const handleCloseModal = () => {
+    const handleCloseModal = async (triggerReset = true) => {
         setData(null);
         setUpdate(false);
-        modalFormRef.current.closeModal();
+
+        if (tableRef.current) {
+            await tableRef.current.reload();
+        }
+
+        if (triggerReset) {
+            if (modalFormRef.current) {
+                modalFormRef.current.closeModal();
+            }
+        }
     };
 
     //* Función para manejar la actualización
@@ -41,6 +51,9 @@ function PageDocenteCrud({ actions, store }) {
     const handleDelete = async (row) => {
         try {
             await actions.deleteDocente(row.id);
+            if (tableRef.current) {
+                await tableRef.current.reload();
+            }
         } catch (error) {
             console.log(error);
         }
@@ -76,7 +89,11 @@ function PageDocenteCrud({ actions, store }) {
 
             {/* Contenedor de la tabla */}
             <div className="flex-grow mt-6 bg-white p-6 rounded-md shadow-md overflow-x-auto">
-                <TableDocente actions={actions} handleUpdate={handleUpdate} />{" "}
+                <TableDocente
+                    ref={tableRef}
+                    actions={actions}
+                    handleUpdate={handleUpdate}
+                />{" "}
             </div>
 
             {/* Modal para crear y actualizar */}

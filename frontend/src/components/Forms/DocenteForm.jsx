@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { IdCard, Mail, Phone, UserIcon } from "lucide-react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import ImputForm from "./Fields/ImputForm";
-import { IdCard, Mail, Phone, UserIcon } from "lucide-react";
 
 function DocenteForm({
-    update = false,
+    update,
     row,
     actions,
     formRef,
@@ -18,7 +18,6 @@ function DocenteForm({
         formState: { errors },
         setValue,
         clearErrors,
-        watch,
     } = useForm();
 
     //* Funcion para enviar los datos
@@ -49,6 +48,7 @@ function DocenteForm({
 
         try {
             await promise;
+
             if (modalRef && modalRef.current) {
                 handleCloseModal();
             }

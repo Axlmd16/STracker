@@ -15,8 +15,9 @@ const ModalForm = forwardRef(({ children, formRef, handleCloseModal }, ref) => {
                     formRef.current.reset();
                 }, 300);
             }
+            // Llama a handleCloseModal, pero evita recursión
             if (handleCloseModal) {
-                handleCloseModal();
+                handleCloseModal(false); // Asegúrate de que esto no desencadene otra llamada a closeModal
             }
         },
     }));
@@ -25,8 +26,9 @@ const ModalForm = forwardRef(({ children, formRef, handleCloseModal }, ref) => {
         if (formRef && formRef.current) {
             formRef.current.reset();
         }
+        // Solo maneja el cierre, sin llamar de nuevo a closeModal
         if (handleCloseModal) {
-            handleCloseModal();
+            handleCloseModal(false);
         }
     };
 

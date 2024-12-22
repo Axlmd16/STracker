@@ -1,11 +1,17 @@
 import { Pencil, Trash2Icon } from "lucide-react";
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, {
+    useEffect,
+    useState,
+    useCallback,
+    useMemo,
+    forwardRef,
+    useImperativeHandle,
+} from "react";
 import { toast } from "react-hot-toast";
 import CustomDataTable from "./CustomDataTable";
 import SearchBar from "../Navigation/search_bar";
 
-const TableDocente = ({ actions, handleUpdate }) => {
-    // Recibimos la función desde el padre
+const TableDocente = forwardRef(({ actions, handleUpdate }, ref) => {
     const [data, setData] = useState([]);
     const [pending, setPending] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
@@ -28,6 +34,11 @@ const TableDocente = ({ actions, handleUpdate }) => {
         fetchDocentes();
     }, [fetchDocentes]);
 
+    // Exponemos fetchDocentes para que se pueda llamar desde el padre
+    useImperativeHandle(ref, () => ({
+        reload: fetchDocentes,
+    }));
+
     //* Filtrar data
     const handleSearch = useCallback(
         (e) => {
@@ -45,11 +56,6 @@ const TableDocente = ({ actions, handleUpdate }) => {
     //* Funcion para actualizar
     const handleUpdateClick = (row) => {
         handleUpdate(row);
-    };
-
-    //* Funcion para eliminar
-    const handleDeleteClick = (row) => {
-        console.log(row);
     };
 
     //* Columnas de la tabla
@@ -89,7 +95,7 @@ const TableDocente = ({ actions, handleUpdate }) => {
             {
                 name: "Acciones",
                 cell: (row) => (
-                    <div className="">
+                    <div className="flex">
                         <button
                             className="btn-ghost btn btn-sm btn-circle text-blue-700"
                             onClick={() => handleUpdateClick(row)}
@@ -99,7 +105,7 @@ const TableDocente = ({ actions, handleUpdate }) => {
                         <button
                             className="btn-ghost btn btn-sm btn-circle mx-5 text-red-500"
                             onClick={() => {
-                                handleDelete(row);
+                                handleDeleteClick(row);
                             }}
                         >
                             <Trash2Icon size={20} />
@@ -123,6 +129,6 @@ const TableDocente = ({ actions, handleUpdate }) => {
             />
         </div>
     );
-};
+});
 
 export default TableDocente;
