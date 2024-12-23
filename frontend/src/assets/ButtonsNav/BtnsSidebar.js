@@ -2,15 +2,19 @@ import { BookA, HeartHandshake, Key, UsersRound } from "lucide-react";
 import { React } from "react";
 
 export const buttons_admin = [
-    { icon: Key, href: "/home/admin/cuentas", tooltip: "Cuentas de usuarios" },
+    {
+        icon: Key,
+        href: "/home/administrador/cuentas",
+        tooltip: "Cuentas de usuarios",
+    },
     {
         icon: HeartHandshake,
-        href: "/home/admin/tests",
+        href: "/home/administrador/tests",
         tooltip: "Tests de estres",
     },
     {
         icon: UsersRound,
-        href: "/home/admin/docentes",
+        href: "/home/administrador/docentes",
         tooltip: "Docentes",
     },
 ];
@@ -18,7 +22,7 @@ export const buttons_admin = [
 export const buttons_docente = [
     {
         icon: UsersRound,
-        href: "/home/docente/estudiantes",
+        href: "/home/docente/asignatura/:id/estudiantes",
         tooltip: "Estudiantes",
     },
     {

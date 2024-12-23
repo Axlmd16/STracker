@@ -4,10 +4,8 @@ from modules.inicio_sesion.routes.router import router
 from modules.inicio_sesion.routes.auth_route import auth_router
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-import os
 
-dotenv_path = os.path.join(os.path.dirname(__file__), 'core', '.env')
-load_dotenv(dotenv_path)
+load_dotenv('.env')
 
 
 init_db()
@@ -16,6 +14,7 @@ app = FastAPI()
 
 origins = [
     "http://localhost:5173",
+    "http://localhost:5174",
 ]
 
 app.add_middleware(

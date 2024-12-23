@@ -2,7 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import React, { useEffect } from "react";
 import { Bell, Search } from "lucide-react";
 
-function Navbar({ actions, store }) {
+function Navbar({ actions, store, rol }) {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,7 +15,10 @@ function Navbar({ actions, store }) {
         <div className="navbar bg-base-100 shadow-lg px-4 fixed top-0 left-0 w-full z-[1000]">
             {/* Logo */}
             <div className="navbar-start">
-                <Link className="w-auto flex items-center" to="/home/docente">
+                <Link
+                    className="w-auto flex items-center"
+                    to={`/home/${rol ? rol.toLowerCase() : "default"}`}
+                >
                     <img
                         className="rounded-full shadow-lg w-12 h-12 mr-2"
                         src="/img/logo.png"

@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 from middlewares.verify_token_route import VerifyTokenRoute
 from modules.inicio_sesion.controllers.usuario_control import UsuarioControl
-from modules.inicio_sesion.schemas.usuario_schema import UsuarioCreate, UsuarioResponse, UsuarioUpdate
+from modules.inicio_sesion.schemas.usuario_schema import ImportarUsuariosRequest, UsuarioBase, UsuarioCreate, UsuarioResponse, UsuarioUpdate
 from modules.inicio_sesion.controllers.cuenta_control import CuentaControl
 from modules.inicio_sesion.schemas.cuenta_schema import CuentaCreate, CuentaResponse, CuentaUpdate
 
@@ -71,24 +72,26 @@ def cambiar_estado_cuenta(id: int, activar: bool):
 @router.post("/usuarios/", response_model=UsuarioResponse)
 def guardar_usuario(usuario: UsuarioCreate):
     try:
-        usr_found = uc.obtener_usuario_por_cedula(usuario.cedula)
-        if usr_found:
-            raise HTTPException(status_code=409, detail="La cedula ya se encuentra registrada")
-        
-        response = uc.crear_usuario(usuario)
-        
-        if response:
-            username = cc.generar_username(response)
-            cuenta = CuentaCreate(
-                username=username, 
-                password=response.cedula, 
-                usuario_id=response.id
-            )
-            response_cc = cc.crear_cuenta(cuenta)
-            
-            if response_cc:
-                return {"message": "Usuario y cuenta registrados correctamente", "data": response}
-        
+        # Validar usuario único
+        uc.validar_usuario_unico(usuario.cedula, usuario.email)
+
+        usuario_creado = uc.crear_usuario(usuario)
+        if not usuario_creado:
+            raise HTTPException(status_code=500, detail="Error al crear el usuario")
+
+        username = cc.generar_username(usuario_creado)
+
+        # Crear cuenta 
+        cuenta = CuentaCreate(
+            username=username,
+            password=usuario_creado.cedula,  
+            usuario_id=usuario_creado.id
+        )
+        cuenta_creada = cc.crear_cuenta(cuenta)
+        if not cuenta_creada:
+            raise HTTPException(status_code=500, detail="Error al crear la cuenta")
+
+        return {"message": "Usuario y cuenta registrados correctamente", "data": usuario_creado}
     except HTTPException as http_exc:
         raise http_exc
     except Exception as e:
@@ -108,7 +111,7 @@ def get_usuario(id: int):
 
 
 @router.put("/usuarios/{id}", response_model=UsuarioResponse)
-def editar_usuario(id: int, usuario: UsuarioUpdate):
+def editar_usuario(id: int, usuario: UsuarioBase):
     response = uc.actualizar_usuario(id, usuario)
     if not response:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
@@ -121,5 +124,24 @@ def remover_usuario(id: int):
         return {"message": f"Usuario con id: {id} eliminado correctamente"}
     else:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    
+@router.post("/usuarios/importar")
+def importar_usuarios(request: ImportarUsuariosRequest):
+    print(request.data)
+    try:
+        response = uc.importar_usuarios(request.data)
+        if response == False:
+            raise HTTPException(status_code=500, detail="Error al importar los usuarios")
+        return {"message": "Usuarios importados correctamente", "code": 200}
+    except HTTPException as http_exc:
+        raise http_exc
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
 
-
+#* Obtener docentes ----------------------------------------------------------------------------------------------------
+@router.get("/docentes/")
+def get_docentes():
+    docentes = uc.obtener_docentes()
+    return {"message": "All teachers", "data": docentes}

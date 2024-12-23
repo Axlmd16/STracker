@@ -6,7 +6,7 @@ class Grupo(Base):
     __tablename__ = "grupo"
     
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    nombre = Column(String, nullable=False)
+    nombre = Column(String(255), nullable=False)
     nro_estudiantes = Column(Integer, nullable=False)
     
     # Relación

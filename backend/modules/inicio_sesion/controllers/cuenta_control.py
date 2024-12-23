@@ -40,9 +40,23 @@ class CuentaControl:
                 return False
             
     def generar_username(self, usuario):
-        nombre = usuario.nombres.split(" ")[0]
-        apellido = usuario.apellidos.split(" ")[0]
-        return f"{nombre.lower()}.{apellido.lower()}@unl.edu.ec"
+        nombre = usuario.nombres.split(" ")[0]  # Primer nombre
+        apellido = usuario.apellidos.split(" ")[0]  # Primer apellido
+        
+        username = f"{nombre.lower()}.{apellido.lower()}@unl.edu.ec"
+        
+        with SessionLocal() as db:
+            cuenta_existente = db.query(Cuenta).filter(Cuenta.username == username).first()
+            
+            if cuenta_existente:
+                segundo_nombre = usuario.nombres.split(" ")[1] if len(usuario.nombres.split(" ")) > 1 else ""
+                if segundo_nombre:
+                    username = f"{nombre.lower()}.{segundo_nombre[0].lower()}.{apellido.lower()}@unl.edu.ec"
+                else:
+                    username = f"{nombre.lower()}.{apellido.lower()}1@unl.edu.ec"
+        
+        return username
+
     
     def cambiar_estado_cuenta(self, id: int, activar: bool):
         with SessionLocal() as db:
