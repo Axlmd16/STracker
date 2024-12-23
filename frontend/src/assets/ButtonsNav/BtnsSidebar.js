@@ -22,7 +22,7 @@ export const buttons_admin = [
 export const buttons_docente = [
     {
         icon: UsersRound,
-        href: "/home/docente/estudiantes",
+        href: "/home/docente/asignatura/:id/estudiantes",
         tooltip: "Estudiantes",
     },
     {
