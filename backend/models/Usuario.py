@@ -12,11 +12,11 @@ class Usuario(Base):
     __tablename__ = "usuario"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    nombres = Column(String, nullable=False)
-    apellidos = Column(String, nullable=False)
-    email = Column(String, unique=True, nullable=False)
-    telefono = Column(String, nullable=True)
-    cedula = Column(String, unique=True, index=True, nullable=False)
+    nombres = Column(String(255), nullable=False)
+    apellidos = Column(String(255), nullable=False)
+    email = Column(String(255), unique=True, nullable=False)
+    telefono = Column(String(255), nullable=True)
+    cedula = Column(String(255), unique=True, index=True, nullable=False)
     rol = Column(Enum_sql(RolEnum), nullable=False)
 
     cuenta = relationship("Cuenta", back_populates="usuario")
