@@ -2,7 +2,7 @@ import { ArrowLeft, ArrowRight, CircleX } from "lucide-react";
 import CustomDataTable from "./CustomDataTable";
 import React, { useMemo } from "react";
 
-function TablePreviewDocente({ data, onNext, onCancel, onBack }) {
+function TablePreviewUser({ data, onNext, onCancel, onBack }) {
     //* Columnas de la tabla
     const columns = useMemo(
         () => [
@@ -72,4 +72,4 @@ function TablePreviewDocente({ data, onNext, onCancel, onBack }) {
     );
 }
 
-export default TablePreviewDocente;
+export default TablePreviewUser;

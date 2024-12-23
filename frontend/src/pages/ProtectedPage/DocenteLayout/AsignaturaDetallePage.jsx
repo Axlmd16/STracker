@@ -10,7 +10,8 @@ import StressIndicators from "../../../components/Graphics/StressIndicators";
 
 function AsignaturaDetallePage({ actions, store }) {
     const { id } = useParams();
-    const [asignatura, setAsignatura] = useState([]);
+    const [asignatura, setAsignatura] = useState({});
+    const [loading, setLoading] = useState(true);
 
     //* Obtener datos de la asignatura
     useEffect(() => {
@@ -22,6 +23,8 @@ function AsignaturaDetallePage({ actions, store }) {
             } catch (error) {
                 console.error("Error al cargar la asignatura:", error);
                 toast.error("Error al cargar la asignatura");
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -80,76 +83,86 @@ function AsignaturaDetallePage({ actions, store }) {
                 <Sidebar buttons={buttons_docente} id={id} />
             </div>
             <div className="flex-grow ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-base-200">
-                {/* Header de la asignatura */}
-                <div className="card bg-white shadow-lg mb-6">
-                    <div className="card-body">
-                        <div className="flex items-start gap-4">
-                            <div className="p-4 bg-primary/10 rounded-lg">
-                                <BookOpen className="w-12 h-12 text-primary" />
-                            </div>
-                            <div>
-                                <h1 className="text-2xl font-bold mb-2">
-                                    {asignatura.nombre}
-                                </h1>
-                                <div className="flex flex-wrap gap-4">
-                                    <div className="badge badge-primary">
-                                        Paralelo {asignatura.paralelo}
+                {loading ? (
+                    <div className="flex justify-center items-center h-full">
+                        <span className="loading loading-spinner loading-lg"></span>
+                    </div>
+                ) : (
+                    <>
+                        {/* Header de la asignatura */}
+                        <div className="card bg-white shadow-lg mb-6">
+                            <div className="card-body">
+                                <div className="flex items-start gap-4">
+                                    <div className="p-4 bg-primary/10 rounded-lg">
+                                        <BookOpen className="w-12 h-12 text-primary" />
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <Users className="w-4 h-4" />
-                                        <span>
-                                            {asignaturaData.estudiantes}{" "}
-                                            estudiantes
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Clock className="w-4 h-4" />
-                                        <span>
-                                            {asignatura.nro_horas} horas totales
-                                        </span>
+                                    <div>
+                                        <h1 className="text-2xl font-bold mb-2">
+                                            {asignatura.nombre}
+                                        </h1>
+                                        <div className="flex flex-wrap gap-4">
+                                            <div className="badge badge-primary">
+                                                Paralelo {asignatura.paralelo}
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Users className="w-4 h-4" />
+                                                <span>
+                                                    {asignaturaData.estudiantes}{" "}
+                                                    estudiantes
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Clock className="w-4 h-4" />
+                                                <span>
+                                                    {asignatura.nro_horas} horas
+                                                    totales
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                {/* Grid de estadísticas */}
-                <StadisticsGrid data={asignaturaData} />
+                        {/* Grid de estadísticas */}
+                        {/* <StadisticsGrid data={asignaturaData} /> */}
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Actividades Asignadas */}
-                    <DataTableAssignment
-                        title="Actividades Asignadas"
-                        buttonLabel="Nueva Actividad"
-                        data={actividadesData}
-                        onButtonClick={() =>
-                            console.log("Nueva Actividad clickeada")
-                        }
-                    />
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {/* Actividades Asignadas */}
+                            <DataTableAssignment
+                                title="Actividades Asignadas"
+                                buttonLabel="Nueva Actividad"
+                                data={actividadesData}
+                                onButtonClick={() =>
+                                    console.log("Nueva Actividad clickeada")
+                                }
+                            />
 
-                    {/* Tests Asignados */}
-                    <DataTableAssignment
-                        title="Tests Asignados"
-                        buttonLabel="Nuevo Test"
-                        data={testsData}
-                        onButtonClick={() =>
-                            console.log("Nuevo Test clickeado")
-                        }
-                    />
+                            {/* Tests Asignados */}
+                            <DataTableAssignment
+                                title="Tests Asignados"
+                                buttonLabel="Nuevo Test"
+                                data={testsData}
+                                onButtonClick={() =>
+                                    console.log("Nuevo Test clickeado")
+                                }
+                            />
 
-                    {/* Indicadores de Estrés */}
-                    <StressIndicators className="col-span-1" />
+                            {/* Indicadores de Estrés */}
+                            <StressIndicators className="col-span-1" />
 
-                    {/* Próximos Eventos */}
-                    <div className="card bg-base-100 shadow-lg">
-                        <div className="card-body">
-                            <span>
-                                Espacio para informacion sobre los grupos
-                            </span>
+                            {/* Próximos Eventos */}
+                            <div className="card bg-base-100 shadow-lg">
+                                <div className="card-body">
+                                    <span>
+                                        Espacio para informacion sobre los
+                                        grupos
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </>
+                )}
             </div>
         </div>
     );

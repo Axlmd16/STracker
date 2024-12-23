@@ -25,8 +25,8 @@ const DocenteApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data;
     },
 
-    deleteDocente: async (id) => {
-        const response = await api.delete(`/docentes/${id}`);
+    deleteUser: async (id) => {
+        const response = await api.delete(`/usuarios/${id}`);
         return response.data;
     },
 });

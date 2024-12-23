@@ -1,10 +1,10 @@
 import { Import, UserRoundPlus } from "lucide-react";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import DocenteForm from "../../../components/Forms/DocenteForm";
 import Modal from "../../../components/Modals/Modal";
 import ModalForm from "../../../components/Modals/ModalForm";
-import TableDocente from "../../../components/Tables/TableDocente";
-import ImportDocentePage from "./ImportDataPage";
+import DataTableUser from "../../../components/Tables/DataTableUser";
+import ImportDataPage from "./ImportDataPage";
 
 function PageDocenteCrud({ actions, store }) {
     //* Referencias y estados
@@ -14,6 +14,8 @@ function PageDocenteCrud({ actions, store }) {
     const tableRef = useRef(null);
     const [data, setData] = useState(null);
     const [update, setUpdate] = useState(false);
+    const [dataTable, setDataTable] = useState([]);
+    const [pending, setPending] = useState(false);
 
     //* Funcion abrir modal para crear
     const handleCreateDocente = () => {
@@ -48,6 +50,23 @@ function PageDocenteCrud({ actions, store }) {
         modalFormRef.current.openModal();
     };
 
+    //* Funcion para obtener los datos
+    const fetchDocentes = useCallback(async () => {
+        setPending(true);
+        try {
+            const data = await actions.getDocentes();
+            setDataTable(data);
+        } catch (error) {
+            toast.error("Error al cargar los datos");
+        } finally {
+            setPending(false);
+        }
+    }, [actions]);
+
+    useEffect(() => {
+        fetchDocentes();
+    }, [fetchDocentes]);
+
     return (
         <div className="flex flex-col h-full">
             {/* Encabezado */}
@@ -78,11 +97,15 @@ function PageDocenteCrud({ actions, store }) {
 
             {/* Contenedor de la tabla */}
             <div className="flex-grow mt-6 bg-white p-6 rounded-md shadow-md overflow-x-auto">
-                <TableDocente
+                <DataTableUser
                     ref={tableRef}
                     actions={actions}
                     handleUpdate={handleUpdate}
-                />{" "}
+                    fetchData={fetchDocentes}
+                    data={dataTable}
+                    pending={pending}
+                    searchKeys={["nombres", "apellidos", "cedula"]}
+                />
             </div>
 
             {/* Modal para crear y actualizar */}
@@ -108,10 +131,11 @@ function PageDocenteCrud({ actions, store }) {
             <Modal ref={modalRef}>
                 <h2 className="text-xl font-semibold mb-4">
                     Importar docentes
-                    <ImportDocentePage
+                    <ImportDataPage
                         actions={actions}
                         store={store}
                         modalRef={modalRef}
+                        userRole={"DOCENTE"}
                     />
                 </h2>
             </Modal>

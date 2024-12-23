@@ -1,7 +1,7 @@
 import React from "react";
 import ExcelJS from "exceljs";
 
-function ImportForm({ onNext, onDataLoad, modalRef }) {
+function ImportForm({ onNext, onDataLoad, modalRef, userRole }) {
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -31,7 +31,7 @@ function ImportForm({ onNext, onDataLoad, modalRef }) {
                             cedula: getCellValue(row.getCell(4)),
                             email: getCellValue(row.getCell(5)),
                             telefono: getCellValue(row.getCell(6)),
-                            rol: "DOCENTE",
+                            rol: userRole,
                         };
                         data.push(rowData);
                     }

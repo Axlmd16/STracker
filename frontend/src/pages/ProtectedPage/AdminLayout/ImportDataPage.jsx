@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import ImportForm from "../../../components/Forms/ImportForm";
-import TablePreviewDocente from "../../../components/Tables/TablePreviewDocente";
+import TablePreviewUser from "../../../components/Tables/TablePreviewUser";
 import SendDataSpinner from "../../../components/Load/SendDataSpinner";
 
-function ImportDocentePage({ actions, store, modalRef }) {
+function ImportDataPage({ actions, store, modalRef, userRole }) {
     const [step, setStep] = useState(0);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -58,10 +58,11 @@ function ImportDocentePage({ actions, store, modalRef }) {
                             onNext={handleNext}
                             onDataLoad={setData}
                             modalRef={modalRef}
+                            userRole={userRole}
                         />
                     )}
                     {step === 1 && (
-                        <TablePreviewDocente
+                        <TablePreviewUser
                             data={data}
                             onNext={handleNext}
                             onCancel={handleCancel}
@@ -81,4 +82,4 @@ function ImportDocentePage({ actions, store, modalRef }) {
     );
 }
 
-export default ImportDocentePage;
+export default ImportDataPage;
