@@ -17,8 +17,7 @@ function AsignaturaDetallePage({ actions, store }) {
     useEffect(() => {
         const fetchAsignatura = async () => {
             try {
-                // const data = await actions.getAsignatura(id);
-                const data = await actions.getProvAsignatura(id);
+                const data = await actions.getAsignatura(id);
                 setAsignatura(data);
             } catch (error) {
                 console.error("Error al cargar la asignatura:", error);

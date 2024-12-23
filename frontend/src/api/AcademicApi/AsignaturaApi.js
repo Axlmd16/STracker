@@ -6,28 +6,40 @@ const AsignaturaApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data.data;
     },
 
-    //* Api provisional para pruebas
-    getProvAsignaturas: async () => {
-        const api_prov = axios.create({
-            baseURL: "https://retoolapi.dev/orfUoR",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+    getAsignatura: async (id) => {
+        const response = await api.get(`/asignaturas/${id}`);
+        return response.data.data;
+    },
 
-        const response = await api_prov.get("/asignaturas");
+    //* Agregar estudiante a asignatura
+    createStudentToSubject: async (id, data) => {
+        const response = await api.post("/usuarios", data);
+        if (response.status === 200) {
+            const response2 = await api.post(`/asignaturas/${id}/estudiantes`, {
+                id_estudiante: response.data.data.id,
+            });
+            return response2.data;
+        }
+    },
+
+    updateEstudiante: async (id, data) => {
+        const response = await api.put(`/usuarios/${id}`, data);
         return response.data;
     },
 
-    getProvAsignatura: async (id) => {
-        const api_prov = axios.create({
-            baseURL: "https://retoolapi.dev/orfUoR",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+    deleteUser: async (id) => {
+        const response = await api.delete(`/usuarios/${id}`);
+        return response.data;
+    },
 
-        const response = await api_prov.get(`/asignaturas/${id}`);
+    createAsignatura: async (data) => {
+        const response = await api.post("/asignaturas", data);
+        return response.data;
+    },
+
+    //* Obtener estudiantes por asignatura
+    getStudentsBySubject: async (id) => {
+        const response = await api.get(`/asignaturas/${id}/estudiantes`);
         return response.data;
     },
 });

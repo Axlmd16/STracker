@@ -28,6 +28,7 @@ class UsuarioInDB(UsuarioBase):
         from_attributes = True
         
 class UsuarioResponse(BaseModel):
+    status: int
     message: str
     data: UsuarioBase
     class Config:
