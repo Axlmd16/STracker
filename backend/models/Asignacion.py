@@ -8,7 +8,7 @@ class AsignacionTest(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     fecha_asignacion = Column(DateTime, nullable=False)
     fecha_limite = Column(DateTime, nullable=False)
-    descripcion = Column(String, nullable=True)
+    descripcion = Column(String(255), nullable=True)
     docente_id = Column(Integer, ForeignKey("usuario.id"), nullable=False)
     test_id = Column(Integer, ForeignKey("test_estres.id"), nullable=False)
     actividad_academica_id = Column(Integer, ForeignKey("actividad_academica.id"), nullable=True) 

@@ -6,8 +6,8 @@ class TestEstres(Base):
     __tablename__ = "test_estres"
     
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    url = Column(String, nullable=False, unique=True)
-    descripcion = Column(String, nullable=False)
+    url = Column(String(255), nullable=False, unique=True)
+    descripcion = Column(String(255), nullable=False)
     
     # Relación
     asignaciones_test = relationship("AsignacionTest", back_populates="test")
