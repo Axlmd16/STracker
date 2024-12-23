@@ -6,8 +6,8 @@ class Cuenta(Base):
     __tablename__ = "cuenta"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    username = Column(String, unique=True, index=True, nullable=False)
-    password = Column(String, nullable=False)
+    username = Column(String(255), unique=True, index=True, nullable=False)
+    password = Column(String(255), nullable=False)
     estado = Column(Boolean, default=True)
     usuario_id = Column(Integer, ForeignKey("usuario.id"))
     

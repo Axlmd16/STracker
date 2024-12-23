@@ -6,8 +6,8 @@ class ActividadAcademica(Base):
     __tablename__ = "actividad_academica"
     
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    titulo = Column(String, nullable=False)
-    descripcion = Column(String, nullable=False)
+    titulo = Column(String(255), nullable=False)
+    descripcion = Column(String(255), nullable=False)
     fecha_inicio = Column(DateTime, nullable=False)
     fecha_fin = Column(DateTime, nullable=False)
     asignatura_id = Column(Integer, ForeignKey("asignatura.id"), nullable=False)

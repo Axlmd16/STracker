@@ -6,8 +6,8 @@ class Notificacion(Base):
     __tablename__ = "notificacion"
     
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    titulo = Column(String, nullable=False)
-    mensaje = Column(String, nullable=False)
+    titulo = Column(String(255), nullable=False)
+    mensaje = Column(String(255), nullable=False)
     fecha = Column(DateTime, nullable=False)
     usuario_id = Column(Integer, ForeignKey("usuario.id"))
     
