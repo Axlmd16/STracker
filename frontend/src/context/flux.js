@@ -3,6 +3,8 @@ import { jwtDecode } from "jwt-decode";
 import AuthApi from "../api/LoginApi/AuthApi";
 import DocenteApi from "../api/AdminApi/DocenteApi";
 import AsignaturaApi from "../api/AcademicApi/AsignaturaApi";
+import TestEstresApi from "../api/TestEstress/TestEstresApi";
+import AsignacionTestApi from "../api/TestEstress/AsignacionTest";
 import EstudianteApi from "../api/AcademicApi/EstudianteApi";
 import TareasApi from "../api/AcademicApi/TareasApi";
 
@@ -45,6 +47,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             ...AuthApi({ getStore, getActions, setStore, api }),
             ...DocenteApi({ getStore, getActions, setStore, api }),
             ...AsignaturaApi({ getStore, getActions, setStore, api }),
+            ...TestEstresApi({ getStore, getActions, setStore, api }),
+            ...AsignacionTestApi({ getStore, getActions, setStore, api }),
             ...EstudianteApi({ getStore, getActions, setStore, api }),
             ...TareasApi({ getStore, getActions, setStore, api }),
         },

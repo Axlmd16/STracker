@@ -17,6 +17,8 @@ import LandingPage from "../pages/PublicPages/LandingPage";
 import LoginPage from "../pages/PublicPages/LoginPage";
 import AsignaturaDetallePage from "../pages/ProtectedPage/DocenteLayout/AsignaturaDetallePage";
 import StudentsSubjectPage from "../pages/ProtectedPage/DocenteLayout/StudentsSubjectPage";
+import PageTestEstresCrud from "../pages/ProtectedPage/AdminLayout/TestEstres";
+import AsignacionTestPage from "../pages/ProtectedPage/DocenteLayout/AsignacionTestPage";
 import NuevaActividadPage from "../pages/ProtectedPage/DocenteLayout/NuevaActividadPage";
 import ActividadDetalles from "../pages/ProtectedPage/DocenteLayout/ActividadDetalles";
 
@@ -105,6 +107,15 @@ function Rutas({ store, actions }) {
                                 </ProtectedRoute>
                             }
                         />
+                        <Route
+                            path="/home/administrador/tests"
+                            element={
+                                    <PageTestEstresCrud
+                                        actions={actions}
+                                        store={store}
+                                    />
+                            }
+                        />
                         {/* Rutas docente */}
                         <Route
                             path="/home/docente"
@@ -116,6 +127,17 @@ function Rutas({ store, actions }) {
                                     />
                                 </ProtectedRoute>
                             }
+                        />
+                        <Route
+                            path="/home/docente/asignacion"
+                            element={
+                                <ProtectedRoute>
+                                    <AsignacionTestPage
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }   
                         />
                         <Route
                             path="/home/docente/asignatura/:id"
