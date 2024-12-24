@@ -71,3 +71,8 @@ class UsuarioControl:
         with SessionLocal() as db:
             docentes = db.query(Usuario).filter(Usuario.rol == "DOCENTE").all()
             return docentes
+
+    def obtener_estudiantes(self):  
+        with SessionLocal() as db:
+            estudiantes = db.query(Usuario).filter(Usuario.rol == "ESTUDIANTE").all()
+            return estudiantes

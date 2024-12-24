@@ -9,7 +9,7 @@ class Cuenta(Base):
     username = Column(String(255), unique=True, index=True, nullable=False)
     password = Column(String(255), nullable=False)
     estado = Column(Boolean, default=True)
-    usuario_id = Column(Integer, ForeignKey("usuario.id"))
+    usuario_id = Column(Integer, ForeignKey("usuario.id", ondelete="CASCADE")) 
     
     # Relación
     usuario = relationship("Usuario", back_populates="cuenta")
