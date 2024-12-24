@@ -96,12 +96,12 @@ function StudentsSubjectPage({ actions, store }) {
                                 >
                                     <UserRoundPlus size={20} />
                                 </button>
-                                <button
+                                {/* <button
                                     className="btn btn-circle ml-3 bg-info"
                                     onClick={handleImportDocente}
                                 >
                                     <Import size={20} />
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>

@@ -3,7 +3,14 @@ import DataTable from "react-data-table-component";
 import { PlusCircle, Rabbit } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const CustomTableTA = ({ columns, data, pending, title, to }) => {
+const CustomTableTA = ({
+    columns,
+    data,
+    pending,
+    title,
+    to,
+    handleDetails,
+}) => {
     // Opciones de paginación
     const paginationComponentOptions = {
         rowsPerPageText: "Filas por página",
@@ -12,7 +19,7 @@ const CustomTableTA = ({ columns, data, pending, title, to }) => {
         selectAllRowsItemText: "Todos",
     };
 
-    const paginationPerPage = 3;
+    const paginationPerPage = 4;
 
     // Estilos personalizados para la tabla
     const customStyles = {
@@ -30,6 +37,7 @@ const CustomTableTA = ({ columns, data, pending, title, to }) => {
                 color: "var(--text-secondary)",
                 backgroundColor: "var(--bg-cell)",
                 padding: "8px",
+                cursor: "pointer",
             },
         },
         table: {
@@ -83,6 +91,7 @@ const CustomTableTA = ({ columns, data, pending, title, to }) => {
                 columns={columns}
                 data={data}
                 pagination
+                onRowDoubleClicked={(row) => handleDetails(row)}
                 striped
                 paginationPerPage={paginationPerPage}
                 highlightOnHover

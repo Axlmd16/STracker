@@ -25,17 +25,25 @@ function NuevaActividadPage({ actions, store }) {
         clearErrors,
     } = useForm();
 
-    //* Funcion para enviar los datos
     const onSubmit = async (data) => {
         const promise = actions.createActividad(data);
         toast.promise(promise, {
             loading: <span className="loading loading-spinner"></span>,
             success: <b>Actividad registrada correctamente</b>,
-
             error: (err) => {
                 if (err.response) {
                     const { status, data } = err.response;
+                    // Para debuggear la estructura del error
+                    console.log("Error data:", data);
+
                     if (status === 409) {
+                        return <b>{data.detail}</b>;
+                    } else if (status === 422) {
+                        // Si data.detail es un array de errores, toma el primer mensaje
+                        if (Array.isArray(data.detail)) {
+                            return <b>{data.detail[0].msg}</b>;
+                        }
+                        // Si es un string directo
                         return <b>{data.detail}</b>;
                     } else {
                         return <b>Error al registrar la actividad</b>;

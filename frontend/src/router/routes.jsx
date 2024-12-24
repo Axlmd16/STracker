@@ -18,6 +18,7 @@ import LoginPage from "../pages/PublicPages/LoginPage";
 import AsignaturaDetallePage from "../pages/ProtectedPage/DocenteLayout/AsignaturaDetallePage";
 import StudentsSubjectPage from "../pages/ProtectedPage/DocenteLayout/StudentsSubjectPage";
 import NuevaActividadPage from "../pages/ProtectedPage/DocenteLayout/NuevaActividadPage";
+import ActividadDetalles from "../pages/ProtectedPage/DocenteLayout/ActividadDetalles";
 
 function Rutas({ store, actions }) {
     const rol = store.access_role;
@@ -139,10 +140,21 @@ function Rutas({ store, actions }) {
                             }
                         />
                         <Route
-                            path="/home/docente/asignatura/:id/actividades/nueva"
+                            path="/home/docente/asignatura/:id/actividades"
                             element={
                                 <ProtectedRoute>
                                     <NuevaActividadPage
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/home/docente/asignatura/:id/actividades/:id"
+                            element={
+                                <ProtectedRoute>
+                                    <ActividadDetalles
                                         actions={actions}
                                         store={store}
                                     />

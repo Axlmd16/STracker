@@ -16,5 +16,10 @@ class Asignatura(Base):
     # Relaciones
     docente = relationship("Usuario", back_populates="asignaturas_dictadas")
     estudiantes = relationship("Usuario", secondary="estudiante_asignatura", back_populates="asignaturas_estudiante")
-    actividades_academicas = relationship("ActividadAcademica", back_populates="asignatura")
+    actividades_academicas = relationship(
+        "ActividadAcademica", 
+        back_populates="asignatura",
+        cascade="all, delete-orphan"  
+    )
+
 

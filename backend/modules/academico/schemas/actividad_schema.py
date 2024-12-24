@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import List, Optional
 from datetime import datetime
 
@@ -11,6 +11,13 @@ class ActividadBase(BaseModel):
     asignatura_id: Optional[int] = None
     class Config:
         from_attributes = True
+        
+    @field_validator("fecha_fin")
+    def validar_fechas(cls, fecha_fin, values):
+        fecha_inicio = values.data.get("fecha_inicio")
+        if fecha_inicio and fecha_fin <= fecha_inicio:
+            raise ValueError("La fecha de finalización debe ser posterior a la fecha de inicio")
+        return fecha_fin
         
 class ActividadCreate(ActividadBase):
     pass
