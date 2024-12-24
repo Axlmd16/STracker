@@ -8,6 +8,7 @@ class ActividadBase(BaseModel):
     descripcion: Optional[str] = None
     fecha_inicio: datetime
     fecha_fin: datetime
+    tipo_actividad: str
     asignatura_id: Optional[int] = None
     class Config:
         from_attributes = True

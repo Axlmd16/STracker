@@ -2,6 +2,8 @@ import {
     BookOpen,
     CalendarArrowDown,
     CalendarArrowUp,
+    FileText,
+    MessageSquare,
     Upload,
 } from "lucide-react";
 import React, { useState } from "react";
@@ -23,9 +25,11 @@ function NuevaActividadPage({ actions, store }) {
         handleSubmit,
         formState: { errors },
         clearErrors,
+        watch,
     } = useForm();
 
     const onSubmit = async (data) => {
+        console.log(data);
         const promise = actions.createActividad(data);
         toast.promise(promise, {
             loading: <span className="loading loading-spinner"></span>,
@@ -33,13 +37,11 @@ function NuevaActividadPage({ actions, store }) {
             error: (err) => {
                 if (err.response) {
                     const { status, data } = err.response;
-                    // Para debuggear la estructura del error
                     console.log("Error data:", data);
 
                     if (status === 409) {
                         return <b>{data.detail}</b>;
                     } else if (status === 422) {
-                        // Si data.detail es un array de errores, toma el primer mensaje
                         if (Array.isArray(data.detail)) {
                             return <b>{data.detail[0].msg}</b>;
                         }
@@ -74,22 +76,45 @@ function NuevaActividadPage({ actions, store }) {
 
             <div className="">
                 <div className="flex-grow ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-base-200">
-                    <div className="flex gap-6 h-full">
-                        <LeftPanel />
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="space-y-6  h-full flex flex-col"
+                    >
+                        <div className="flex gap-6 h-full">
+                            <LeftPanel
+                                activities={[
+                                    {
+                                        value: "ACTIVIDAD_EXTRA_CLASE",
+                                        title: "Extra Clase",
+                                        description: "Actividad fuera del aula",
+                                    },
+                                    {
+                                        value: "ACTIVIDAD_EN_CLASE",
+                                        title: "En Clase",
+                                        description:
+                                            "Actividad dentro del aula",
+                                    },
+                                    {
+                                        value: "FORO",
+                                        title: "Foro",
+                                        description: "Discusión en línea",
+                                    },
+                                ]}
+                                name={"tipo_actividad"}
+                                register={register}
+                                clearErrors={clearErrors}
+                                watch={watch}
+                            />
 
-                        <div className="w-3/4">
-                            <div className="card bg-white shadow-xl">
-                                <div className="card-body p-8">
-                                    <form
-                                        onSubmit={handleSubmit(onSubmit)}
-                                        className="space-y-10"
-                                    >
+                            <div className="w-3/4 flex flex-col">
+                                <div className="card bg-white shadow-xl flex-grow flex flex-col">
+                                    <div className="card-body p-8 flex-grow flex flex-col">
                                         {/* Información General Section */}
-                                        <section>
+                                        <section className="flex-grow flex flex-col">
                                             <h2 className="text-xl font-semibold mb-8 pb-2 border-b">
                                                 Información General
                                             </h2>
-                                            <div className="grid grid-cols-2 gap-8">
+                                            <div className="grid grid-cols-2 gap-8 flex-grow">
                                                 {/* Left Column - Title and Description */}
                                                 <div className="space-y-8">
                                                     <div className="relative">
@@ -208,11 +233,11 @@ function NuevaActividadPage({ actions, store }) {
                                                 Registrar
                                             </button>
                                         </section>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

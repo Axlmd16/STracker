@@ -35,6 +35,7 @@ def get_actividad(id: int):
         return HTTPException(status_code=404, detail="Actividad no encontrada")
     return {"message": f"Actividad con id: {id}", "data": response}
 
+#* Crear actividad academica
 @router_actividades.post("/actividades/")
 def guardar_actividad(actividad: ActividadCreate):
     try:

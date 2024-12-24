@@ -3,12 +3,12 @@ import React from "react";
 const ImputForm = ({
     label,
     name,
-    type = "text",
     register,
     errors,
     clearErrors,
-    icon: Icon,
     required = true,
+    icon: Icon,
+    type = "text",
 }) => (
     <div className="relative z-0 w-full mb-5 group">
         <input

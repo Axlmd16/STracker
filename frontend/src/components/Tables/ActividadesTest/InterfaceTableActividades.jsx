@@ -70,7 +70,7 @@ function InterfaceTableActividades({ actions, store, id }) {
                 name: "Fecha Límite",
                 selector: (row) => new Date(row.fecha_fin).toLocaleDateString(),
                 sortable: true,
-                center: true,
+                center: "true",
             },
             {
                 name: "Estado",
@@ -89,7 +89,7 @@ function InterfaceTableActividades({ actions, store, id }) {
                     </span>
                 ),
                 sortable: true,
-                center: true,
+                center: "true",
             },
         ],
         [data]
