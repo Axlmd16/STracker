@@ -83,7 +83,6 @@ const DataTableUser = forwardRef(
                     name: (
                         <div className="flex justify-center">
                             <ListOrdered className="mr-2" size={20} />
-                            <span>Nro</span>
                         </div>
                     ),
                     selector: (row) => filteredData.indexOf(row) + 1,

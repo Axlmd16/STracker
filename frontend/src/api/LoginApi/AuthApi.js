@@ -10,6 +10,7 @@ const AuthApi = ({ getStore, getActions, setStore, api }) => ({
             setStore({
                 isAuthenticated: true,
                 access_role: decodedToken.rol,
+                id_user_auth: decodedToken.id_usuario,
             });
             return true;
         } catch (error) {

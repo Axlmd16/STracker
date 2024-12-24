@@ -12,25 +12,27 @@ const LoginForm = ({ actions, store }) => {
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        console.log(data);
-
         const succes = await actions.iniciar_sesion(data);
 
         if (succes) {
-            // Redirigir a la página de inicio según el rol del usuario
             if (store.isAuthenticated) {
                 if (store.access_role === "ADMINISTRADOR") {
-                    navigate("/home/admin");
+                    navigate("/home/administrador");
                 } else if (store.access_role === "DOCENTE") {
                     navigate("/home/docente");
                 } else if (store.access_role === "ESTUDIANTE") {
                     navigate("/home/estudiante");
                 }
-                toast.success("Sesión iniciada correctamente", {
+                toast.success("Bienvenido de vuelta", {
                     duration: 3500,
-                    position: "bottom-right",
+                    position: "top-center",
                 });
             }
+        } else {
+            toast.error("Usuario o contraseña incorrectos", {
+                duration: 3500,
+                position: "top-center",
+            });
         }
     };
 

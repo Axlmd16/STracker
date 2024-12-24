@@ -19,7 +19,12 @@ class Usuario(Base):
     cedula = Column(String(255), unique=True, index=True, nullable=False)
     rol = Column(Enum_sql(RolEnum), nullable=False)
 
-    cuenta = relationship("Cuenta", back_populates="usuario")
+    cuenta = relationship(
+        "Cuenta",
+        back_populates="usuario",
+        cascade="all, delete-orphan",  
+        passive_deletes=True  
+    )
     notificaciones = relationship("Notificacion", back_populates="usuario")
     asignaciones = relationship("AsignacionTest", back_populates="docente")
     test_realizados = relationship("ResultadoTest", back_populates="estudiante")
