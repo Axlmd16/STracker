@@ -70,4 +70,17 @@ class AsignaturaControl:
             else:
                 raise HTTPException(status_code=404, detail="Asignatura no encontrada")
             
-    
+    def obtener_detalles(self, id: int):
+        # Obtener el nro de estudiantes en la asignatura
+        # Obtener el nro de tareas asignadas en la asignatura
+        # Obtener el nro de test asignados en la asignatura
+        
+        with SessionLocal() as db:
+            asignatura = db.query(Asignatura).filter(Asignatura.id == id).first()
+            if asignatura:
+                nro_estudiantes = len(asignatura.estudiantes)
+                nro_tareas = len(asignatura.actividades_academicas)
+                
+                return {"nro_estudiantes": nro_estudiantes,
+                        "nro_tareas": nro_tareas}
+                    

@@ -1,16 +1,17 @@
-import { AlertTriangle, BookOpen, Calendar, Clock, Users } from "lucide-react";
+import { BookOpen, Clock, Users } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { buttons_docente } from "../../../assets/ButtonsNav/BtnsSidebar";
-import StadisticsGrid from "../../../components/Cards/StadisticsGrid";
-import Sidebar from "../../../components/Navigation/Sidebar";
-import DataTableAssignment from "../../../components/Tables/DataTableAssignment";
 import StressIndicators from "../../../components/Graphics/StressIndicators";
+import Sidebar from "../../../components/Navigation/Sidebar";
+import InterfaceTableActividades from "../../../components/Tables/ActividadesTest/InterfaceTableActividades";
+import DataTableAssignment from "../../../components/Tables/DataTableAssignment";
 
 function AsignaturaDetallePage({ actions, store }) {
     const { id } = useParams();
     const [asignatura, setAsignatura] = useState({});
+    const [detalles, setDetalles] = useState({});
     const [loading, setLoading] = useState(true);
 
     //* Obtener datos de la asignatura
@@ -18,6 +19,8 @@ function AsignaturaDetallePage({ actions, store }) {
         const fetchAsignatura = async () => {
             try {
                 const data = await actions.getAsignatura(id);
+                const dataDetalles = await actions.getDetalles(id);
+                setDetalles(dataDetalles);
                 setAsignatura(data);
             } catch (error) {
                 console.error("Error al cargar la asignatura:", error);
@@ -106,7 +109,7 @@ function AsignaturaDetallePage({ actions, store }) {
                                             <div className="flex items-center gap-2">
                                                 <Users className="w-4 h-4" />
                                                 <span>
-                                                    {asignaturaData.estudiantes}{" "}
+                                                    {detalles.nro_estudiantes}{" "}
                                                     estudiantes
                                                 </span>
                                             </div>
@@ -126,37 +129,29 @@ function AsignaturaDetallePage({ actions, store }) {
                         {/* Grid de estadísticas */}
                         {/* <StadisticsGrid data={asignaturaData} /> */}
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {/* Actividades Asignadas */}
-                            <DataTableAssignment
-                                title="Actividades Asignadas"
-                                buttonLabel="Nueva Actividad"
-                                data={actividadesData}
-                                onButtonClick={() =>
-                                    console.log("Nueva Actividad clickeada")
-                                }
-                            />
-
-                            {/* Tests Asignados */}
-                            <DataTableAssignment
-                                title="Tests Asignados"
-                                buttonLabel="Nuevo Test"
-                                data={testsData}
-                                onButtonClick={() =>
-                                    console.log("Nuevo Test clickeado")
-                                }
-                            />
-
+                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                             {/* Indicadores de Estrés */}
-                            <StressIndicators className="col-span-1" />
+                            <div className="lg:col-span-2 bg-white shadow-lg rounded-lg p-6 min-h-[800px]">
+                                <StressIndicators className="h-full" />
+                            </div>
 
-                            {/* Próximos Eventos */}
-                            <div className="card bg-base-100 shadow-lg">
-                                <div className="card-body">
-                                    <span>
-                                        Espacio para informacion sobre los
-                                        grupos
-                                    </span>
+                            <div className="lg:col-span-2 flex flex-col gap-6">
+                                <div className="bg-white shadow-lg rounded-lg p-6 min-h-[400px]">
+                                    <InterfaceTableActividades
+                                        actions={actions}
+                                        store={store}
+                                        id={id}
+                                    />
+                                </div>
+                                <div className="bg-white shadow-lg rounded-lg p-6 min-h-[400px]">
+                                    <DataTableAssignment
+                                        title="Tests Asignados"
+                                        buttonLabel="Nuevo Test"
+                                        data={testsData}
+                                        onButtonClick={() =>
+                                            console.log("Nuevo Test clickeado")
+                                        }
+                                    />
                                 </div>
                             </div>
                         </div>

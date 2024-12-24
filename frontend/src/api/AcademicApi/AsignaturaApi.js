@@ -11,6 +11,11 @@ const AsignaturaApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data.data;
     },
 
+    getDetalles: async (id) => {
+        const response = await api.get(`/asignaturas/${id}/detalles`);
+        return response.data;
+    },
+
     //* Agregar estudiante a asignatura
     createStudentToSubject: async (id, data) => {
         const response = await api.post("/usuarios", data);

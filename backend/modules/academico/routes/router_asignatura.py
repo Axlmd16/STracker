@@ -24,6 +24,14 @@ def get_asignatura(id: int):
         raise HTTPException(status_code=404, detail="Subject not found")
     return {"message": f"Subject with id: {id}", "data": response}
 
+#* Obtener mas detalles de la asignatura
+@router_asignatura.get("/asignaturas/{id}/detalles")
+def get_asignatura_detalles(id: int):
+    response = ac.obtener_detalles(id)
+    if not response:
+        raise HTTPException(status_code=404, detail="Subject not found")
+    return JSONResponse(content=response, status_code=200)
+
 @router_asignatura.post("/asignaturas/")
 def guardar_asignatura(asignatura: AsignaturaCreate):
     
@@ -62,16 +70,16 @@ def agregar_estudiante_asignatura(id: int, estudiante: EstudianteAsignatura):
     if response:
         return {"status": 200, "message": "Estudiante agregado correctamente a la asignatura"}
     
-@router_asignatura.delete("/asignaturas/{id}/estudiantes/")
-def remover_estudiante_asignatura(id: int, estudiante: EstudianteAsignatura):
-    response = ac.remover_estudiante_asignatura(id, estudiante.id_estudiante)
+# @router_asignatura.delete("/asignaturas/{id}/estudiantes/")
+# def remover_estudiante_asignatura(id: int, estudiante: EstudianteAsignatura):
+#     response = ac.remover_estudiante_asignatura(id, estudiante.id_estudiante)
     
-    if response:
-        return {"status": 200, "message": "Estudiante removido correctamente de la asignatura"}
-
+#     if response:
+#         return {"status": 200, "message": "Estudiante removido correctamente de la asignatura"}
 
 @router_asignatura.get("/asignaturas/{id}/estudiantes/")
 def obtener_estudiantes_asignatura(id: int):
     data = ac.obtener_estudiantes_asignatura(id)
     return JSONResponse(content=data, status_code=200)
+
 

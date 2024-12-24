@@ -7,7 +7,7 @@ class ActividadAcademica(Base):
     
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     titulo = Column(String(255), nullable=False)
-    descripcion = Column(String(255), nullable=False)
+    descripcion = Column(String(255), nullable=True)
     fecha_inicio = Column(DateTime, nullable=False)
     fecha_fin = Column(DateTime, nullable=False)
     asignatura_id = Column(Integer, ForeignKey("asignatura.id"), nullable=False)

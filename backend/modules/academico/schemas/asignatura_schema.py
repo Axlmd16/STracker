@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
-from modules.inicio_sesion.schemas.usuario_schema import UsuarioBase
 
 class AsignaturaBase(BaseModel):
     id: Optional[int] = None
