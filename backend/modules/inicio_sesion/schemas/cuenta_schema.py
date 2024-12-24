@@ -41,5 +41,6 @@ class CuentaRol(BaseModel):
     password: str
     estado: Optional[bool] = True
     rol: str
+    id_usuario: int
     class Config:
         from_attributes = True

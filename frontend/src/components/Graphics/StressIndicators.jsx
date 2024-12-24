@@ -7,7 +7,6 @@ import {
     Users,
     TrendingUp,
     AlertCircle,
-    Calendar,
 } from "lucide-react";
 
 const StressIndicators = ({ className }) => {
@@ -27,8 +26,8 @@ const StressIndicators = ({ className }) => {
     };
 
     return (
-        <div className={`card bg-white shadow-lg ${className}`}>
-            <div className="card-body">
+        <div className={`card bg-white shadow-lg h-full w-full ${className}`}>
+            <div className="card-body h-full flex flex-col">
                 {/* Encabezado con badge de estado */}
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="card-title text-xl flex items-center gap-2">
@@ -42,7 +41,7 @@ const StressIndicators = ({ className }) => {
                 </div>
 
                 {/* Alerta principal */}
-                <div className="alert alert-warning shadow-sm">
+                <div className="alert alert-warning shadow-sm mb-4">
                     <AlertTriangle className="w-6 h-6" />
                     <div>
                         <h3 className="font-bold">Alerta de Estrés</h3>
@@ -55,16 +54,18 @@ const StressIndicators = ({ className }) => {
                 </div>
 
                 {/* Indicadores principales */}
-                <div className="grid grid-cols-2 gap-4 my-4">
-                    <div className="bg-base-200 p-4 rounded-lg border border-base-300">
-                        <div className="flex items-center gap-2 mb-2">
-                            <BookOpen className="w-5 h-5 text-primary" />
-                            <div className="text-sm font-medium">
-                                Carga de Trabajo
+                <div className="grid grid-cols-2 gap-4 mb-4 flex-grow">
+                    <div className="bg-base-200 p-4 rounded-lg border border-base-300 flex flex-col justify-between">
+                        <div>
+                            <div className="flex items-center gap-2 mb-2">
+                                <BookOpen className="w-5 h-5 text-primary" />
+                                <div className="text-sm font-medium">
+                                    Carga de Trabajo
+                                </div>
                             </div>
-                        </div>
-                        <div className="text-xl font-bold text-primary">
-                            {stressData.workload}
+                            <div className="text-xl font-bold text-primary">
+                                {stressData.workload}
+                            </div>
                         </div>
                         <div className="text-xs text-base-content/70 mt-1">
                             Basado en {stressData.weeklyReports} reportes
@@ -72,15 +73,17 @@ const StressIndicators = ({ className }) => {
                         </div>
                     </div>
 
-                    <div className="bg-base-200 p-4 rounded-lg border border-base-300">
-                        <div className="flex items-center gap-2 mb-2">
-                            <TrendingUp className="w-5 h-5 text-secondary" />
-                            <div className="text-sm font-medium">
-                                Dificultad Percibida
+                    <div className="bg-base-200 p-4 rounded-lg border border-base-300 flex flex-col justify-between">
+                        <div>
+                            <div className="flex items-center gap-2 mb-2">
+                                <TrendingUp className="w-5 h-5 text-secondary" />
+                                <div className="text-sm font-medium">
+                                    Dificultad Percibida
+                                </div>
                             </div>
-                        </div>
-                        <div className="text-xl font-bold text-secondary">
-                            {stressData.difficulty}
+                            <div className="text-xl font-bold text-secondary">
+                                {stressData.difficulty}
+                            </div>
                         </div>
                         <div className="text-xs text-base-content/70 mt-1">
                             Evaluación promedio del curso
@@ -89,7 +92,7 @@ const StressIndicators = ({ className }) => {
                 </div>
 
                 {/* Distribución de niveles de estrés */}
-                <div className="bg-base-200 p-4 rounded-lg border border-base-300">
+                <div className="bg-base-200 p-4 rounded-lg border border-base-300 mb-4 flex-grow">
                     <h3 className="font-medium text-sm mb-3 flex items-center gap-2">
                         <Users className="w-4 h-4" />
                         Distribución de Niveles de Estrés
@@ -117,7 +120,7 @@ const StressIndicators = ({ className }) => {
                 </div>
 
                 {/* Pie de componente con última actualización */}
-                <div className="flex items-center justify-end gap-2 mt-4 text-sm text-base-content/70">
+                <div className="flex items-center justify-end gap-2 mt-4 text-sm text-base-content/70 font-medium">
                     <Clock className="w-4 h-4" />
                     <span>
                         Última actualización:{" "}

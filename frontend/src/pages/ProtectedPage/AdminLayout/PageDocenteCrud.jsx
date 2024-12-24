@@ -5,12 +5,14 @@ import Modal from "../../../components/Modals/Modal";
 import ModalForm from "../../../components/Modals/ModalForm";
 import DataTableUser from "../../../components/Tables/DataTableUser";
 import ImportDataPage from "./ImportDataPage";
+import { toast } from "react-hot-toast";
 
 function PageDocenteCrud({ actions, store }) {
     //* Referencias y estados
     const modalFormRef = useRef(null);
     const modalRef = useRef(null);
     const formRef = useRef(null);
+
     const tableRef = useRef(null);
     const [data, setData] = useState(null);
     const [update, setUpdate] = useState(false);

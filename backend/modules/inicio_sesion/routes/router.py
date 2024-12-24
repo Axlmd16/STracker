@@ -91,7 +91,7 @@ def guardar_usuario(usuario: UsuarioCreate):
         if not cuenta_creada:
             raise HTTPException(status_code=500, detail="Error al crear la cuenta")
 
-        return {"message": "Usuario y cuenta registrados correctamente", "data": usuario_creado}
+        return {"status": 200, "message": "Usuario creado correctamente", "data": usuario_creado}
     except HTTPException as http_exc:
         raise http_exc
     except Exception as e:
@@ -115,7 +115,7 @@ def editar_usuario(id: int, usuario: UsuarioBase):
     response = uc.actualizar_usuario(id, usuario)
     if not response:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
-    return {"message": f"Usuario con id: {id} actualizado correctamente", "data": response}
+    return {"status": 200, "message": f"Usuario con id: {id} actualizado correctamente", "data": response}
     
 @router.delete("/usuarios/{id}")
 def remover_usuario(id: int):
@@ -145,3 +145,9 @@ def importar_usuarios(request: ImportarUsuariosRequest):
 def get_docentes():
     docentes = uc.obtener_docentes()
     return {"message": "All teachers", "data": docentes}
+
+
+@router.get("/estudiantes/")
+def get_docentes():
+    data = uc.obtener_estudiantes()
+    return {"message": "All teachers", "data": data}

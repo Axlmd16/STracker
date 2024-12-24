@@ -8,6 +8,8 @@ import { Import, UserRoundPlus } from "lucide-react";
 import DocenteForm from "../../../components/Forms/DocenteForm";
 import ImportDataPage from "../AdminLayout/ImportDataPage";
 import DataTableUser from "../../../components/Tables/DataTableUser";
+import { toast } from "react-hot-toast";
+import EstudianteForm from "../../../components/Forms/EstudianteForm";
 
 function StudentsSubjectPage({ actions, store }) {
     const { id } = useParams();
@@ -56,10 +58,10 @@ function StudentsSubjectPage({ actions, store }) {
     };
 
     //* Funcion para obtener los datos
-    const fetchDocentes = useCallback(async () => {
+    const fetchData = useCallback(async () => {
         setPending(true);
         try {
-            const data = await actions.getDocentes();
+            const data = await actions.getStudentsBySubject(id);
             setDataTable(data);
         } catch (error) {
             toast.error("Error al cargar los datos");
@@ -69,8 +71,8 @@ function StudentsSubjectPage({ actions, store }) {
     }, [actions]);
 
     useEffect(() => {
-        fetchDocentes();
-    }, [fetchDocentes]);
+        fetchData();
+    }, [fetchData]);
     return (
         <div>
             <div className="fixed left-0 top-16 h-full bg-gray-800">
@@ -94,12 +96,12 @@ function StudentsSubjectPage({ actions, store }) {
                                 >
                                     <UserRoundPlus size={20} />
                                 </button>
-                                <button
+                                {/* <button
                                     className="btn btn-circle ml-3 bg-info"
                                     onClick={handleImportDocente}
                                 >
                                     <Import size={20} />
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>
@@ -110,7 +112,7 @@ function StudentsSubjectPage({ actions, store }) {
                             ref={tableRef}
                             actions={actions}
                             handleUpdate={handleUpdate}
-                            fetchData={fetchDocentes}
+                            fetchData={fetchData}
                             data={dataTable}
                             pending={pending}
                             searchKeys={["nombres", "apellidos", "cedula"]}
@@ -124,15 +126,18 @@ function StudentsSubjectPage({ actions, store }) {
                         handleCloseModal={handleCloseModal}
                     >
                         <h2 className="text-xl font-semibold mb-4">
-                            {data ? "Actualizar docente" : "Crear docente"}
+                            {data
+                                ? "Actualizar estudiante"
+                                : "Agregar estudiante"}
                         </h2>
-                        <DocenteForm
+                        <EstudianteForm
                             actions={actions}
                             formRef={formRef}
                             modalRef={modalFormRef}
                             update={update}
                             row={data}
                             handleCloseModal={handleCloseModal}
+                            idAsignatura={id}
                         />
                     </ModalForm>
 
