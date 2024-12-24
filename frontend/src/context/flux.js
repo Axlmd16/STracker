@@ -3,6 +3,8 @@ import { jwtDecode } from "jwt-decode";
 import AuthApi from "../api/LoginApi/AuthApi";
 import DocenteApi from "../api/AdminApi/DocenteApi";
 import AsignaturaApi from "../api/AcademicApi/AsignaturaApi";
+import TestEstresApi from "../api/TestEstress/TestEstresApi";
+import AsignacionTestApi from "../api/TestEstress/AsignacionTest";
 
 const getState = ({ getStore, getActions, setStore }) => {
     const API_BASE_URL = "http://127.0.0.1:8000";
@@ -40,6 +42,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             ...AuthApi({ getStore, getActions, setStore, api }),
             ...DocenteApi({ getStore, getActions, setStore, api }),
             ...AsignaturaApi({ getStore, getActions, setStore, api }),
+            ...TestEstresApi({ getStore, getActions, setStore, api }),
+            ...AsignacionTestApi({ getStore, getActions, setStore, api }),
         },
     };
 };

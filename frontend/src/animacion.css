@@ -1,0 +1,218 @@
+@keyframes shine {
+    from {
+      opacity: 0;
+      left: 0%;
+    }
+    50% {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      left: 100%;
+    }
+  }
+  
+  .animated-button {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 18px; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    color: #00c7ec;
+    border: 1px solid #00c7ec;
+    border-radius: 5px;
+    line-height: 1.5em;
+    padding: 0.5em 1.5em;
+    box-shadow: 0 0 0 0 transparent;
+    transition: all 0.2s ease-in;
+    gap: 0.5em;
+  }
+  
+  .animated-button:hover {
+    color: white;
+    box-shadow: 0 0 30px 0 rgba(0, 199, 236, 0.5);
+    background-color: #00c7ec;
+    transition: all 0.2s ease-out;
+  }
+  
+  .animated-button:hover::before {
+    animation: shine 0.5s 0s linear;
+  }
+  
+  .animated-button:active {
+    box-shadow: 0 0 0 0 transparent;
+    transition: box-shadow 0.2s ease-in;
+  }
+  
+  .animated-button::before {
+    content: '';
+    display: block;
+    width: 0px;
+    height: 86%;
+    position: absolute;
+    top: 7%;
+    left: 0%;
+    opacity: 0;
+    background: white;
+    box-shadow: 0 0 15px 3px white;
+    transform: skewX(-20deg);
+  }
+  
+  .delete-button {
+    color: #ee4e6e;
+    border-color: #ee4e6e;
+  }
+  
+  .delete-button:hover {
+    background-color: #ee4e6e; 
+    color: white;
+    box-shadow: 0 0 10px 0 rgba(248, 113, 113, 0.5); 
+  }
+  
+/* ANIMACIONES PARA EL BOTON DE FORMULARIOS */
+.btn-form {
+    width: 50px; 
+    height: 50px;
+    background: linear-gradient(to right, #a855f7, #9333ea); 
+    border-style: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 23px;
+    font-family: 'Lato';
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    padding: 0px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-form .btn-text {
+    display: none; 
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 10px; 
+}
+
+.btn-form:hover .btn-icon {
+    display: none; 
+}
+
+.btn-form svg {
+    transition: all 0.3s ease;
+}
+
+.btn-form span {
+    position: absolute;
+    display: block;
+}
+
+.btn-form span:nth-child(1) {
+    height: 3px;
+    width: 100%;
+    top: 0px;
+    left: -100%;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0), #bfdbfe);
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    animation: span1 2s linear infinite;
+    animation-delay: 1s;
+}
+
+@keyframes span1 {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+.btn-form span:nth-child(2) {
+    height: 100%;
+    width: 3px;
+    top: -100%;
+    right: 0px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0), #bfdbfe);
+    border-bottom-left-radius: 1px;
+    border-bottom-right-radius: 1px;
+    animation: span2 2s linear infinite;
+    animation-delay: 2s;
+}
+
+@keyframes span2 {
+    0% {
+        top: -100%;
+    }
+    100% {
+        top: 100%;
+    }
+}
+
+.btn-form span:nth-child(3) {
+    height: 3px;
+    width: 100%;
+    right: -100%;
+    bottom: 0px;
+    background: linear-gradient(to left, rgba(0,0,0,0), #bfdbfe);
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+    animation: span3 2s linear infinite;
+    animation-delay: 3s;
+}
+
+@keyframes span3 {
+    0% {
+        right: -100%;
+    }
+    100% {
+        right: 100%;
+    }
+}
+
+.btn-form span:nth-child(4) {
+    height: 100%;
+    width: 3px;
+    bottom: -100%;
+    left: 0px;
+    background: linear-gradient(to top, rgba(0,0,0,0), #bfdbfe);
+    border-top-right-radius: 1px;
+    border-top-left-radius: 1px;
+    animation: span4 2s linear infinite;
+    animation-delay: 4s;
+}
+
+@keyframes span4 {
+    0% {
+        bottom: -100%;
+    }
+    100% {
+        bottom: 100%;
+    }
+}
+
+.btn-form:hover {
+    width: 150px; 
+    height: 50px;
+    box-shadow: 0px 3px 5px rgba(0,0,0,.4);
+}
+
+.btn-form:hover .btn-text {
+    display: inline-block;
+}
+
+.btn-form:hover {
+    transform: none; 
+    transition: all 0.3s ease; 
+}

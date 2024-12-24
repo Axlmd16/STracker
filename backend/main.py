@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from core.database import init_db
 from modules.inicio_sesion.routes.router import router
 from modules.inicio_sesion.routes.auth_route import auth_router
+from modules.test_estres.routes.test_estres_router import router_test_estres
+from modules.test_estres.routes.asignacion_test_router import router_asignacion_test
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -27,6 +29,8 @@ app.add_middleware(
 
 app.include_router(router)
 app.include_router(auth_router)
+app.include_router(router_test_estres)
+app.include_router(router_asignacion_test)
 
 @app.get("/")
 def read_root():

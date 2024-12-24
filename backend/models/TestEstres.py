@@ -8,6 +8,7 @@ class TestEstres(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     url = Column(String(255), nullable=False, unique=True)
     descripcion = Column(String(255), nullable=False)
+    estado = Column(Boolean, default=True)  
     
     # Relación
     asignaciones_test = relationship("AsignacionTest", back_populates="test")
