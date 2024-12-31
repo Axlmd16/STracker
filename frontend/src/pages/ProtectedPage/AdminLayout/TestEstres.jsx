@@ -75,7 +75,7 @@ function PageTestEstresCrud({ actions, store }) {
                             <PlusCircle size={20} />
                         </button>
                     </div> */}
-                     <div className="ml-auto">
+                    {/* <div className="ml-auto">
                         <div className="ml-auto">
                             <button className="btn-form" onClick={handleCreateTestEstres}>
                                 <span></span>
@@ -83,11 +83,19 @@ function PageTestEstresCrud({ actions, store }) {
                                 <span></span>
                                 <span></span>
                                 <PlusCircle size={20} className="btn-icon" />
-                                <span className="btn-text">Agregar</span>
+                                <span className="button-text">Agregar</span>
                             </button>
-                        </div>
-                        </div>
+                        </div>  
+                    </div> */}
+                     <div className="ml-auto">
+                        <button className="wave-button" onClick={handleCreateTestEstres}>
+                            <span className="button-content">
+                                <PlusCircle size={20} className="icon" />
+                                <span className="button-text">ADD</span>
+                            </span>
+                        </button>
                     </div>
+                </div>
             </div>
 
             <div className="flex-grow mt-6 bg-white p-6 rounded-md shadow-md overflow-x-auto">

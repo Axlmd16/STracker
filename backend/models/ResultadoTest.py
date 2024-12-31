@@ -7,7 +7,7 @@ class ResultadoTest(Base):
     
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     fecha = Column(DateTime, nullable=False)
-    resultado = Column(Float, nullable=False)
+    resultado = Column(Float, nullable=True)
     asignacion_id = Column(Integer, ForeignKey("asignacion_test.id"), nullable=False)
     estudiante_id = Column(Integer, ForeignKey("usuario.id"), nullable=False)
     

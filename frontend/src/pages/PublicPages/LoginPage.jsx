@@ -19,7 +19,17 @@ function LoginPage({ actions, store }) {
                 </div>
             </div>
 
-            {/* Lado Derecho: Imagen o Fondo Visual */}
+            {/* <div className="hidden md:flex w-3/5 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 items-center justify-center relative">
+                <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{
+                        backgroundImage: `url('/src/util/imgs/psicologo_test.png')`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    }}
+                ></div>
+            </div> */}
+            {/* //* Version antigua */}
             <div className="hidden md:flex w-3/5 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 items-center justify-center relative">
                 <div className="absolute top-0 left-0 h-full w-full bg-gray-900 opacity-50"></div>
                 <div className="relative z-10 text-center text-white px-8">
