@@ -1,0 +1,187 @@
+/* ESTILOS PARA LOS BOTONES DE EDITAR Y ELIMINAR */
+.btn-accion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border: 2px solid currentColor;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-accion::after {
+    content: "";
+    position: absolute;
+    width: 300%;
+    height: 300%;
+    border-radius: 50%;
+    background-color: currentColor;
+    transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+}
+
+.btn-accion:hover::after {
+    width: 400%;
+    height: 400%;
+    opacity: 0.3;
+    top: -50%;
+    left: -50%;
+}
+
+.btn-editar {
+    color: #33bfea;
+}
+
+.btn-eliminar {
+    color: #EF4444;
+}
+
+.btn-accion svg {
+    transition: transform 0.5s ease-in-out;
+}
+
+.btn-editar:hover svg {
+    animation: pendulo-editar 1s ease-in-out infinite;
+}
+
+.btn-eliminar:hover svg {
+    animation: pendulo-eliminar 1s ease-in-out infinite;
+}
+
+@keyframes pendulo-editar {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(10deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes pendulo-eliminar {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(-10deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* PARA EL BOTNO PARA ABRIR FORMULARIO */
+.wave-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: linear-gradient(135deg, #6fd8a5, #00b3ff, #00e5ff);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.5s ease, background-position 1.5s ease;
+    background-size: 200%;
+}
+
+.wave-button:hover {
+    background-position: right center;
+    background: linear-gradient(135deg, #d85d9a, #946fd8, #00b3ff);
+    transform: scale(1.03);
+}
+
+.button-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 1;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.icon {
+    margin-right: 0.5rem;
+    transition: transform 0.5s ease;
+}
+
+.wave-button:hover .icon {
+    transform: rotate(360deg);
+}
+
+.wave-button:hover .button-content {
+    transform: scale(1.05);
+}
+
+/* ESTILOS PARA BOTONES*/
+.btn-custom {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    outline: none;
+}
+
+.btn-custom-warning {
+    background-color: #ef4444;
+    color: white;
+    position: relative;
+}
+
+.btn-custom-warning:hover {
+    background-color: #dc2626;
+    box-shadow: 0 0 3px rgba(239, 68, 68, 0.5), 0 0 8px rgba(239, 68, 68, 0.3);
+    animation: pulsate-warning 1.5s infinite;
+}
+
+.btn-custom-success {
+    background-color: #06b6d4;
+    color: white;
+    position: relative;
+}
+
+.btn-custom-success:hover {
+    background-color: #0ea5e9;
+    box-shadow: 0 0 3px rgba(6, 182, 212, 0.5), 0 0 8px rgba(6, 182, 212, 0.3);
+    animation: pulsate-success 1.5s infinite;
+}
+
+@keyframes pulsate-warning {
+    0% {
+        box-shadow: 0 0 3px rgba(239, 68, 68, 0.5), 0 0 8px rgba(239, 68, 68, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 8px rgba(239, 68, 68, 0.7), 0 0 12px rgba(239, 68, 68, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 3px rgba(239, 68, 68, 0.5), 0 0 8px rgba(239, 68, 68, 0.3);
+    }
+}
+
+@keyframes pulsate-success {
+    0% {
+        box-shadow: 0 0 3px rgba(6, 182, 212, 0.5), 0 0 8px rgba(6, 182, 212, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 8px rgba(6, 182, 212, 0.7), 0 0 12px rgba(6, 182, 212, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 3px rgba(6, 182, 212, 0.5), 0 0 8px rgba(6, 182, 212, 0.3);
+    }
+}

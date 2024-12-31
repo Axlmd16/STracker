@@ -62,35 +62,31 @@ function AsignacionTestPage({ actions, store }) {
 
     return (
         <div className="flex flex-col h-full">
-            <div className="bg-white p-6 rounded-md shadow-md">
-                <h1 className="text-2xl font-semibold text-gray-700">
+            <div className="relative w-full h-40 p-6 rounded-md shadow-md">
+                <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{
+                        backgroundImage: `url('/src/util/imgs/Background-test.png')`,
+                        filter: 'opacity(0.2)',
+                        zIndex: -1,
+                    }}
+                ></div>
+                <h1 className="text-3xl font-bold text-sky-700">
                     Asignación de Test
                 </h1>
                 <div className="flex items-center mt-4">
-                    <p className="text-sm text-gray-500 mt-2">
+                    <p className="text-sm font-semibold text-sky-600 mt-2">
                         Crear, editar, eliminar y listar asignaciones de tests
                     </p>
-                    {/* <div className="ml-auto"> */}
-                    {/* <button
-                            className="btn btn-primary mt-4 btn-circle"
-                            onClick={handleCreateAsignacionTest}
-                        >
-                            <PlusCircle size={20} />
-                        </button> */}
-                    {/* </div> */}
                     <div className="ml-auto">
-                        <div className="ml-auto">
-                            <button className="btn-form" onClick={handleCreateAsignacionTest}>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <PlusCircle size={20} className="btn-icon" />
-                                <span className="btn-text">Agregar</span>
-                            </button>
-                        </div>
-
+                        <button className="wave-button" onClick={handleCreateAsignacionTest}>
+                            <span className="button-content">
+                                <PlusCircle size={20} className="icon" />
+                                <span className="button-text">ADD</span>
+                            </span>
+                        </button>
                     </div>
+
                 </div>
             </div>
 
@@ -115,11 +111,13 @@ function AsignacionTestPage({ actions, store }) {
                     formRef={formRef}
                     modalRef={modalFormRef}
                     update={update}
+                    store={store}
                     row={data}
                     handleCloseModal={handleCloseModal}
                 />
             </ModalForm>
         </div>
+
     );
 }
 
