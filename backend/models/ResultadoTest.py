@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, Float
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, Float, UniqueConstraint
 from sqlalchemy.orm import relationship
 from core.database import Base
 
@@ -9,8 +9,13 @@ class ResultadoTest(Base):
     fecha = Column(DateTime, nullable=False)
     resultado = Column(Float, nullable=False)
     asignacion_id = Column(Integer, ForeignKey("asignacion_test.id"), nullable=False)
-    estudiante_id = Column(Integer, ForeignKey("usuario.id"), nullable=False)
+    estudiante_asignatura_id = Column(Integer, ForeignKey("estudiante_asignatura.id"), nullable=False)
     
     # Relaciones
     asignacion = relationship("AsignacionTest", back_populates="resultados")
-    estudiante = relationship("Usuario", back_populates="test_realizados")
+    estudiante_asignatura = relationship("EstudianteAsignatura", back_populates="test_realizados")
+
+    # Índice compuesto para evitar combinaciones duplicadas
+    __table_args__ = (
+        UniqueConstraint('asignacion_id', 'estudiante_asignatura_id', name='unique_asignacion_estudiante'),
+    )

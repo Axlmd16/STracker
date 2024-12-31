@@ -116,6 +116,7 @@ function StudentsSubjectPage({ actions, store }) {
                             data={dataTable}
                             pending={pending}
                             searchKeys={["nombres", "apellidos", "cedula"]}
+                            idAsig={id}
                         />
                     </div>
 

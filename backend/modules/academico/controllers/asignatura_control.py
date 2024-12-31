@@ -1,8 +1,5 @@
 from models.Asignatura import Asignatura
-from models.Usuario import Usuario
 from core.database import SessionLocal
-from fastapi import HTTPException
-from modules.inicio_sesion.schemas.usuario_schema import UsuarioBase
 
 
 class AsignaturaControl:
@@ -47,34 +44,9 @@ class AsignaturaControl:
     #             raise HTTPException(status_code=400, detail="Estudiante ya se encuentra en la asignatura")
     #         return True
             
-    
-    def agregar_estudiante_asignatura(self, id_asignatura: int, id_estudiante: int):
-        with SessionLocal() as db:
-            asignatura = db.query(Asignatura).filter(Asignatura.id == id_asignatura).first()
-            estudiante = db.query(Usuario).filter(Usuario.id == id_estudiante).first()
-            
-            if estudiante and asignatura:
-                asignatura.estudiantes.append(estudiante)
-                db.commit()
-                return True
-            return HTTPException(status_code=404, detail="Estudiante o asignatura no encontrada")
-                
-    def obtener_estudiantes_asignatura(self, id: int):
-        with SessionLocal() as db:
-            asignatura = db.query(Asignatura).filter(Asignatura.id == id).first()
-            if asignatura:
-                estudiantes = asignatura.estudiantes
-                dict_estudiantes = [UsuarioBase.from_orm(estudiante).dict() for estudiante in estudiantes]
-                return dict_estudiantes
-                
-            else:
-                raise HTTPException(status_code=404, detail="Asignatura no encontrada")
-            
+
+
     def obtener_detalles(self, id: int):
-        # Obtener el nro de estudiantes en la asignatura
-        # Obtener el nro de tareas asignadas en la asignatura
-        # Obtener el nro de test asignados en la asignatura
-        
         with SessionLocal() as db:
             asignatura = db.query(Asignatura).filter(Asignatura.id == id).first()
             if asignatura:
