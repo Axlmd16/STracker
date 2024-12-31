@@ -22,7 +22,10 @@ import SearchBar from "../Navigation/search_bar";
 import Swal from "sweetalert2";
 
 const DataTableUser = forwardRef(
-    ({ actions, handleUpdate, fetchData, data, pending, searchKeys }, ref) => {
+    (
+        { actions, handleUpdate, fetchData, data, pending, searchKeys, idAsig },
+        ref
+    ) => {
         const [filteredData, setFilteredData] = useState([]);
 
         useEffect(() => {
@@ -56,7 +59,10 @@ const DataTableUser = forwardRef(
         const handleDeleteClick = async (row) => {
             Swal.fire({
                 title: "¿Estás seguro?",
-                text: "¡No podrás revertir esto!",
+                text: idAsig
+                    ? "Estás a punto de eliminar al estudiante de la asignatura"
+                    : "No podrás revertir esto",
+
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#8da579",
@@ -65,7 +71,10 @@ const DataTableUser = forwardRef(
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        await actions.deleteUser(row.id);
+                        await actions.quitarEstudianteAsignatura(
+                            idAsig,
+                            row.id
+                        );
                         fetchData();
                         toast.success("Elemento eliminado correctamente");
                     } catch (error) {
