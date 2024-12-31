@@ -6,13 +6,15 @@ import InputForm from "./Fields/ImputForm";
 function AsignacionTestForm({
   update,
   row,
+  store,
   actions,
   formRef,
   modalRef,
   handleCloseModal,
 }) {
-  const [tests, setTests] = useState([]); // Estado para los tests disponibles
+  const [tests, setTests] = useState([]);
   const [pending, setPending] = useState(false);
+  const [activities, setActivities] = useState([]); 
 
   const {
     register,
@@ -26,13 +28,32 @@ function AsignacionTestForm({
     setPending(true);
     try {
       const data = await actions.getAllTestEstres();
-      setTests(data); 
+      setTests(data);
     } catch (error) {
       toast.error("Error al cargar los datos");
     } finally {
       setPending(false);
     }
   }, [actions]);
+
+
+  const fetchAcademicActivities = useCallback(async () => {
+    setPending(true); 
+    try {
+      const data = await actions.getActividades(); 
+      setActivities(data);
+    } catch (error) {
+      toast.error("Error al cargar las actividades académicas");
+    } finally {
+      setPending(false);
+    }
+  }, [actions]);
+
+  useEffect(() => {
+    fetchTestEstres();
+    fetchAcademicActivities(); 
+  }, [fetchTestEstres, fetchAcademicActivities]);
+
 
   useEffect(() => {
     fetchTestEstres();
@@ -41,14 +62,14 @@ function AsignacionTestForm({
   const onSubmit = async (data) => {
     const formData = {
       ...data,
-      docente_id: 1, 
-      actividad_academica_id: 1, 
+      docente_id: store.id_user_auth,
+      actividad_academica_id: 1,
     };
-  
+
     const promise = update
       ? actions.updateAsignacionTest(row.id, { ...formData, id: row.id })
       : actions.createAsignacionTest(formData);
-  
+
     toast.promise(promise, {
       loading: <span className="loading loading-spinner"></span>,
       success: update ? (
@@ -68,7 +89,7 @@ function AsignacionTestForm({
         return <b>Error inesperado al registrar la asignación del test de estrés</b>;
       },
     });
-  
+
     try {
       await promise;
       if (modalRef && modalRef.current) {
@@ -116,6 +137,28 @@ function AsignacionTestForm({
           </select>
           {errors.test_id && <p className="text-error text-sm">{errors.test_id.message}</p>}
         </div>
+        <div className="grid md:grid-cols-1 md:gap-6">
+          <label className="label" htmlFor="actividad_academica_id">
+            <span className="label-text">Seleccionar Actividad Académica</span>
+          </label>
+          <select
+            id="actividad_academica_id"
+            name="actividad_academica_id"
+            className={`input input-bordered w-full ${errors.actividad_academica_id ? "input-error" : ""}`}
+            {...register("actividad_academica_id", { required: "Este campo es obligatorio" })}
+          >
+            <option value="">Seleccione una actividad académica</option>
+            {activities.map((activity) => (
+              <option key={activity.id} value={activity.id}>
+                {activity.descripcion}
+              </option>
+            ))}
+          </select>
+          {errors.actividad_academica_id && (
+            <p className="text-error text-sm">{errors.actividad_academica_id.message}</p>
+          )}
+        </div>
+
 
         <div className="grid md:grid-cols-1 md:gap-6">
           <label className="label" htmlFor="fecha_asignacion">
@@ -167,11 +210,11 @@ function AsignacionTestForm({
           <button
             type="button"
             onClick={handleCancel}
-            className="btn btn-warning"
+            className="btn btn-warning btn-custom-warning"
           >
             Cancelar
           </button>
-          <button type="submit" className="btn btn-success">
+          <button type="submit" className="btn btn-success btn-custom-success">
             {update ? "Actualizar" : "Registrar"}
           </button>
         </div>
