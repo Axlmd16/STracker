@@ -46,7 +46,7 @@ class AsignaturaControl:
             
 
 
-    def obtener_detalles(self, id: int):
+    def obtener_detalles(self, id: int): 
         with SessionLocal() as db:
             asignatura = db.query(Asignatura).filter(Asignatura.id == id).first()
             if asignatura:

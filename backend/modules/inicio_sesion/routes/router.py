@@ -4,7 +4,7 @@ from middlewares.verify_token_route import VerifyTokenRoute
 from modules.inicio_sesion.controllers.usuario_control import UsuarioControl
 from modules.inicio_sesion.schemas.usuario_schema import ImportarUsuariosRequest, UsuarioBase, UsuarioCreate, UsuarioResponse, UsuarioUpdate
 from modules.inicio_sesion.controllers.cuenta_control import CuentaControl
-from modules.inicio_sesion.schemas.cuenta_schema import CuentaCreate, CuentaResponse, CuentaUpdate
+from modules.inicio_sesion.schemas.cuenta_schema import CuentaCreate, CuentaResponse, CuentaUpdate, CuentaUpdateEstado
 
 
 router = APIRouter(route_class=VerifyTokenRoute)
@@ -25,7 +25,10 @@ cc = CuentaControl()
     
 @router.get("/cuentas/")
 def get_cuentas():
-    cuentas = cc.obtener_cuentas()
+    cuentas = []
+    for cuenta in cc.obtener_cuentas():
+        cuentas.append(cc.combinar_usuario_cuenta(cuenta))     
+    
     return {"message": "All accounts", "data": cuentas}
 
 @router.get("/cuentas/{id}")
@@ -51,12 +54,12 @@ def remover_cuenta(id: int):
         raise HTTPException(status_code=404, detail="Cuenta no encontrada")
     
 @router.put("/cuentas/{id}/cambiar_estado", response_model=CuentaResponse)
-def cambiar_estado_cuenta(id: int, activar: bool):
+def cambiar_estado_cuenta(id: int, data: CuentaUpdateEstado):
     try:
-        response = cc.cambiar_estado_cuenta(id, activar)
+        response = cc.cambiar_estado_cuenta(id, data.activar)
         if response is None:
             raise HTTPException(status_code=404, detail="Cuenta no encontrada")
-        estado = "activada" if activar else "desactivada"
+        estado = "activada" if data.activar else "desactivada"
         return {
             "message": f"Cuenta con id: {id} {estado} correctamente",
             "data": response
@@ -85,6 +88,7 @@ def guardar_usuario(usuario: UsuarioCreate):
         cuenta = CuentaCreate(
             username=username,
             password=usuario_creado.cedula,  
+            estado=True,
             usuario_id=usuario_creado.id
         )
         cuenta_creada = cc.crear_cuenta(cuenta)
