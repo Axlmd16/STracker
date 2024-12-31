@@ -77,10 +77,18 @@ class CuentaControl:
                 return None
             return cuenta
         
+
     def combinar_usuario_cuenta(self, cuenta):
         usuario = UsuarioControl().obtener_usuario(cuenta.usuario_id)
         
-        return CuentaRol(username=cuenta.username, password=cuenta.password, estado=cuenta.estado, rol=usuario.rol, id_usuario=usuario.id)
+        return CuentaRol(
+                id=cuenta.id,
+                username=cuenta.username, 
+                password=cuenta.password, 
+                estado=cuenta.estado, 
+                rol=usuario.rol, 
+                id_usuario=usuario.id
+                )
         
         
 
