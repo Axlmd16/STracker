@@ -22,13 +22,15 @@ def init_db():
     from models.Cuenta import Cuenta
     from models.Notificacion import Notificacion
     from models.Grupo import Grupo
-    from models.Asociacion import estudiante_grupo
     from models.Asignatura import Asignatura
-    from models.Asociacion import estudiante_asignatura
+    from models.EstudianteAsignatura import EstudianteAsignatura
+    from models.Asociacion import recomendacion_test
     from models.Asignacion import AsignacionTest
     from models.TestEstres import TestEstres
     from models.ResultadoTest import ResultadoTest
     from models.ActividadAcademica import ActividadAcademica
+    from models.Asociacion import gea
+    from models.Recomendacion import Recomendacion
         
     try:
         Base.metadata.create_all(bind=engine)

@@ -2,7 +2,9 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from middlewares.verify_token_route import VerifyTokenRoute
 from modules.academico.controllers.asignatura_control import AsignaturaControl
+from modules.academico.controllers.estudiante_asignatura_control import EstudianteAsignaturaControl
 from modules.academico.schemas.asignatura_schema import AsignaturaCreate, AsignaturaResponse, AsignaturaUpdate, EstudianteAsignatura
+from modules.academico.schemas.estudiante_asignatura_schema import EstudianteAsig, EstudianteAsignaturaBase
 from modules.inicio_sesion.controllers.usuario_control import UsuarioControl
 
 
@@ -10,6 +12,7 @@ router_asignatura = APIRouter(route_class=VerifyTokenRoute)
 
 uc = UsuarioControl()
 ac = AsignaturaControl()
+eac = EstudianteAsignaturaControl()
 
 #* CRUD ASIGNATURAS ----------------------------------------------------------------------------------------------------
 @router_asignatura.get("/asignaturas/")
@@ -66,20 +69,40 @@ def remover_asignatura(id: int):
 #* ESTUDIANTES EN ASIGNATURAS ----------------------------------------------------------------------------------------------------
 @router_asignatura.post("/asignaturas/{id}/estudiantes/")
 def agregar_estudiante_asignatura(id: int, estudiante: EstudianteAsignatura):
-    response = ac.agregar_estudiante_asignatura(id, estudiante.id_estudiante)
+    asignatura = ac.obtener_asignatura(id)
+    estudiante = uc.obtener_usuario(estudiante.id_estudiante)
+    
+    if not asignatura:
+        raise HTTPException(status_code=404, detail="Asignatura no encontrada")
+    if not estudiante:
+        raise HTTPException(status_code=404, detail="Estudiante no encontrado")
+    
+    response = eac.agregar_estudiante_a_asignatura(id, estudiante.id)
     if response:
         return {"status": 200, "message": "Estudiante agregado correctamente a la asignatura"}
+    else:
+        raise HTTPException(status_code=400, detail="Error al agregar estudiante a la asignatura")
     
-# @router_asignatura.delete("/asignaturas/{id}/estudiantes/")
-# def remover_estudiante_asignatura(id: int, estudiante: EstudianteAsignatura):
-#     response = ac.remover_estudiante_asignatura(id, estudiante.id_estudiante)
+@router_asignatura.delete("/asignaturas/{id}/estudiantes/{id_est}")
+def remover_estudiante_asignatura(id: int, id_est: int):
     
-#     if response:
-#         return {"status": 200, "message": "Estudiante removido correctamente de la asignatura"}
+    asignatura = ac.obtener_asignatura(id)
+    estudiante = uc.obtener_usuario(id_est)
+    
+    if not asignatura:
+        raise HTTPException(status_code=404, detail="Asignatura no encontrada")
+    if not estudiante:
+        raise HTTPException(status_code=404, detail="Estudiante no encontrado")
+    
+    response = eac.quitar_estudiante_de_asignatura(asignatura.id, estudiante.id)
+    
+    if response == True:
+        return {"status": 200, "message": "Estudiante eliminado de la asignatura correctamente"}
+
 
 @router_asignatura.get("/asignaturas/{id}/estudiantes/")
 def obtener_estudiantes_asignatura(id: int):
-    data = ac.obtener_estudiantes_asignatura(id)
+    data = eac.obtener_estudiantes_en_asignatura(id)
     return JSONResponse(content=data, status_code=200)
 
 
