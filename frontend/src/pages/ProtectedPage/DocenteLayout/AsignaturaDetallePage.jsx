@@ -7,6 +7,7 @@ import StressIndicators from "../../../components/Graphics/StressIndicators";
 import Sidebar from "../../../components/Navigation/Sidebar";
 import InterfaceTableActividades from "../../../components/Tables/ActividadesTest/InterfaceTableActividades";
 import DataTableAssignment from "../../../components/Tables/DataTableAssignment";
+import InterfaceTableAsignaciones from "../../../components/Tables/ActividadesTest/InterfaceTableAsignaciones";
 
 function AsignaturaDetallePage({ actions, store }) {
     const { id } = useParams();
@@ -144,14 +145,19 @@ function AsignaturaDetallePage({ actions, store }) {
                                     />
                                 </div>
                                 <div className="bg-white shadow-lg rounded-lg p-6 min-h-[400px]">
-                                    <DataTableAssignment
+                                    <InterfaceTableAsignaciones
+                                        actions={actions}
+                                        store={store}
+                                        id={id}
+                                    />
+                                    {/* <DataTableAssignment
                                         title="Tests Asignados"
                                         buttonLabel="Nuevo Test"
                                         data={testsData}
                                         onButtonClick={() =>
                                             console.log("Nuevo Test clickeado")
                                         }
-                                    />
+                                    /> */}
                                 </div>
                             </div>
                         </div>

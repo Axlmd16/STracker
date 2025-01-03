@@ -9,6 +9,8 @@ class AsignacionTestSchema(BaseModel):
     docente_id: int
     test_id: int
     actividad_academica_id: Optional[int] = None
+    asignatura_id: int
+    id_grupo: Optional[int] = None
 
     class Config:
         orm_mode = True

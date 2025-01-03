@@ -13,9 +13,11 @@ class AsignacionTest(Base):
     test_id = Column(Integer, ForeignKey("test_estres.id"), nullable=False)
     actividad_academica_id = Column(Integer, ForeignKey("actividad_academica.id"), nullable=True) 
     asignatura_id = Column(Integer, ForeignKey("asignatura.id"), nullable=False)
+    id_grupo = Column(Integer, ForeignKey("grupo.id"), nullable=True)
     
     # Relaciones
     asignatura = relationship("Asignatura", back_populates="asignaciones")
     test = relationship("TestEstres", back_populates="asignaciones_test")
     actividad_academica = relationship("ActividadAcademica", back_populates="asignaciones_test_ac")
-    resultados = relationship("ResultadoTest", back_populates="asignacion", cascade="all, delete-orphan") 
+    resultados = relationship("ResultadoTest", back_populates="asignacion", cascade="all, delete-orphan")
+    grupo = relationship("Grupo", back_populates="asignaciones_test", lazy="subquery")

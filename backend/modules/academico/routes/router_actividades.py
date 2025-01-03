@@ -57,3 +57,11 @@ def editar_actividad(id: int, actividad):
     if not response:
         return HTTPException(status_code=404, detail="Actividad no encontrada")
     return {"message": f"Actividad con id: {id} actualizada correctamente", "data": response}
+
+
+@router_actividades.get("/actividades/asignatura/{asignatura_id}", tags=["Actividades"])
+def get_asignaciones_por_asignatura(asignatura_id: int):
+    asignaciones = ac.obtener_actividades_por_asignatura(asignatura_id)
+    if not asignaciones:
+        raise HTTPException(status_code=404, detail="No se encontraron asignaciones para esta asignatura")
+    return {"message": "Asignaciones para la asignatura", "data": asignaciones}

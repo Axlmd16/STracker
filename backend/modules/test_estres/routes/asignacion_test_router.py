@@ -3,7 +3,6 @@ from ..controllers.asignacion_test_controller import AsignacionTestController
 from ..schemas.asignacion_test_schema import AsignacionTestSchema
 
 router_asignacion_test = APIRouter()
-
 asignacion_controller = AsignacionTestController()
 
 @router_asignacion_test.get("/asignacion_test/", tags=["Asignacion Test"])
@@ -36,3 +35,33 @@ def eliminar_asignacion(id: int):
     if not asignacion_eliminada:
         raise HTTPException(status_code=404, detail="AsignacionTest no encontrada para eliminar")
     return {"message": "Asignacion test eliminada", "data": asignacion_eliminada}
+
+@router_asignacion_test.get("/asignacion_test/asignatura/{asignatura_id}", tags=["Asignacion Test"])
+def get_asignaciones_por_asignatura(asignatura_id: int):
+    asignaciones = asignacion_controller.obtener_asignaciones_por_asignatura(asignatura_id)
+    if not asignaciones:
+        raise HTTPException(status_code=404, detail="No se encontraron asignaciones para esta asignatura")
+    return {"message": "Asignaciones para la asignatura", "data": asignaciones}
+
+@router_asignacion_test.get("/asignaciones_estudiantes/{id_estudiante}", tags=["Asignacion Test"])
+def get_asignaciones_para_estudiante(id_estudiante: int):
+    asignaciones = asignacion_controller.obtener_asignaciones_para_estudiantes(id_estudiante)
+    if not asignaciones:
+        raise HTTPException(status_code=404, detail="No se encontraron asignaciones para este estudiante")
+    return {"message": "Asignaciones para el estudiante", "data": asignaciones}
+
+#! Nota: Esto debo cambiarlo en otro archivo
+@router_asignacion_test.get("/grupo/asignatura/{asignatura_id}", tags=["Grupos"])
+def get_grupos_por_asignatura(asignatura_id: int):
+    asignaciones = asignacion_controller.obtener_grupos_por_asignatura(asignatura_id)
+    if not asignaciones:
+        raise HTTPException(status_code=404, detail="No se encontraron asignaciones para esta asignatura")
+    return {"message": "Asignaciones para la asignatura", "data": asignaciones}
+
+#! Nota: Esto debo cambiarlo en otro archivo
+@router_asignacion_test.get("/actividades/asignatura/{asignatura_id}", tags=["Actividades"])
+def get_asignaciones_por_asignatura(asignatura_id: int):
+    asignaciones = asignacion_controller.obtener_actividades_por_asignatura(asignatura_id)
+    if not asignaciones:
+        raise HTTPException(status_code=404, detail="No se encontraron asignaciones para esta asignatura")
+    return {"message": "Asignaciones para la asignatura", "data": asignaciones}
