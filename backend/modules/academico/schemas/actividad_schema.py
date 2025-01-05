@@ -10,6 +10,7 @@ class ActividadBase(BaseModel):
     fecha_fin: datetime
     tipo_actividad: str
     asignatura_id: Optional[int] = None
+    url_archivo: Optional[str] = None
     class Config:
         from_attributes = True
         

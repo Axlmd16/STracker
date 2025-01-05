@@ -101,6 +101,22 @@ def guardar_usuario(usuario: UsuarioCreate):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
 
+
+@router.post("/usuarios/importar")
+def importar_usuarios(request: ImportarUsuariosRequest):
+    try:
+        response = uc.importar_usuarios(request.data)
+        if not response:
+            raise HTTPException(status_code=500, detail="Error al importar los usuarios")
+
+        return {"message": "Usuarios y cuentas creados correctamente", "code": 200}
+    except HTTPException as http_exc:
+        raise http_exc
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+
+
 @router.get("/usuarios/")
 def get_usuarios():
     usrs = uc.obtener_usuarios()
@@ -130,19 +146,20 @@ def remover_usuario(id: int):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     
     
-@router.post("/usuarios/importar")
-def importar_usuarios(request: ImportarUsuariosRequest):
-    print(request.data)
-    try:
-        response = uc.importar_usuarios(request.data)
-        if response == False:
-            raise HTTPException(status_code=500, detail="Error al importar los usuarios")
-        return {"message": "Usuarios importados correctamente", "code": 200}
-    except HTTPException as http_exc:
-        raise http_exc
-    except Exception as e:
-        print(e)
-        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+
+
+#* Funcion para obtener los 3 ultimos usuarios registrados
+@router.get("/usuarios_ultimos/")
+def get_ultimos_usuarios():
+    response = uc.obtener_ultimos_usuarios()
+    return {"message": "Ultimos usuarios", "data": response}
+
+#* Funcion para obtener informacion general
+@router.get("/informacion_general/")
+def get_informacion_general():
+    response = uc.obtener_info_general()
+    return {"message": "Informacion general", "data": response}
+
 
 #* Obtener docentes ----------------------------------------------------------------------------------------------------
 @router.get("/docentes/")

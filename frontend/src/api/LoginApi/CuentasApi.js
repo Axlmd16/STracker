@@ -10,6 +10,21 @@ const CuentasApi = ({ getStore, getActions, setStore, api }) => ({
         });
         return response.data.data;
     },
+
+    getUltimosUsuarios: async () => {
+        const response = await api.get("/usuarios_ultimos");
+        return response.data;
+    },
+
+    getInfoGeneral: async () => {
+        const response = await api.get("/informacion_general");
+        return response.data;
+    },
+
+    getUltimosTests: async () => {
+        const response = await api.get("/test_estres_ultimos");
+        return response.data.data;
+    },
 });
 
 export default CuentasApi;

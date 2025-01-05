@@ -82,7 +82,7 @@ function CuentaCrudPage({ actions, store }) {
                         Crear, editar, eliminar y listar docentes
                     </p>
                     <div className="ml-auto">
-                        <button
+                        {/* <button
                             className="btn btn-primary mt-4 btn-circle"
                             onClick={handleCreateDocente}
                         >
@@ -93,7 +93,7 @@ function CuentaCrudPage({ actions, store }) {
                             onClick={handleImportDocente}
                         >
                             <Import size={20} />
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>
@@ -106,38 +106,6 @@ function CuentaCrudPage({ actions, store }) {
                     handleUpdate={handleUpdate}
                 />
             </div>
-
-            {/* Modal para crear y actualizar */}
-            <ModalForm
-                ref={modalFormRef}
-                formRef={formRef}
-                handleCloseModal={handleCloseModal}
-            >
-                <h2 className="text-xl font-semibold mb-4">
-                    {data ? "Actualizar docente" : "Crear docente"}
-                </h2>
-                <DocenteForm
-                    actions={actions}
-                    formRef={formRef}
-                    modalRef={modalFormRef}
-                    update={update}
-                    row={data}
-                    handleCloseModal={handleCloseModal}
-                />
-            </ModalForm>
-
-            {/* Modal para importar */}
-            <Modal ref={modalRef}>
-                <h2 className="text-xl font-semibold mb-4">
-                    Importar docentes
-                    <ImportDataPage
-                        actions={actions}
-                        store={store}
-                        modalRef={modalRef}
-                        userRole={"DOCENTE"}
-                    />
-                </h2>
-            </Modal>
         </div>
     );
 }

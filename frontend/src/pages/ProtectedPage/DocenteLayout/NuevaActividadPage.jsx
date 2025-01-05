@@ -59,7 +59,7 @@ function NuevaActividadPage({ actions, store }) {
             await promise;
             navigate(`/home/docente/asignatura/${id}`);
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
         }
     };
 
@@ -195,7 +195,36 @@ function NuevaActividadPage({ actions, store }) {
                                             <h2 className="text-xl font-semibold mb-6 pb-2 border-b">
                                                 Archivos Adjuntos
                                             </h2>
-                                            <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl p-8 transition-all duration-300 hover:border-gray-400">
+                                            <div
+                                                className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl p-8 transition-all duration-300 hover:border-gray-600"
+                                                onDragOver={(e) => {
+                                                    e.preventDefault();
+                                                    e.currentTarget.classList.add(
+                                                        "border-blue-500",
+                                                        "bg-blue-50"
+                                                    );
+                                                }}
+                                                onDragLeave={(e) => {
+                                                    e.currentTarget.classList.remove(
+                                                        "border-blue-500",
+                                                        "bg-blue-50"
+                                                    );
+                                                }}
+                                                onDrop={(e) => {
+                                                    e.preventDefault();
+                                                    e.currentTarget.classList.remove(
+                                                        "border-blue-500",
+                                                        "bg-blue-50"
+                                                    );
+                                                    const files =
+                                                        e.dataTransfer.files;
+                                                    const input =
+                                                        document.querySelector(
+                                                            ".file-input"
+                                                        );
+                                                    input.files = files;
+                                                }}
+                                            >
                                                 <div className="flex flex-col items-center text-center">
                                                     <div className="bg-white p-4 rounded-full mb-4 shadow-sm">
                                                         <Upload className="w-8 h-8 text-gray-500" />
@@ -204,15 +233,15 @@ function NuevaActividadPage({ actions, store }) {
                                                         Arrastra y suelta
                                                         archivos aquí o
                                                     </p>
-                                                    <label className="btn btn-primary btn-md">
-                                                        <input
-                                                            type="file"
-                                                            className="hidden"
-                                                            multiple
-                                                            accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar"
-                                                        />
-                                                        Seleccionar archivos
-                                                    </label>
+                                                    <input
+                                                        type="file"
+                                                        className="file-input file-input-bordered file-input-accent w-full max-w-xs"
+                                                        {...register(
+                                                            "archivo",
+                                                            { required: false }
+                                                        )}
+                                                        multiple={false}
+                                                    />
                                                 </div>
                                             </div>
                                         </section>

@@ -22,6 +22,7 @@ import AsignacionTestPage from "../pages/ProtectedPage/DocenteLayout/AsignacionT
 import NuevaActividadPage from "../pages/ProtectedPage/DocenteLayout/NuevaActividadPage";
 import ActividadDetalles from "../pages/ProtectedPage/DocenteLayout/ActividadDetalles";
 import CuentaCrudPage from "../pages/ProtectedPage/AdminLayout/CuentaCrudPage";
+import AsignaturaConfigPage from "../pages/ProtectedPage/DocenteLayout/AsignaturaConfigPage";
 
 function Rutas({ store, actions }) {
     const rol = store.access_role;
@@ -165,6 +166,17 @@ function Rutas({ store, actions }) {
                             }
                         />
                         <Route
+                            path="/home/docente/asignatura/:id/configuracion"
+                            element={
+                                <ProtectedRoute>
+                                    <AsignaturaConfigPage
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
                             path="/home/docente/asignatura/:id/estudiantes"
                             element={
                                 <ProtectedRoute>
@@ -187,7 +199,7 @@ function Rutas({ store, actions }) {
                             }
                         />
                         <Route
-                            path="/home/docente/asignatura/:id/actividades/:id"
+                            path="/home/docente/asignatura/:asignaturaId/actividades/:actividadId"
                             element={
                                 <ProtectedRoute>
                                     <ActividadDetalles

@@ -8,6 +8,7 @@ from modules.test_estres.routes.asignacion_test_router import router_asignacion_
 from modules.academico.routes.router_asignatura import router_asignatura
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from fastapi.staticfiles import StaticFiles
 
 load_dotenv('.env')
 
@@ -28,6 +29,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 app.include_router(router)
 app.include_router(auth_router)
