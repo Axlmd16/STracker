@@ -7,6 +7,8 @@ import {
     UsersRound,
     LayoutGrid,
     ListOrdered,
+    ToggleRight,
+    ScanEye,
 } from "lucide-react";
 import React, {
     useEffect,
@@ -21,40 +23,40 @@ import CustomDataTable from "./CustomDataTable";
 import SearchBar from "../Navigation/search_bar";
 import Swal from "sweetalert2";
 
-const TableDocente = forwardRef(({ actions, handleUpdate }, ref) => {
+const TableCuentas = forwardRef(({ actions, handleUpdate }, ref) => {
     const [data, setData] = useState([]);
     const [pending, setPending] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
 
     //* Obtener data
-    const fetchDocentes = useCallback(async () => {
+    const fetchData = useCallback(async () => {
         setPending(true);
         try {
-            const data = await actions.getDocentes();
+            const data = await actions.getCuentas();
             setData(data);
             setFilteredData(data);
         } catch (error) {
-            toast.error("Error al cargar los docentes");
+            toast.error("Error al cargar las cuentas de usuario");
         } finally {
             setPending(false);
         }
     }, [actions]);
 
     useEffect(() => {
-        fetchDocentes();
-    }, [fetchDocentes]);
+        fetchData();
+    }, [fetchData]);
 
     useImperativeHandle(ref, () => ({
-        reload: fetchDocentes,
+        reload: fetchData,
     }));
 
     //* Filtrar data
     const handleSearch = useCallback(
         (e) => {
             const value = e.target.value.toLowerCase();
-            const filtered = data.filter((docente) =>
-                ["nombres", "apellidos", "cedula"].some((key) =>
-                    docente[key].toLowerCase().includes(value)
+            const filtered = data.filter((cuenta) =>
+                ["username", "estado", "rol"].some((key) =>
+                    cuenta[key].toLowerCase().includes(value)
                 )
             );
             setFilteredData(filtered);
@@ -67,29 +69,30 @@ const TableDocente = forwardRef(({ actions, handleUpdate }, ref) => {
         handleUpdate(row);
     };
 
-    //* Funcion para eliminar
-    async function handleDeleteClick(row) {
+    //* Funcion para actualizar estado de la cuenta
+    const handleUpdateState = async (row) => {
+        const estado = row.estado;
         Swal.fire({
             title: "Estás seguro?",
-            text: "No podrás revertir esto!",
-            icon: "warning",
+            text: "Se cambiará el estado de la cuenta",
+            icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#8da579",
             cancelButtonColor: "#ccb078",
-            confirmButtonText: "Sí, borrar!",
+            confirmButtonText: "Sí, cambiar!",
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await actions.deleteDocente(row.id);
-                    fetchDocentes();
-                    toast.success("Docente eliminado correctamente");
+                    await actions.updateEstadoCuenta(row.id, !estado);
+                    fetchData();
+                    toast.success("Estado actualizado correctamente");
                 } catch (error) {
                     console.log(error);
-                    toast.error("Error al eliminar el docente");
+                    toast.error("Error al actualizar el estado");
                 }
             }
         });
-    }
+    };
 
     //* Columnas de la tabla
     const columns = useMemo(
@@ -103,56 +106,44 @@ const TableDocente = forwardRef(({ actions, handleUpdate }, ref) => {
                 ),
                 selector: (row) => filteredData.indexOf(row) + 1,
                 sortable: true,
-                width: "130px",
             },
             {
                 name: (
                     <div className="flex justify-center">
                         <UsersRound className="mr-2" size={20} />
-                        <span>Nombres</span>
+                        <span>Nombre de usuario</span>
                     </div>
                 ),
-                selector: (row) => row.nombres,
+                selector: (row) => row.username,
                 sortable: true,
             },
             {
                 name: (
                     <div className="flex justify-center">
-                        <UsersRound className="mr-2" size={20} />
-                        <span>Apellidos</span>
+                        <ScanEye className="mr-2" size={20} />
+                        <span>Rol</span>
                     </div>
                 ),
-                selector: (row) => row.apellidos,
+                selector: (row) => row.rol,
                 sortable: true,
             },
             {
                 name: (
                     <div className="flex justify-center">
-                        <IdCard className="mr-2" size={20} />
-                        <span>Cédula</span>
+                        <ToggleRight className="mr-2" size={20} />
+                        <span>Estado</span>
                     </div>
                 ),
-                selector: (row) => row.cedula,
-                sortable: true,
-            },
-            {
-                name: (
-                    <div className="flex justify-center">
-                        <Mail className="mr-2" size={20} />
-                        <span>Email</span>
-                    </div>
-                ),
-                selector: (row) => row.email,
-                sortable: true,
-            },
-            {
-                name: (
-                    <div className="flex justify-center">
-                        <Phone className="mr-2" size={20} />
-                        <span>Telefono</span>
-                    </div>
-                ),
-                selector: (row) => row.telefono,
+                selector: (row) =>
+                    row.estado === true ? (
+                        <span className="px-3 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800">
+                            Activo
+                        </span>
+                    ) : (
+                        <span className="px-3 py-1 text-sm font-medium rounded-full bg-red-100 text-red-800">
+                            Inactivo
+                        </span>
+                    ),
                 sortable: true,
             },
             {
@@ -162,22 +153,18 @@ const TableDocente = forwardRef(({ actions, handleUpdate }, ref) => {
                         <span>Acciones</span>
                     </div>
                 ),
-                cell: (row) => (
+                selector: (row) => (
                     <div className="flex">
-                        <button
-                            className="btn-ghost btn btn-sm btn-circle text-blue-700"
-                            onClick={() => handleUpdateClick(row)}
-                        >
-                            <Pencil size={20} />
-                        </button>
-                        <button
-                            className="btn-ghost btn btn-sm btn-circle mx-5 text-red-500"
-                            onClick={() => {
-                                handleDeleteClick(row);
-                            }}
-                        >
-                            <Trash2Icon size={20} />
-                        </button>
+                        <div className="form-control w-52">
+                            <label className="label cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    className="toggle toggle-primary"
+                                    checked={row.estado}
+                                    onChange={() => handleUpdateState(row)}
+                                />
+                            </label>
+                        </div>
                     </div>
                 ),
             },
@@ -199,4 +186,4 @@ const TableDocente = forwardRef(({ actions, handleUpdate }, ref) => {
     );
 });
 
-export default TableDocente;
+export default TableCuentas;

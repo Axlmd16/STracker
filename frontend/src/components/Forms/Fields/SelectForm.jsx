@@ -7,6 +7,7 @@ const SelectForm = ({
     register,
     errors,
     clearErrors,
+    disabled,
 }) => (
     <div className="relative z-0 w-full mb-5 group">
         <select
@@ -16,6 +17,7 @@ const SelectForm = ({
             } focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
             {...register(name, { required: true })}
             onFocus={() => clearErrors(name)}
+            disabled={disabled}
         >
             <option value="">{label}</option>
             {options.map((option, index) => (

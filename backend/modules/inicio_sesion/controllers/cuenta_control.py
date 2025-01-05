@@ -1,6 +1,6 @@
 from models.Cuenta import Cuenta
 from core.database import SessionLocal
-from modules.inicio_sesion.controllers.usuario_control import UsuarioControl
+from models.Usuario import Usuario
 from modules.inicio_sesion.schemas.cuenta_schema import CuentaCreate, CuentaRol
 
 class CuentaControl:
@@ -77,10 +77,19 @@ class CuentaControl:
                 return None
             return cuenta
         
+
     def combinar_usuario_cuenta(self, cuenta):
-        usuario = UsuarioControl().obtener_usuario(cuenta.usuario_id)
-        
-        return CuentaRol(username=cuenta.username, password=cuenta.password, estado=cuenta.estado, rol=usuario.rol, id_usuario=usuario.id)
+        with SessionLocal() as db:
+            usr =  db.query(Usuario).filter(Usuario.id == cuenta.usuario_id).first()
+    
+            return CuentaRol(
+                id=cuenta.id,
+                username=cuenta.username, 
+                password=cuenta.password, 
+                estado=cuenta.estado, 
+                rol=usr.rol, 
+                id_usuario=usr.id
+                )
         
         
 

@@ -12,6 +12,7 @@
     "dependencies": {
         "@headlessui/react": "^2.2.0",
         "axios": "^1.7.9",
+        "clsx": "^2.1.1",
         "exceljs": "^4.4.0",
         "jwt-decode": "^4.0.0",
         "lucide-react": "^0.468.0",
@@ -24,12 +25,16 @@
         "react-router-dom": "^7.0.2",
         "react-switch": "^7.1.0",
         "react-tooltip": "^5.28.0",
-        "sweetalert2": "^11.15.3"
+        "recharts": "^2.15.0",
+        "sweetalert2": "^11.15.3",
+        "tailwind-merge": "^2.6.0",
+        "tailwind-variants": "^0.3.0"
     },
     "devDependencies": {
         "@babel/core": "^7.26.0",
         "@babel/preset-react": "^7.26.3",
         "@eslint/js": "^9.15.0",
+        "@tailwindcss/forms": "^0.5.9",
         "@types/react": "^18.3.12",
         "@types/react-dom": "^18.3.1",
         "@vitejs/plugin-react": "^4.3.4",

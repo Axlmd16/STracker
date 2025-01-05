@@ -1,4 +1,11 @@
-import { BookA, Group, HeartHandshake, Key, UsersRound } from "lucide-react";
+import {
+    BookA,
+    Group,
+    HeartHandshake,
+    Key,
+    Settings,
+    UsersRound,
+} from "lucide-react";
 
 export const buttons_admin = [
     {
@@ -33,6 +40,11 @@ export const buttons_docente = [
         icon: BookA,
         href: "/home/docente/asignacion",
         tooltip: "Asignacion de tests",
+    },
+    {
+        icon: Settings,
+        href: "/home/docente/asignatura/:id/configuracion",
+        tooltip: "Configuracion",
     },
 ];
 

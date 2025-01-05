@@ -12,10 +12,14 @@ const AuthApi = ({ getStore, getActions, setStore, api }) => ({
                 access_role: decodedToken.rol,
                 id_user_auth: decodedToken.id_usuario,
             });
-            return true;
+            return true; // Devuelve true si la autenticación es exitosa
         } catch (error) {
-            console.error("Error al iniciar sesión:", error);
-            return false;
+            console.error("Error al iniciar sesión:", error.response?.data);
+            // Devuelve el mensaje de error que viene del backend
+            return (
+                error.response?.data?.message ||
+                "Error inesperado al iniciar sesión"
+            );
         }
     },
 
@@ -23,6 +27,11 @@ const AuthApi = ({ getStore, getActions, setStore, api }) => ({
     cerrar_sesion: () => {
         localStorage.removeItem("access_token");
         setStore({ isAuthenticated: false, access_role: null });
+    },
+
+    getUserInfo: async (id) => {
+        const response = await api.get(`/usuarios/${id}`);
+        return response.data.data;
     },
 });
 

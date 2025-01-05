@@ -12,9 +12,9 @@ const LoginForm = ({ actions, store }) => {
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        const succes = await actions.iniciar_sesion(data);
+        const result = await actions.iniciar_sesion(data);
 
-        if (succes) {
+        if (result === true) {
             if (store.isAuthenticated) {
                 if (store.access_role === "ADMINISTRADOR") {
                     navigate("/home/administrador");
@@ -29,7 +29,7 @@ const LoginForm = ({ actions, store }) => {
                 });
             }
         } else {
-            toast.error("Usuario o contraseña incorrectos", {
+            toast.error(result, {
                 duration: 3500,
                 position: "top-center",
             });

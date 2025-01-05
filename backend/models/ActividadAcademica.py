@@ -25,6 +25,7 @@ class ActividadAcademica(Base):
     asignatura_id = Column(Integer, ForeignKey("asignatura.id", ondelete="CASCADE"), nullable=False)
     estado = Column(Enum_sql(EstadoActividadEnum), nullable= False, default=EstadoActividadEnum.PENDIENTE)
     tipo_actividad = Column(Enum_sql(TipoActividad), nullable=False, default=TipoActividad.ACTIVIDAD_EXTRA_CLASE)
+    url_archivo =  Column(String(255), nullable=True)
     
     
     # Relaciones

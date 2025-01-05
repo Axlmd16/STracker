@@ -21,6 +21,8 @@ import PageTestEstresCrud from "../pages/ProtectedPage/AdminLayout/TestEstres";
 import AsignacionTestPage from "../pages/ProtectedPage/DocenteLayout/AsignacionTestPage";
 import NuevaActividadPage from "../pages/ProtectedPage/DocenteLayout/NuevaActividadPage";
 import ActividadDetalles from "../pages/ProtectedPage/DocenteLayout/ActividadDetalles";
+import CuentaCrudPage from "../pages/ProtectedPage/AdminLayout/CuentaCrudPage";
+import AsignaturaConfigPage from "../pages/ProtectedPage/DocenteLayout/AsignaturaConfigPage";
 
 function Rutas({ store, actions }) {
     const rol = store.access_role;
@@ -110,10 +112,23 @@ function Rutas({ store, actions }) {
                         <Route
                             path="/home/administrador/tests"
                             element={
+                                <ProtectedRoute>
                                     <PageTestEstresCrud
                                         actions={actions}
                                         store={store}
                                     />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/home/administrador/cuentas"
+                            element={
+                                <ProtectedRoute>
+                                    <CuentaCrudPage
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
                             }
                         />
                         {/* Rutas docente */}
@@ -137,13 +152,24 @@ function Rutas({ store, actions }) {
                                         store={store}
                                     />
                                 </ProtectedRoute>
-                            }   
+                            }
                         />
                         <Route
                             path="/home/docente/asignatura/:id"
                             element={
                                 <ProtectedRoute>
                                     <AsignaturaDetallePage
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/home/docente/asignatura/:id/configuracion"
+                            element={
+                                <ProtectedRoute>
+                                    <AsignaturaConfigPage
                                         actions={actions}
                                         store={store}
                                     />
@@ -173,7 +199,7 @@ function Rutas({ store, actions }) {
                             }
                         />
                         <Route
-                            path="/home/docente/asignatura/:id/actividades/:id"
+                            path="/home/docente/asignatura/:asignaturaId/actividades/:actividadId"
                             element={
                                 <ProtectedRoute>
                                     <ActividadDetalles

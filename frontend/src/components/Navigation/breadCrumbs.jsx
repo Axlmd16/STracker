@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { act, Fragment } from "react";
 import { Link } from "react-router-dom";
 
 function BreadCrumbs({ items }) {
@@ -9,20 +9,27 @@ function BreadCrumbs({ items }) {
                     <Fragment key={index}>
                         <li className="inline-flex items-center">
                             <Link
-                                to={item.link || "#"}
-                                className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                                key={index}
+                                to={item.to || "#"}
+                                className={`inline-flex items-center text-sm hover:text-gray-900 ${
+                                    item.active
+                                        ? "text-gray-900 font-semibold"
+                                        : "text-gray-500"
+                                }`}
                             >
                                 {item.icon && (
-                                    <div className="">{item.icon}</div>
+                                    <div className="mr-2">
+                                        <item.icon className="w-4 h-4 text-gray-800" />
+                                    </div>
                                 )}
-                                {item.title}
+                                <span>{item.title}</span>
                             </Link>
                         </li>
                         {index < items.length - 1 && (
                             <li>
                                 <div className="flex items-center">
                                     <svg
-                                        className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                                        className="rtl:rotate-180 w-3 h-3 text-gray-600 mx-1"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"

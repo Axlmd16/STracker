@@ -4,7 +4,7 @@ from middlewares.verify_token_route import VerifyTokenRoute
 from modules.inicio_sesion.controllers.usuario_control import UsuarioControl
 from modules.inicio_sesion.schemas.usuario_schema import ImportarUsuariosRequest, UsuarioBase, UsuarioCreate, UsuarioResponse, UsuarioUpdate
 from modules.inicio_sesion.controllers.cuenta_control import CuentaControl
-from modules.inicio_sesion.schemas.cuenta_schema import CuentaCreate, CuentaResponse, CuentaUpdate
+from modules.inicio_sesion.schemas.cuenta_schema import CuentaCreate, CuentaResponse, CuentaUpdate, CuentaUpdateEstado
 
 
 router = APIRouter(route_class=VerifyTokenRoute)
@@ -25,7 +25,10 @@ cc = CuentaControl()
     
 @router.get("/cuentas/")
 def get_cuentas():
-    cuentas = cc.obtener_cuentas()
+    cuentas = []
+    for cuenta in cc.obtener_cuentas():
+        cuentas.append(cc.combinar_usuario_cuenta(cuenta))     
+    
     return {"message": "All accounts", "data": cuentas}
 
 @router.get("/cuentas/{id}")
@@ -51,12 +54,12 @@ def remover_cuenta(id: int):
         raise HTTPException(status_code=404, detail="Cuenta no encontrada")
     
 @router.put("/cuentas/{id}/cambiar_estado", response_model=CuentaResponse)
-def cambiar_estado_cuenta(id: int, activar: bool):
+def cambiar_estado_cuenta(id: int, data: CuentaUpdateEstado):
     try:
-        response = cc.cambiar_estado_cuenta(id, activar)
+        response = cc.cambiar_estado_cuenta(id, data.activar)
         if response is None:
             raise HTTPException(status_code=404, detail="Cuenta no encontrada")
-        estado = "activada" if activar else "desactivada"
+        estado = "activada" if data.activar else "desactivada"
         return {
             "message": f"Cuenta con id: {id} {estado} correctamente",
             "data": response
@@ -85,6 +88,7 @@ def guardar_usuario(usuario: UsuarioCreate):
         cuenta = CuentaCreate(
             username=username,
             password=usuario_creado.cedula,  
+            estado=True,
             usuario_id=usuario_creado.id
         )
         cuenta_creada = cc.crear_cuenta(cuenta)
@@ -96,6 +100,22 @@ def guardar_usuario(usuario: UsuarioCreate):
         raise http_exc
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+
+
+@router.post("/usuarios/importar")
+def importar_usuarios(request: ImportarUsuariosRequest):
+    try:
+        response = uc.importar_usuarios(request.data)
+        if not response:
+            raise HTTPException(status_code=500, detail="Error al importar los usuarios")
+
+        return {"message": "Usuarios y cuentas creados correctamente", "code": 200}
+    except HTTPException as http_exc:
+        raise http_exc
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+
 
 @router.get("/usuarios/")
 def get_usuarios():
@@ -126,19 +146,20 @@ def remover_usuario(id: int):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     
     
-@router.post("/usuarios/importar")
-def importar_usuarios(request: ImportarUsuariosRequest):
-    print(request.data)
-    try:
-        response = uc.importar_usuarios(request.data)
-        if response == False:
-            raise HTTPException(status_code=500, detail="Error al importar los usuarios")
-        return {"message": "Usuarios importados correctamente", "code": 200}
-    except HTTPException as http_exc:
-        raise http_exc
-    except Exception as e:
-        print(e)
-        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+
+
+#* Funcion para obtener los 3 ultimos usuarios registrados
+@router.get("/usuarios_ultimos/")
+def get_ultimos_usuarios():
+    response = uc.obtener_ultimos_usuarios()
+    return {"message": "Ultimos usuarios", "data": response}
+
+#* Funcion para obtener informacion general
+@router.get("/informacion_general/")
+def get_informacion_general():
+    response = uc.obtener_info_general()
+    return {"message": "Informacion general", "data": response}
+
 
 #* Obtener docentes ----------------------------------------------------------------------------------------------------
 @router.get("/docentes/")
