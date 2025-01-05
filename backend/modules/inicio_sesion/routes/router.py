@@ -31,21 +31,21 @@ def get_cuentas():
     
     return {"message": "All accounts", "data": cuentas}
 
-@router.get("/cuentas/{id}")
+@router.get("/cuentas/{id}", tags=["Cuentas"])
 def get_cuenta(id: int):
     response = cc.obtener_cuenta(id)
     if not response:
         raise HTTPException(status_code=404, detail="Cuenta no encontrada")
     return {"message": f"Cuenta con id: {id}", "data": response}
 
-@router.put("/cuentas/{id}", response_model=CuentaResponse)
+@router.put("/cuentas/{id}", response_model=CuentaResponse, tags=["Cuentas"])
 def editar_cuenta(id: int, cuenta: CuentaUpdate):
     response = cc.actualizar_cuenta(id, cuenta)
     if not response:
         raise HTTPException(status_code=404, detail="Cuenta no encontrada")
     return {"message": f"Cuenta con id: {id} actualizada correctamente", "data": response}
 
-@router.delete("/cuentas/{id}")
+@router.delete("/cuentas/{id}", tags=["Cuentas"])
 def remover_cuenta(id: int):
     response = cc.eliminar_cuenta(id)
     if response:
@@ -53,7 +53,7 @@ def remover_cuenta(id: int):
     else:
         raise HTTPException(status_code=404, detail="Cuenta no encontrada")
     
-@router.put("/cuentas/{id}/cambiar_estado", response_model=CuentaResponse)
+@router.put("/cuentas/{id}/cambiar_estado", response_model=CuentaResponse, tags=["Cuentas"])
 def cambiar_estado_cuenta(id: int, data: CuentaUpdateEstado):
     try:
         response = cc.cambiar_estado_cuenta(id, data.activar)
@@ -72,7 +72,7 @@ def cambiar_estado_cuenta(id: int, data: CuentaUpdateEstado):
 
 
 #* CRUD USUARIOS ----------------------------------------------------------------------------------------------------   
-@router.post("/usuarios/", response_model=UsuarioResponse)
+@router.post("/usuarios/", response_model=UsuarioResponse, tags=["Usuarios"])
 def guardar_usuario(usuario: UsuarioCreate):
     try:
         # Validar usuario único
@@ -102,7 +102,7 @@ def guardar_usuario(usuario: UsuarioCreate):
         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
 
 
-@router.post("/usuarios/importar")
+@router.post("/usuarios/importar", tags=["Usuarios"])
 def importar_usuarios(request: ImportarUsuariosRequest):
     try:
         response = uc.importar_usuarios(request.data)
@@ -117,12 +117,12 @@ def importar_usuarios(request: ImportarUsuariosRequest):
         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
 
 
-@router.get("/usuarios/")
+@router.get("/usuarios/", tags=["Usuarios"])
 def get_usuarios():
     usrs = uc.obtener_usuarios()
     return {"message": "All users", "data": usrs}
 
-@router.get("/usuarios/{id}")
+@router.get("/usuarios/{id}", tags=["Usuarios"])
 def get_usuario(id: int):
     response = uc.obtener_usuario(id)
     if not response:
@@ -130,14 +130,14 @@ def get_usuario(id: int):
     return {"message": f"Usuario con id: {id}", "data": response}
 
 
-@router.put("/usuarios/{id}", response_model=UsuarioResponse)
+@router.put("/usuarios/{id}", response_model=UsuarioResponse, tags=["Usuarios"])
 def editar_usuario(id: int, usuario: UsuarioBase):
     response = uc.actualizar_usuario(id, usuario)
     if not response:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return {"status": 200, "message": f"Usuario con id: {id} actualizado correctamente", "data": response}
     
-@router.delete("/usuarios/{id}")
+@router.delete("/usuarios/{id}", tags=["Usuarios"])
 def remover_usuario(id: int):
     response = uc.eliminar_usuario(id)
     if response:
@@ -149,7 +149,7 @@ def remover_usuario(id: int):
 
 
 #* Funcion para obtener los 3 ultimos usuarios registrados
-@router.get("/usuarios_ultimos/")
+@router.get("/usuarios_ultimos/", tags=["Usuarios"])
 def get_ultimos_usuarios():
     response = uc.obtener_ultimos_usuarios()
     return {"message": "Ultimos usuarios", "data": response}
@@ -162,13 +162,13 @@ def get_informacion_general():
 
 
 #* Obtener docentes ----------------------------------------------------------------------------------------------------
-@router.get("/docentes/")
+@router.get("/docentes/", tags=["Usuario-Docentes"])
 def get_docentes():
     docentes = uc.obtener_docentes()
     return {"message": "All teachers", "data": docentes}
 
 
-@router.get("/estudiantes/")
+@router.get("/estudiantes/", tags=["Usuario-Estudiantes"])
 def get_docentes():
     data = uc.obtener_estudiantes()
     return {"message": "All teachers", "data": data}

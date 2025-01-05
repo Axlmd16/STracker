@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
     BookOpen,
     Brain,
@@ -16,6 +16,8 @@ import TestDeEstresCard from "./TestDeEstresCard";
 
 function HomeEstudiantePage({ actions, store }) {
     const [userInfo, setUserInfo] = useState(null);
+    const [pending, setPending] = useState(false);
+    const [asignaciones, setAsignaciones] = useState([]);
 
     //* Funcion para obtener la informacion del usuario autenticado
     useEffect(() => {
@@ -26,6 +28,22 @@ function HomeEstudiantePage({ actions, store }) {
 
         getUserInfo();
     }, [actions, store]);
+
+    const fetchAsignacionesEstudiante = useCallback(async () => {
+        setPending(true);
+        try {
+            const data = await actions.getAllAsignacionTestForEstudiante(store.id_user_auth);
+            setAsignaciones(data);
+        } catch (error) {
+            toast.error("Error al cargar las actividades académicas");
+        } finally {
+            setPending(false);
+        }
+    }, [actions]);
+
+    useEffect(() => {
+        fetchAsignacionesEstudiante();
+    }, [fetchAsignacionesEstudiante]);
 
     return (
         <div className="bg-base-200 min-h-screen">
@@ -190,8 +208,20 @@ function HomeEstudiantePage({ actions, store }) {
 
                     {/* Columna 2: Gráfica y Factores de Estrés */}
                     <div className="space-y-6">
-                        {/* Espacio para Gráfica */}
                         <div className="card bg-base-100 shadow-lg">
+                            <div className="card-body">
+                                <h2 className="card-title text-xl mb-4">
+                                    Tests de Estrés Asignados
+                                </h2>
+                                <div className="space-y-4">
+                                    {asignaciones?.map((test) => (
+                                        <TestDeEstresCard key={test.id} test={test} actions={actions} />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        {/* Espacio para Gráfica */}
+                        {/* <div className="card bg-base-100 shadow-lg">
                             <div className="card-body">
                                 <h2 className="card-title">
                                     Tendencias de Estrés
@@ -202,10 +232,10 @@ function HomeEstudiantePage({ actions, store }) {
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Factores de Estrés */}
-                        <div className="card bg-base-100 shadow-lg">
+                        {/* <div className="card bg-base-100 shadow-lg">
                             <div className="card-body">
                                 <h2 className="card-title">
                                     Factores de Estrés
@@ -237,7 +267,7 @@ function HomeEstudiantePage({ actions, store }) {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Columna 3: Materias y Recomendaciones */}
@@ -313,20 +343,6 @@ function HomeEstudiantePage({ actions, store }) {
                         </div>
                     </div>
                 </div>
-
-                    {/* Tests de Estrés */}
-                    <div className="card bg-base-100 shadow-lg">
-                        <div className="card-body">
-                            <h2 className="card-title text-xl mb-4">
-                                Tests de Estrés Asignados
-                            </h2>
-                            <div className="space-y-4">
-                                {asignaciones?.map((test) => (
-                                    <TestDeEstresCard key={test.id} test={test} actions={actions} />
-                                ))}
-                            </div>
-                        </div>
-                    </div>
             </div>
         </div>
     );

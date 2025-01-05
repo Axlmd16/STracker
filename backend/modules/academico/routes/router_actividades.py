@@ -18,13 +18,13 @@ router_actividades = APIRouter(route_class=VerifyTokenRoute)
 ac = ActividadControl()
 
 #* Obtener todas las actividades
-@router_actividades.get("/actividades/")
+@router_actividades.get("/actividades/", tags=["Actividades"])
 def get_actividades():
     actividades = ac.obtener_actividades()
     return {"message": "Todas las actividades", "data": actividades}
 
 #* Actualizar estados
-@router_actividades.post("/actividades/actualizar-estados")
+@router_actividades.post("/actividades/actualizar-estados", tags=["Actividades"])
 def actualizar_estados():
     try:
         ac.actualizar_estados_actividades()
@@ -33,7 +33,7 @@ def actualizar_estados():
         raise HTTPException(status_code=500, detail=str(e))
 
 #* Obtener una actividad
-@router_actividades.get("/actividades/{id}")
+@router_actividades.get("/actividades/{id}", tags=["Actividades"])
 def get_actividad(id: int):
     response = ac.obtener_actividad(id)
     if not response:
@@ -41,7 +41,7 @@ def get_actividad(id: int):
     return {"message": f"Actividad con id: {id}", "data": response}
 
 #* Crear actividad academica
-@router_actividades.post("/actividades/")
+@router_actividades.post("/actividades/", tags=["Actividades"])
 async def guardar_actividad(
     titulo: str = Form(...),
     descripcion: str = Form(...),
@@ -96,7 +96,7 @@ async def guardar_actividad(
         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
     
 #* Editar una actividad
-@router_actividades.put("/actividades/{id}")
+@router_actividades.put("/actividades/{id}", tags=["Actividades"])
 def editar_actividad(id: int, actividad):
     response = ac.actualizar_actividad(id, actividad)
     if not response:

@@ -8,7 +8,7 @@ cc = CuentaControl()
 
 auth_router = APIRouter()
 
-@auth_router.post("/login")
+@auth_router.post("/login",  tags=["Auth"])
 def login(cuenta: CuentaLogin):
     response = cc.login(cuenta)
     if response:
@@ -22,7 +22,7 @@ def login(cuenta: CuentaLogin):
     
 
     
-@auth_router.post("/verify/token")
+@auth_router.post("/verify/token", tags=["Auth"])
 def verify_token(Authorization: str = Header(None)):
     if Authorization is None:
         return JSONResponse(status_code=401, content={"message": "Token no proporcionado"})
