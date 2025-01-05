@@ -62,3 +62,4 @@ class ActividadControl:
                 return True
             else:
                 return False
+            

@@ -144,7 +144,7 @@ function Rutas({ store, actions }) {
                             }
                         />
                         <Route
-                            path="/home/docente/asignacion"
+                            path="/home/docente/asignacion/:id"
                             element={
                                 <ProtectedRoute>
                                     <AsignacionTestPage
