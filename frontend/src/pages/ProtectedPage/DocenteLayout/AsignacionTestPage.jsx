@@ -3,8 +3,10 @@ import { PlusCircle } from "lucide-react";
 import ModalForm from "../../../components/Modals/ModalForm";
 import AsignacionTestForm from "../../../components/Forms/AsignacionTestForm";
 import AsignacionTestCards from "../../../util/AsignacionTestCards";
+import { useParams } from "react-router-dom";
 
 function AsignacionTestPage({ actions, store }) {
+    const { id } = useParams()
     const modalFormRef = useRef(null);
     const formRef = useRef(null);
     const [data, setData] = useState(null);
@@ -107,6 +109,7 @@ function AsignacionTestPage({ actions, store }) {
                     {data ? "Actualizar asignación de test" : "Crear asignación de test"}
                 </h2>
                 <AsignacionTestForm
+                    id = {id}
                     actions={actions}
                     formRef={formRef}
                     modalRef={modalFormRef}

@@ -67,26 +67,6 @@ function PageTestEstresCrud({ actions, store }) {
                     <p className="text-sm text-gray-500 mt-2">
                         Crear, editar, eliminar y listar test de estrés
                     </p>
-                    {/* <div className="ml-auto">
-                        <button
-                            className="btn btn-primary mt-4 btn-circle"
-                            onClick={handleCreateTestEstres}
-                        >
-                            <PlusCircle size={20} />
-                        </button>
-                    </div> */}
-                    {/* <div className="ml-auto">
-                        <div className="ml-auto">
-                            <button className="btn-form" onClick={handleCreateTestEstres}>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <PlusCircle size={20} className="btn-icon" />
-                                <span className="button-text">Agregar</span>
-                            </button>
-                        </div>  
-                    </div> */}
                      <div className="ml-auto">
                         <button className="wave-button" onClick={handleCreateTestEstres}>
                             <span className="button-content">

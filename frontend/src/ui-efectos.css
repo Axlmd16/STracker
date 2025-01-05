@@ -185,3 +185,78 @@
         box-shadow: 0 0 3px rgba(6, 182, 212, 0.5), 0 0 8px rgba(6, 182, 212, 0.3);
     }
 }
+
+/* Estilo para botnoes de asignaciones de estudiantes */
+.btn-status {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out; 
+    outline: none;
+}
+
+.btn-status-start {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-status-start:hover {
+    background-color: #218838; 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.btn-status-start:active {
+    transform: translateY(0);
+    box-shadow: none; 
+}
+
+.btn-status-view {
+    background-color: #ffc107; 
+    color: black;
+}
+
+.btn-status-view:hover {
+    background-color: #e0a800; 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-status-view:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+@keyframes hover-animation {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.btn-status:hover {
+    animation: hover-animation 0.2s ease-in-out; 
+}
+
+.btn-status:focus {
+    outline: 2px solid #007bff; 
+    outline-offset: 2px;
+}
+
+.bg-circle-bg {
+    background-color: #007bff; 
+}
