@@ -1,9 +1,17 @@
-import { BookOpen, Clock, Users } from "lucide-react";
+import {
+    BookOpen,
+    Clock,
+    GraduationCap,
+    HomeIcon,
+    LibraryBig,
+    Users,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { buttons_docente } from "../../../assets/ButtonsNav/BtnsSidebar";
 import StressIndicators from "../../../components/Graphics/StressIndicators";
+import BreadCrumbs from "../../../components/Navigation/breadCrumbs";
 import Sidebar from "../../../components/Navigation/Sidebar";
 import InterfaceTableActividades from "../../../components/Tables/ActividadesTest/InterfaceTableActividades";
 import DataTableAssignment from "../../../components/Tables/DataTableAssignment";
@@ -34,35 +42,6 @@ function AsignaturaDetallePage({ actions, store }) {
         fetchAsignatura();
     }, [actions, id]);
 
-    //* Datos de ejemplo
-    const asignaturaData = {
-        nombre: "Matemáticas Discretas",
-        paralelo: "A",
-        fecha_inicio: "2024-03-01",
-        fecha_fin: "2024-07-31",
-        nro_horas: 64,
-        estudiantes: 35,
-        actividades_pendientes: 3,
-        tests_pendientes: 2,
-    };
-
-    //* Datos de ejemplo para la tabla de actividades
-    const actividadesData = {
-        headers: ["Actividad", "Fecha Límite", "Estado"],
-        rows: [
-            [
-                "Tarea 1: Conjuntos",
-                "2024-04-15",
-                <div className="badge badge-warning">Pendiente</div>,
-            ],
-            [
-                "Proyecto Grupal",
-                "2024-04-20",
-                <div className="badge badge-success">En Progreso</div>,
-            ],
-        ],
-    };
-
     //* Datos de ejemplo para la tabla de tests
     const testsData = {
         headers: ["Test", "Fecha", "Estado"],
@@ -80,6 +59,26 @@ function AsignaturaDetallePage({ actions, store }) {
         ],
     };
 
+    //* Items del breadcrumb
+    const breadcrumbItems = [
+        {
+            to: "/home/docente",
+            title: "",
+            icon: HomeIcon,
+        },
+        {
+            to: `/home/docente`,
+            title: "Asignaturas",
+            icon: LibraryBig,
+        },
+        {
+            to: `/home/docente/asignatura/${id}`,
+            title: asignatura.nombre,
+            icon: GraduationCap,
+            active: true,
+        },
+    ];
+
     return (
         <div>
             <div className="fixed left-0 top-16 h-full bg-gray-800">
@@ -94,6 +93,10 @@ function AsignaturaDetallePage({ actions, store }) {
                     <>
                         {/* Header de la asignatura */}
                         <div className="card bg-white shadow-lg mb-6">
+                            {/* Breadcrumbs */}
+                            <div className="px-6 py-3 flex items-center space-x-2 text-sm text-gray-600 border-b">
+                                <BreadCrumbs items={breadcrumbItems} />
+                            </div>
                             <div className="card-body">
                                 <div className="flex items-start gap-4">
                                     <div className="p-4 bg-primary/10 rounded-lg">
@@ -104,7 +107,7 @@ function AsignaturaDetallePage({ actions, store }) {
                                             {asignatura.nombre}
                                         </h1>
                                         <div className="flex flex-wrap gap-4">
-                                            <div className="badge badge-primary">
+                                            <div className="badge bg-blue-100 font-medium text-blue-800">
                                                 Paralelo {asignatura.paralelo}
                                             </div>
                                             <div className="flex items-center gap-2">

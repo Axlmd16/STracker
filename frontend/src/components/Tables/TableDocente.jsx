@@ -136,11 +136,11 @@ const TableCuentas = forwardRef(({ actions, handleUpdate }, ref) => {
                 ),
                 selector: (row) =>
                     row.estado === true ? (
-                        <span className="px-3 py-2 rounded-full text-sm bg-green-300">
+                        <span className="px-3 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800">
                             Activo
                         </span>
                     ) : (
-                        <span className="px-3 py-2 rounded-full text-sm bg-red-300">
+                        <span className="px-3 py-1 text-sm font-medium rounded-full bg-red-100 text-red-800">
                             Inactivo
                         </span>
                     ),

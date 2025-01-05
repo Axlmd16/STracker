@@ -184,6 +184,28 @@ function AsignacionTestForm({
             <p className="text-error text-sm">{errors.id_grupo.message}</p>
           )}
         </div>
+        <div className="grid md:grid-cols-1 md:gap-6">
+          <label className="label" htmlFor="actividad_academica_id">
+            <span className="label-text">Seleccionar Actividad Académica</span>
+          </label>
+          <select
+            id="actividad_academica_id"
+            name="actividad_academica_id"
+            className={`input input-bordered w-full ${errors.actividad_academica_id ? "input-error" : ""}`}
+            {...register("actividad_academica_id", { required: "Este campo es obligatorio" })}
+          >
+            <option value="">Seleccione una actividad académica</option>
+            {activities.map((activity) => (
+              <option key={activity.id} value={activity.id}>
+                {activity.descripcion}
+              </option>
+            ))}
+          </select>
+          {errors.actividad_academica_id && (
+            <p className="text-error text-sm">{errors.actividad_academica_id.message}</p>
+          )}
+        </div>
+
 
         <div className="grid md:grid-cols-1 md:gap-6">
           <label className="label" htmlFor="fecha_asignacion">

@@ -77,12 +77,12 @@ function InterfaceTableActividades({ actions, store, id }) {
                 selector: (row) => row.estado,
                 cell: (row) => (
                     <span
-                        className={`px-3 py-1 rounded-full  text-sm ${
-                            row.estado === "Pendiente"
-                                ? "bg-yellow-400"
+                        className={`px-3 py-1 rounded-full  text-sm font-medium  ${
+                            row.estado === "PENDIENTE"
+                                ? "text-yellow-800 bg-yellow-100"
                                 : row.estado === "EN_PROGRESO"
-                                ? "bg-green-300"
-                                : "bg-red-400"
+                                ? "text-green-800 bg-green-100"
+                                : "text-red-800 bg-red-100"
                         }`}
                     >
                         {capitalize(row.estado.replace("_", " "))}{" "}

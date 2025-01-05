@@ -39,3 +39,8 @@ class TestEstresController:
                 db.delete(db_test)
                 db.commit()
                 return True
+            
+    
+    def get_ultimos_test(self):
+        with SessionLocal() as db:
+            return db.query(TestEstres).order_by(TestEstres.id.desc()).limit(3).all()

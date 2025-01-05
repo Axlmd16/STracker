@@ -13,4 +13,4 @@ class AsignacionTestSchema(BaseModel):
     id_grupo: Optional[int] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
