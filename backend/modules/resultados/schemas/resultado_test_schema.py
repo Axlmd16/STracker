@@ -13,3 +13,9 @@ class ResultadoTestSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+class RespuestaFormulario(BaseModel):
+    timestamp: str
+    puntuacion: str
+    id_unico: str
+    tiene_estres: str

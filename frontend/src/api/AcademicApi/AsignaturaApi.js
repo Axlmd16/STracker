@@ -55,6 +55,12 @@ const AsignaturaApi = ({ getStore, getActions, setStore, api }) => ({
         const response = await api.get(`/asignaturas/${id}/estudiantes`);
         return response.data;
     },
+
+    //* Asignaturas de un estudiante
+    getAsignaturasEstudiante: async (id) => {
+        const response = await api.get(`/asignaturas/estudiante/${id}`);
+        return response.data.data;
+    },
 });
 
 export default AsignaturaApi;
