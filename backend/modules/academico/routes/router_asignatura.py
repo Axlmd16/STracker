@@ -106,3 +106,10 @@ def obtener_estudiantes_asignatura(id: int):
     return JSONResponse(content=data, status_code=200)
 
 
+#* Funcion para obtener las asignaturas de un estudiante
+@router_asignatura.get("/asignaturas/estudiante/{id}",  tags=["Aginaturas"])
+def obtener_asignaturas_estudiante(id: int):
+    data = eac.obtener_asignaturas_estudiante(id)
+    return {"message": f"Subjects for student with id: {id}", "data": data}
+
+

@@ -41,17 +41,11 @@ class ResultadoTestControl:
     
     def obtener_resultados_por_estudiante(self, estudiante_id: int):
         with SessionLocal() as db:
-            print(f"estudiante_id: {estudiante_id}")
             estudiante_asignatura_ids = db.query(EstudianteAsignatura.id).filter(EstudianteAsignatura.estudiante_id == estudiante_id).all()
-            print(f"estudiante_asignatura_ids: {estudiante_asignatura_ids}")
             estudiante_asignatura_ids = [ea.id for ea in estudiante_asignatura_ids]
-            print(f"estudiante_asignatura_ids: {estudiante_asignatura_ids}")
             resultados = db.query(ResultadoTest).filter(ResultadoTest.estudiante_asignatura_id.in_(estudiante_asignatura_ids)).all()
             
             return resultados
-        
-        
-        
         
         
     def obtener_resultados_por_test(self, test_id: int):
