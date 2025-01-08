@@ -1,9 +1,14 @@
 from fastapi import APIRouter, HTTPException
+
+from middlewares.verify_token_route import VerifyTokenRoute
+from modules.resultados.controllers.resultado_test_controller import ResultadoTestControl
+from modules.resultados.schemas.resultado_test_schema import ResultadoTestSchema
 from ..controllers.asignacion_test_controller import AsignacionTestController
 from ..schemas.asignacion_test_schema import AsignacionTestSchema
 
-router_asignacion_test = APIRouter()
+router_asignacion_test =APIRouter(route_class=VerifyTokenRoute)
 asignacion_controller = AsignacionTestController()
+rc = ResultadoTestControl()
 
 @router_asignacion_test.get("/asignacion_test/", tags=["Asignacion Test"])
 def get_asignaciones():
@@ -17,10 +22,23 @@ def get_asignacion(id: int):
         raise HTTPException(status_code=404, detail="AsignacionTest no encontrada")
     return {"message": "Asignacion test", "data": asignacion}
 
+# @router_asignacion_test.post("/asignacion_test/", tags=["Asignacion Test"])
+# def crear_asignacion(asignacion: AsignacionTestSchema):
+#     asignacion_creada = asignacion_controller.crear_asignacion(asignacion)
+#     return {"message": "Asignacion test creada", "data": asignacion_creada}
+
+#* PRUEBA!!!!!!!!
 @router_asignacion_test.post("/asignacion_test/", tags=["Asignacion Test"])
-def crear_asignacion(asignacion: AsignacionTestSchema):
+def crear_asignacion(asignacion: AsignacionTestSchema, resultadoTest: ResultadoTestSchema ):
     asignacion_creada = asignacion_controller.crear_asignacion(asignacion)
-    return {"message": "Asignacion test creada", "data": asignacion_creada}
+    resultadoTest.asignacion_id = asignacion_creada.id
+    
+    #! Solo funciona para individuales
+    resultado_creado = rc.crear_resultado(resultadoTest)
+    
+    return {"message": "Asignacion test creada", "data": asignacion_creada, "resultado": resultado_creado}
+
+#* ----------------------------------------
 
 @router_asignacion_test.put("/asignacion_test/{id}", tags=["Asignacion Test"])
 def modificar_asignacion(id: int, asignacion: AsignacionTestSchema):
@@ -39,16 +57,16 @@ def eliminar_asignacion(id: int):
 @router_asignacion_test.get("/asignacion_test/asignatura/{asignatura_id}", tags=["Asignacion Test"])
 def get_asignaciones_por_asignatura(asignatura_id: int):
     asignaciones = asignacion_controller.obtener_asignaciones_por_asignatura(asignatura_id)
-    if not asignaciones:
+    if asignaciones == None:
         raise HTTPException(status_code=404, detail="No se encontraron asignaciones para esta asignatura")
     return {"message": "Asignaciones para la asignatura", "data": asignaciones}
 
-@router_asignacion_test.get("/asignaciones_estudiantes/{id_estudiante}", tags=["Asignacion Test"])
-def get_asignaciones_para_estudiante(id_estudiante: int):
-    asignaciones = asignacion_controller.obtener_asignaciones_para_estudiantes(id_estudiante)
-    if not asignaciones:
-        raise HTTPException(status_code=404, detail="No se encontraron asignaciones para este estudiante")
-    return {"message": "Asignaciones para el estudiante", "data": asignaciones}
+# @router_asignacion_test.get("/asignaciones_estudiantes/{id_estudiante}", tags=["Asignacion Test"])
+# def get_asignaciones_para_estudiante(id_estudiante: int):
+#     asignaciones = asignacion_controller.obtener_asignaciones_para_estudiantes(id_estudiante)
+#     if asignaciones == None:
+#         raise HTTPException(status_code=404, detail="No se encontraron asignaciones para este estudiante")
+#     return {"message": "Asignaciones para el estudiante", "data": asignaciones}
 
 #! Nota: Esto debo cambiarlo en otro archivo
 @router_asignacion_test.get("/grupo/asignatura/{asignatura_id}", tags=["Grupos"])

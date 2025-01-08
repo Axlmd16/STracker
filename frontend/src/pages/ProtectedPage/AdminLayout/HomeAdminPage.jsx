@@ -1,22 +1,13 @@
+import { BookOpen, Brain, FileText, Users } from "lucide-react";
 import React from "react";
-import {
-    Users,
-    BookOpen,
-    Brain,
-    FileText,
-    Bell,
-    Search,
-    Settings,
-    LogOut,
-} from "lucide-react";
-import UserCard from "../../../components/Cards/UserCard";
 import { Link } from "react-router-dom";
 import StatisticsCards from "../../../components/Cards/StatisticsCards";
 import TestsCard from "../../../components/Cards/TestsCard";
+import UserCard from "../../../components/Cards/UserCard";
 
 function HomeAdminPage({ actions, store }) {
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className=" bg-gray-50">
             {/* Contenido principal */}
             <div className="container mx-auto px-6 py-8">
                 <StatisticsCards actions={actions} store={store} />
@@ -30,9 +21,11 @@ function HomeAdminPage({ actions, store }) {
                             </h2>
                             <Link
                                 to="/home/administrador/cuentas"
-                                className="btn btn-primary btn-sm"
+                                className="btn btn-sm bg-green-100"
                             >
-                                Ver todos
+                                <span className="text-green-800">
+                                    Ver todos
+                                </span>
                             </Link>
                         </div>
                         <div className="space-y-4">
@@ -48,9 +41,11 @@ function HomeAdminPage({ actions, store }) {
                             </h2>
                             <Link
                                 to="/home/administrador/tests"
-                                className="btn btn-primary btn-sm"
+                                className="btn bg-green-100 btn-sm"
                             >
-                                Ver todos
+                                <span className="text-green-800">
+                                    Ver todos
+                                </span>
                             </Link>
                         </div>
                         <div className="space-y-4">

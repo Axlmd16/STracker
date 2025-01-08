@@ -119,6 +119,8 @@ function EstudianteForm({
                         errors={errors}
                         clearErrors={clearErrors}
                         icon={Phone}
+                        required={false}
+                        maxLength={10}
                     />
                     <ImputForm
                         label="Numero de cedula"
@@ -128,6 +130,7 @@ function EstudianteForm({
                         errors={errors}
                         clearErrors={clearErrors}
                         icon={IdCard}
+                        maxLength={10}
                     />
                 </div>
 

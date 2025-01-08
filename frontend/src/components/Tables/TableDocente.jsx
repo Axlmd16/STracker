@@ -23,7 +23,7 @@ import CustomDataTable from "./CustomDataTable";
 import SearchBar from "../Navigation/search_bar";
 import Swal from "sweetalert2";
 
-const TableCuentas = forwardRef(({ actions, handleUpdate }, ref) => {
+const TableCuentas = forwardRef(({ actions }) => {
     const [data, setData] = useState([]);
     const [pending, setPending] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
@@ -45,10 +45,6 @@ const TableCuentas = forwardRef(({ actions, handleUpdate }, ref) => {
     useEffect(() => {
         fetchData();
     }, [fetchData]);
-
-    useImperativeHandle(ref, () => ({
-        reload: fetchData,
-    }));
 
     //* Filtrar data
     const handleSearch = useCallback(

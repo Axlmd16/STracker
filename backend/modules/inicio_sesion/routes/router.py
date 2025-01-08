@@ -23,7 +23,7 @@ cc = CuentaControl()
 #     except Exception as e:
 #         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
     
-@router.get("/cuentas/")
+@router.get("/cuentas/", tags=["Cuentas"])
 def get_cuentas():
     cuentas = []
     for cuenta in cc.obtener_cuentas():

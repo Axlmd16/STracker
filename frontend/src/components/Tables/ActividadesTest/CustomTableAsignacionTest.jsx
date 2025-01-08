@@ -82,7 +82,7 @@ const CustomTableAsignacionTest = ({
                         <span className="text-xl font-semibold text-slate-700">
                             {title}
                         </span>
-                        <Link to={`${to}/${id}`}>
+                        <Link to={to}>
                             <button className="btn btn-circle btn-ghost text-blue-900">
                                 <PlusCircle size={35} />
                             </button>
@@ -114,4 +114,3 @@ const CustomTableAsignacionTest = ({
 };
 
 export default CustomTableAsignacionTest;
-

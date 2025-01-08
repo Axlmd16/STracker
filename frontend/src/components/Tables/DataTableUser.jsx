@@ -71,10 +71,13 @@ const DataTableUser = forwardRef(
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        await actions.quitarEstudianteAsignatura(
-                            idAsig,
-                            row.id
-                        );
+                        idAsig
+                            ? await actions.quitarEstudianteAsignatura(
+                                  idAsig,
+                                  row.id
+                              )
+                            : await actions.deleteUser(row.id);
+
                         fetchData();
                         toast.success("Elemento eliminado correctamente");
                     } catch (error) {
