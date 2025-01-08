@@ -13,6 +13,7 @@ import {
     User,
 } from "lucide-react";
 import TestDeEstresCard from "./TestDeEstresCard";
+import { toast } from "react-hot-toast";
 
 function HomeEstudiantePage({ actions, store }) {
     const [userInfo, setUserInfo] = useState(null);
@@ -32,14 +33,16 @@ function HomeEstudiantePage({ actions, store }) {
     const fetchAsignacionesEstudiante = useCallback(async () => {
         setPending(true);
         try {
-            const data = await actions.getAllAsignacionTestForEstudiante(store.id_user_auth);
+            const data = await actions.getResultadosPorEstudiante(
+                store.id_user_auth
+            );
             setAsignaciones(data);
         } catch (error) {
             toast.error("Error al cargar las actividades académicas");
         } finally {
             setPending(false);
         }
-    }, [actions]);
+    }, [actions, store]);
 
     useEffect(() => {
         fetchAsignacionesEstudiante();
@@ -86,38 +89,6 @@ function HomeEstudiantePage({ actions, store }) {
 
             {/* Contenido Principal */}
             <div className="container mx-auto p-4">
-                {/* Indicadores de Bienestar */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                    <div className="stat bg-base-100 shadow rounded-box">
-                        <div className="stat-figure text-error">
-                            <Activity className="w-8 h-8" />
-                        </div>
-                        <div className="stat-title">Nivel de Ansiedad</div>
-                        <div className="stat-value text-error">65%</div>
-                    </div>
-                    <div className="stat bg-base-100 shadow rounded-box">
-                        <div className="stat-figure text-info">
-                            <Clock className="w-8 h-8" />
-                        </div>
-                        <div className="stat-title">Horas de Sueño</div>
-                        <div className="stat-value text-info">6.5h</div>
-                    </div>
-                    <div className="stat bg-base-100 shadow rounded-box">
-                        <div className="stat-figure text-success">
-                            <Heart className="w-8 h-8" />
-                        </div>
-                        <div className="stat-title">Bienestar General</div>
-                        <div className="stat-value text-success">75%</div>
-                    </div>
-                    <div className="stat bg-base-100 shadow rounded-box">
-                        <div className="stat-figure text-warning">
-                            <Coffee className="w-8 h-8" />
-                        </div>
-                        <div className="stat-title">Nivel de Energía</div>
-                        <div className="stat-value text-warning">55%</div>
-                    </div>
-                </div>
-
                 {/* Grid Principal de 3 Columnas */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Columna 1: Actividades y Evaluaciones */}
@@ -169,36 +140,20 @@ function HomeEstudiantePage({ actions, store }) {
                         {/* Evaluaciones de Estrés */}
                         <div className="card bg-base-100 shadow-lg">
                             <div className="card-body">
-                                <h2 className="card-title">
-                                    Evaluaciones de Estrés
-                                </h2>
                                 <div className="space-y-3">
-                                    <div className="alert alert-warning">
-                                        <Brain className="w-5 h-5" />
-                                        <div>
-                                            <div className="font-bold">
-                                                Test Semanal
-                                            </div>
-                                            <div className="text-sm">
-                                                Vence en 2 días
-                                            </div>
-                                            <button className="btn btn-sm btn-warning mt-2">
-                                                Realizar
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className="alert alert-error">
-                                        <AlertCircle className="w-5 h-5" />
-                                        <div>
-                                            <div className="font-bold">
-                                                Evaluación Pre-exámenes
-                                            </div>
-                                            <div className="text-sm">
-                                                ¡Urgente!
-                                            </div>
-                                            <button className="btn btn-sm btn-error mt-2">
-                                                Completar
-                                            </button>
+                                    <div className="card bg-base-100 shadow-lg">
+                                        <h2 className="card-title text-xl mb-4">
+                                            Tests de Estrés Asignados
+                                        </h2>
+
+                                        <div className="space-y-4">
+                                            {asignaciones?.map((resultado) => (
+                                                <TestDeEstresCard
+                                                    key={resultado.id}
+                                                    test={resultado}
+                                                    actions={actions}
+                                                />
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
@@ -208,20 +163,8 @@ function HomeEstudiantePage({ actions, store }) {
 
                     {/* Columna 2: Gráfica y Factores de Estrés */}
                     <div className="space-y-6">
-                        <div className="card bg-base-100 shadow-lg">
-                            <div className="card-body">
-                                <h2 className="card-title text-xl mb-4">
-                                    Tests de Estrés Asignados
-                                </h2>
-                                <div className="space-y-4">
-                                    {asignaciones?.map((test) => (
-                                        <TestDeEstresCard key={test.id} test={test} actions={actions} />
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
                         {/* Espacio para Gráfica */}
-                        {/* <div className="card bg-base-100 shadow-lg">
+                        <div className="card bg-base-100 shadow-lg">
                             <div className="card-body">
                                 <h2 className="card-title">
                                     Tendencias de Estrés
@@ -232,42 +175,7 @@ function HomeEstudiantePage({ actions, store }) {
                                     </p>
                                 </div>
                             </div>
-                        </div> */}
-
-                        {/* Factores de Estrés */}
-                        {/* <div className="card bg-base-100 shadow-lg">
-                            <div className="card-body">
-                                <h2 className="card-title">
-                                    Factores de Estrés
-                                </h2>
-                                <div className="space-y-3">
-                                    <div className="bg-error/10 p-3 rounded-lg">
-                                        <h3 className="font-medium text-error">
-                                            Académicos
-                                        </h3>
-                                        <p className="text-sm mt-1">
-                                            Alta carga de tareas
-                                        </p>
-                                    </div>
-                                    <div className="bg-warning/10 p-3 rounded-lg">
-                                        <h3 className="font-medium text-warning">
-                                            Tiempo
-                                        </h3>
-                                        <p className="text-sm mt-1">
-                                            Horarios irregulares
-                                        </p>
-                                    </div>
-                                    <div className="bg-info/10 p-3 rounded-lg">
-                                        <h3 className="font-medium text-info">
-                                            Descanso
-                                        </h3>
-                                        <p className="text-sm mt-1">
-                                            Poco sueño
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
+                        </div>
                     </div>
 
                     {/* Columna 3: Materias y Recomendaciones */}

@@ -10,7 +10,7 @@ function AsignacionTestCards({ data, handleUpdate, handleDelete }) {
                 >
                     <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-teal-400 rounded-full flex-shrink-0 flex items-center justify-center mb-4 sm:mb-0 sm:mr-6">
                         <span className="text-lg font-bold text-white">
-                            {item.descripcion.charAt(0).toUpperCase()}
+                            {item.descripcion ? item.descripcion[0] : "T"}
                         </span>
                     </div>
 
@@ -19,11 +19,15 @@ function AsignacionTestCards({ data, handleUpdate, handleDelete }) {
                             {item.descripcion}
                         </h3>
                         <p className="text-sm text-gray-600 mt-2">
-                            <span className="font-medium text-cyan-600">Fecha de asignación:</span>{" "}
+                            <span className="font-medium text-cyan-600">
+                                Fecha de asignación:
+                            </span>{" "}
                             {item.fecha_asignacion}
                         </p>
                         <p className="text-sm text-gray-600 mt-2">
-                            <span className="font-medium text-cyan-600">Fecha Limite:</span>{" "}
+                            <span className="font-medium text-cyan-600">
+                                Fecha Limite:
+                            </span>{" "}
                             {item.fecha_limite}
                         </p>
                     </div>

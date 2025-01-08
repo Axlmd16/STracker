@@ -11,4 +11,4 @@ class Grupo(Base):
 
     # Relación
     estudiantes_asignaturas = relationship("EstudianteAsignatura", secondary="gea", back_populates="grupos") 
-    asignaciones_test = relationship("AsignacionTest", back_populates="grupo")
+    resultados = relationship("ResultadoTest", back_populates="grupo")

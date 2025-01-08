@@ -1,13 +1,14 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import AuthApi from "../api/LoginApi/AuthApi";
-import DocenteApi from "../api/AdminApi/DocenteApi";
 import AsignaturaApi from "../api/AcademicApi/AsignaturaApi";
-import TestEstresApi from "../api/TestEstress/TestEstresApi";
-import AsignacionTestApi from "../api/TestEstress/AsignacionTest";
 import EstudianteApi from "../api/AcademicApi/EstudianteApi";
 import TareasApi from "../api/AcademicApi/TareasApi";
+import DocenteApi from "../api/AdminApi/DocenteApi";
+import AuthApi from "../api/LoginApi/AuthApi";
 import CuentasApi from "../api/LoginApi/CuentasApi";
+import ResultadoTestApi from "../api/Resultados/resultadoTestApi";
+import AsignacionTestApi from "../api/TestEstress/AsignacionTest";
+import TestEstresApi from "../api/TestEstress/TestEstresApi";
 
 const getState = ({ getStore, getActions, setStore }) => {
     const API_BASE_URL = "http://127.0.0.1:8000";
@@ -53,6 +54,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             ...EstudianteApi({ getStore, getActions, setStore, api }),
             ...TareasApi({ getStore, getActions, setStore, api }),
             ...CuentasApi({ getStore, getActions, setStore, api }),
+            ...ResultadoTestApi({ getStore, getActions, setStore, api }),
         },
     };
 };

@@ -35,6 +35,11 @@ const TareasApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data.data;
     },
 
+    getAcividadesPorAsignatura: async (id) => {
+        const response = await api.get(`/actividades_asignatura/${id}`);
+        return response.data.data;
+    },
+
     getActividad: async (id) => {
         const response = await api.get(`/actividades/${id}`);
         return response.data.data;
