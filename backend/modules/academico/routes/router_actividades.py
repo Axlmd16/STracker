@@ -104,9 +104,10 @@ def editar_actividad(id: int, actividad):
     return {"message": f"Actividad con id: {id} actualizada correctamente", "data": response}
 
 
-@router_actividades.get("/actividades/asignatura/{asignatura_id}", tags=["Actividades"])
-def get_asignaciones_por_asignatura(asignatura_id: int):
-    asignaciones = ac.obtener_actividades_por_asignatura(asignatura_id)
-    if not asignaciones:
-        raise HTTPException(status_code=404, detail="No se encontraron asignaciones para esta asignatura")
-    return {"message": "Asignaciones para la asignatura", "data": asignaciones}
+#* Obtener actividades para una asignatura
+@router_actividades.get("/actividades_asignatura/{id}", tags=["Actividades"])
+def get_asignaciones_por_asignatura(id: int):
+    response = ac.obtener_actividades_por_asignatura(id)
+    if response == None:
+        raise HTTPException(status_code=404, detail="No existen actividades para esta asignatura")
+    return {"message": "Asignaciones para la asignatura", "data": response}

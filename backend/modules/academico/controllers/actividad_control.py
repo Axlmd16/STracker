@@ -63,3 +63,7 @@ class ActividadControl:
             else:
                 return False
             
+    def obtener_actividades_por_asignatura(self, id: int):
+        with SessionLocal() as db:
+            return db.query(ActividadAcademica).filter(ActividadAcademica.asignatura_id == id).all()
+            

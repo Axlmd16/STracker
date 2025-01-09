@@ -14,7 +14,6 @@ import StressIndicators from "../../../components/Graphics/StressIndicators";
 import BreadCrumbs from "../../../components/Navigation/breadCrumbs";
 import Sidebar from "../../../components/Navigation/Sidebar";
 import InterfaceTableActividades from "../../../components/Tables/ActividadesTest/InterfaceTableActividades";
-import DataTableAssignment from "../../../components/Tables/DataTableAssignment";
 import InterfaceTableAsignaciones from "../../../components/Tables/ActividadesTest/InterfaceTableAsignaciones";
 
 function AsignaturaDetallePage({ actions, store }) {
@@ -42,28 +41,11 @@ function AsignaturaDetallePage({ actions, store }) {
         fetchAsignatura();
     }, [actions, id]);
 
-    //* Datos de ejemplo para la tabla de tests
-    const testsData = {
-        headers: ["Test", "Fecha", "Estado"],
-        rows: [
-            [
-                "Evaluación Parcial 1",
-                "2024-04-10",
-                <div className="badge badge-error">Próximo</div>,
-            ],
-            [
-                "Quiz Semana 3",
-                "2024-04-05",
-                <div className="badge badge-info">Preparado</div>,
-            ],
-        ],
-    };
-
     //* Items del breadcrumb
     const breadcrumbItems = [
         {
             to: "/home/docente",
-            title: "",
+            title: "Inicio",
             icon: HomeIcon,
         },
         {
@@ -153,14 +135,6 @@ function AsignaturaDetallePage({ actions, store }) {
                                         store={store}
                                         id={id}
                                     />
-                                    {/* <DataTableAssignment
-                                        title="Tests Asignados"
-                                        buttonLabel="Nuevo Test"
-                                        data={testsData}
-                                        onButtonClick={() =>
-                                            console.log("Nuevo Test clickeado")
-                                        }
-                                    /> */}
                                 </div>
                             </div>
                         </div>

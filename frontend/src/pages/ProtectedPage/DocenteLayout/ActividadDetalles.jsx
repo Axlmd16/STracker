@@ -136,9 +136,9 @@ function ActividadDetalles({ actions, store }) {
                         <span className="loading loading-spinner loading-lg"></span>
                     </div>
                 ) : (
-                    <div className="min-h-screen bg-gray-50">
+                    <div className="min-h-screen bg-gray-200">
                         {/* Header Section - Full Width */}
-                        <div className="col-span-12 bg-white rounded-lg shadow-sm">
+                        <div className="col-span-12 bg-white rounded-lg shadow-md ">
                             {/* Header con fondo y breadcrumbs */}
                             <div className="bg-white border-b">
                                 <div className="max-w-screen-2xl mx-auto">
@@ -149,7 +149,7 @@ function ActividadDetalles({ actions, store }) {
 
                                     {/* Header Content */}
 
-                                    <div className="px-6 py-4">
+                                    <div className="px-6 py-4 rounded-md">
                                         <div className="flex justify-between items-start">
                                             {/* Left side - Title and info */}
                                             <div className="space-y-4">
@@ -259,7 +259,7 @@ function ActividadDetalles({ actions, store }) {
                             </div>
                         </div>
 
-                        <div className="max-w-screen-2xl mx-auto p-6">
+                        <div className="max-w-screen-2xl mx-auto mt-6">
                             <div className="grid grid-cols-12 gap-6">
                                 {/* Main Content Grid */}
                                 <div className="col-span-8 space-y-6">

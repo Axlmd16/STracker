@@ -16,8 +16,8 @@ function InterfaceTableAsignaciones({ actions, store, id }) {
             const data = await actions.getAllAsignacionTestForAsignature(id);
             setData(data);
         } catch (error) {
-            console.error("Error al cargar las actividades:", error);
-            toast.error("Error al cargar las actividades");
+            console.error("Error al cargar las asignaciones:", error);
+            toast.error("Error al cargar las asignaciones:  " + error.message);
         } finally {
             setLoading(false);
         }
@@ -26,10 +26,10 @@ function InterfaceTableAsignaciones({ actions, store, id }) {
     //* Efecto para la carga inicial de datos
     useEffect(() => {
         cargarTestAsignados();
-    }, []);
+    }, [actions, id]);
 
     const handleDetails = (row) => {
-        navigate(`/home/docente/asignatura/${id}/actividades/${row.id}`);
+        navigate(`/home/docente/asignatura/${id}/asignaciones/${row.id}`);
     };
 
     const columns = useMemo(
@@ -41,7 +41,8 @@ function InterfaceTableAsignaciones({ actions, store, id }) {
             },
             {
                 name: "Fecha Límite",
-                selector: (row) => new Date(row.fecha_asignacion).toLocaleDateString(),
+                selector: (row) =>
+                    new Date(row.fecha_asignacion).toLocaleDateString(),
                 sortable: true,
                 center: "true",
             },
@@ -53,11 +54,11 @@ function InterfaceTableAsignaciones({ actions, store, id }) {
         <div>
             <div className="">
                 <CustomTableAsignacionTest
-                    id = {id}
+                    id={id}
                     columns={columns}
                     data={data}
                     title={"Test asignadas"}
-                    to={`/home/docente/asignacion`}
+                    to={`/home/docente/asignatura/${id}/asignaciones`}
                     handleDetails={handleDetails}
                 />
             </div>
