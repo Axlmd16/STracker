@@ -2,18 +2,22 @@ import { AlertCircle, CheckCircle2, PlayCircle } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
+import ViewResultados from "../../../components/ViewsSets/ViewResultados";
 
 const ResultadoTestPage = ({ actions }) => {
     const location = useLocation();
-    const { resultado } = location.state || {};
+    const [resultado, setResultado] = useState(
+        location.state?.resultado || null
+    );
     const [testState, setTestState] = useState({
         isActive: false,
         isCompleted: false,
         info: null,
     });
     const [loading, setLoading] = useState(false);
-
+    const [processingResults, setProcessingResults] = useState(false);
     const fetchTestInfo = useCallback(async () => {
+        if (!resultado?.asignacion?.test_id) return;
         setLoading(true);
         try {
             const data = await actions.getTestEstres(
@@ -28,41 +32,59 @@ const ResultadoTestPage = ({ actions }) => {
         }
     }, [actions, resultado?.asignacion?.test_id]);
 
+    const fetchUpdatedResult = useCallback(async () => {
+        if (!resultado?.id) return;
+        try {
+            const updatedResult = await actions.obtenerResultado(resultado.id);
+            if (updatedResult) {
+                setResultado(updatedResult);
+            }
+        } catch (error) {
+            console.error("Error al obtener resultado actualizado:", error);
+        }
+    }, [actions, resultado?.id]);
+
     useEffect(() => {
         fetchTestInfo();
     }, [fetchTestInfo]);
 
     const verifyCompletion = useCallback(async () => {
-        setLoading(true);
+        if (!resultado?.id) return;
+
+        setProcessingResults(true);
         try {
-            const isCompleted = await actions.verifyTestCompletion(
-                resultado.asignacion.test_id
-            );
-            if (isCompleted) {
+            const response = await actions.verificarResultado(resultado.id);
+            if (response === true) {
+                await fetchUpdatedResult();
                 setTestState((prev) => ({
                     ...prev,
                     isCompleted: true,
                 }));
+                setProcessingResults(false);
             } else {
-                toast.error("El test no fue completado correctamente");
+                toast("Procesando resultados, inténtalo en unos segundos", {
+                    icon: "⏳",
+                });
+                setTimeout(() => {
+                    verifyCompletion();
+                }, 3000);
             }
         } catch (error) {
             console.error(
                 "Error al verificar la finalización del test:",
                 error
             );
-            toast.error("Error al verificar la finalización del test" + error);
-        } finally {
-            setTestState((prev) => ({
-                ...prev,
-                isActive: false,
-            }));
-            setLoading(false);
+            toast.error("Error al verificar la finalización del test");
+            setProcessingResults(false); // Finaliza el procesamiento incluso en error
         }
-    }, [actions, resultado?.asignacion?.test_id]);
+    }, [actions, resultado?.id, fetchUpdatedResult]);
 
-    //* Función para abrir el test en una nueva ventana
     const startTest = () => {
+        if (!testState.info?.url) {
+            toast.error("No se pudo obtener la URL del test");
+            return;
+        }
+
         setTestState((prev) => ({ ...prev, isActive: true }));
 
         const id_unico = [
@@ -83,34 +105,37 @@ const ResultadoTestPage = ({ actions }) => {
         }, 500);
     };
 
-    if (loading) {
+    if (loading || processingResults) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gray-50">
+            <div className="flex min-h-screen items-center justify-center bg-base-200">
                 <div className="flex flex-col items-center gap-4">
                     <span className="loading loading-spinner loading-lg text-primary"></span>
-                    <p className="text-lg font-medium text-gray-600">
-                        Cargando test...
+                    <p className="text-lg font-medium">
+                        Procesando resultados, por favor espera...
                     </p>
                 </div>
             </div>
         );
     }
 
+    if (resultado?.fecha_realizacion) {
+        return <ViewResultados actions={actions} resultado={resultado} />;
+    }
+
     return (
-        <div className="relative min-h-screen bg-gray-50">
+        <div className="relative min-h-screen bg-base-200">
             {testState.isActive && !testState.isCompleted && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                    <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+                    <div className="mx-4 w-full max-w-md rounded-lg bg-base-100 p-6 shadow-xl">
                         <div className="flex items-center gap-3">
-                            <AlertCircle className="h-6 w-6 text-yellow-500" />
-                            <h3 className="text-lg font-semibold text-gray-900">
+                            <AlertCircle className="h-6 w-6 text-warning" />
+                            <h3 className="text-lg font-semibold">
                                 Test en Progreso
                             </h3>
                         </div>
-                        <p className="mt-3 text-gray-600">
+                        <p className="mt-3 text-base-content/80">
                             Por favor, complete el test en la ventana abierta
-                            antes de volver a esta página. No cierre esta
-                            ventana.
+                            antes de volver a esta página.
                         </p>
                     </div>
                 </div>
@@ -119,17 +144,17 @@ const ResultadoTestPage = ({ actions }) => {
             <div className="container mx-auto flex min-h-screen items-center justify-center px-4">
                 {!testState.isActive && !testState.isCompleted && (
                     <div className="flex flex-col items-center gap-6 text-center">
-                        <h2 className="text-2xl font-bold text-gray-900">
+                        <h2 className="text-2xl font-bold">
                             Evaluación de Estrés
                         </h2>
-                        <p className="max-w-md text-gray-600">
+                        <p className="max-w-md text-base-content/80">
                             Está a punto de comenzar su evaluación. El test se
-                            abrirá en una nueva ventana. Por favor, asegúrese de
-                            completarlo sin interrupciones.
+                            abrirá en una nueva ventana.
                         </p>
                         <button
                             onClick={startTest}
                             className="btn btn-primary gap-2"
+                            disabled={!testState.info?.url}
                         >
                             <PlayCircle className="h-5 w-5" />
                             Comenzar Test
@@ -139,16 +164,15 @@ const ResultadoTestPage = ({ actions }) => {
 
                 {testState.isCompleted && (
                     <div className="flex flex-col items-center gap-4 text-center">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-                            <CheckCircle2 className="h-8 w-8 text-green-600" />
+                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-success/20">
+                            <CheckCircle2 className="h-8 w-8 text-success" />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900">
+                        <h2 className="text-2xl font-bold">
                             ¡Test Completado!
                         </h2>
-                        <p className="max-w-md text-gray-600">
-                            Has finalizado exitosamente la evaluación. Tus
-                            resultados están siendo procesados y estarán
-                            disponibles próximamente.
+                        <p className="max-w-md text-base-content/80">
+                            Has finalizado exitosamente la evaluación. La página
+                            se actualizará en breve para mostrar tus resultados.
                         </p>
                     </div>
                 )}

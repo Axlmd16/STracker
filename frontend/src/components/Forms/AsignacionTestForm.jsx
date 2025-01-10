@@ -82,17 +82,20 @@ function AsignacionTestForm({
 
         const resultadoTest = {
             estudiante_asignatura_id:
-                seleccion_tipo_asignacion === "individual"
-                    ? data.estudiante_asignatura_id
+                seleccion_tipo_asignacion === "toIndividual"
+                    ? parseInt(data.estudiante_asignatura_id, 10) || null // Asegurar que sea un número
                     : null,
             grupo_id:
-                seleccion_tipo_asignacion === "group" ? data.grupo_id : null,
+                seleccion_tipo_asignacion === "toGrupos"
+                    ? parseInt(data.grupo_id, 10) || null
+                    : null,
         };
 
         const formData = {
             asignacion,
             resultadoTest,
         };
+        console.log("Data a enviar:", formData);
 
         try {
             const promise = update

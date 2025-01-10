@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from models.TestEstres import TestEstres
 from core.database import SessionLocal
 
@@ -44,3 +45,7 @@ class TestEstresController:
     def get_ultimos_test(self):
         with SessionLocal() as db:
             return db.query(TestEstres).order_by(TestEstres.id.desc()).limit(3).all()
+        
+    def ramdon_id_test(self):
+        with SessionLocal() as db:
+            return db.query(TestEstres).order_by(func.random()).first().id
