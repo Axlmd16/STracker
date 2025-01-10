@@ -44,11 +44,7 @@ const ResultadoTestPage = ({ actions }) => {
         }
     }, [actions, resultado?.id]);
 
-    useEffect(() => {
-        fetchTestInfo();
-    }, [fetchTestInfo]);
 
-    const verifyCompletion = useCallback(async () => {
         if (!resultado?.id) return;
 
         setProcessingResults(true);
@@ -84,7 +80,6 @@ const ResultadoTestPage = ({ actions }) => {
             toast.error("No se pudo obtener la URL del test");
             return;
         }
-
         setTestState((prev) => ({ ...prev, isActive: true }));
 
         const id_unico = [

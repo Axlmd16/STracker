@@ -1,5 +1,8 @@
 from fastapi import APIRouter, HTTPException
-
+from core.database import SessionLocal
+from sqlalchemy.orm import Session
+from models.EstudianteAsignatura import EstudianteAsignatura
+from sqlalchemy import text
 from middlewares.verify_token_route import VerifyTokenRoute
 from modules.resultados.controllers.resultado_test_controller import ResultadoTestControl
 from modules.resultados.schemas.resultado_test_schema import ResultadoTestSchema
@@ -22,21 +25,22 @@ def get_asignacion(id: int):
         raise HTTPException(status_code=404, detail="AsignacionTest no encontrada")
     return {"message": "Asignacion test", "data": asignacion}
 
-# @router_asignacion_test.post("/asignacion_test/", tags=["Asignacion Test"])
-# def crear_asignacion(asignacion: AsignacionTestSchema):
-#     asignacion_creada = asignacion_controller.crear_asignacion(asignacion)
-#     return {"message": "Asignacion test creada", "data": asignacion_creada}
-
-#* PRUEBA!!!!!!!!
-@router_asignacion_test.post("/asignacion_test/", tags=["Asignacion Test"])
-def crear_asignacion(asignacion: AsignacionTestSchema, resultadoTest: ResultadoTestSchema ):
+@router_asignacion_test.post("/asignacion_test/", tags=["Asignacion Test"], response_model=None)
+def crear_asignacion(asignacion: AsignacionTestSchema, resultadoTest: ResultadoTestSchema):
     asignacion_creada = asignacion_controller.crear_asignacion(asignacion)
     resultadoTest.asignacion_id = asignacion_creada.id
+
+    estudiante_asignatura_id = rc.obtener_estudiante_asignatura_id(resultadoTest.estudiante_asignatura_id)
     
-    #! Solo funciona para individuales
-    resultado_creado = rc.crear_resultado(resultadoTest)
-    
-    return {"message": "Asignacion test creada", "data": asignacion_creada, "resultado": resultado_creado}
+    if estudiante_asignatura_id:
+        resultadoTest.estudiante_asignatura_id = estudiante_asignatura_id
+        print(f"\n\n\n\n", resultadoTest,"\n\n\n\n")
+        
+        rc.crear_resultado(resultadoTest)
+        
+        return {"message": "Asignación test creada"}
+    else:
+        raise HTTPException(status_code=404, detail="No se encontró el registro para el estudiante_id proporcionado.")
 
 #* ----------------------------------------
 
@@ -71,6 +75,7 @@ def get_asignaciones_por_asignatura(asignatura_id: int):
 #! Nota: Esto debo cambiarlo en otro archivo
 @router_asignacion_test.get("/grupo/asignatura/{asignatura_id}", tags=["Grupos"])
 def get_grupos_por_asignatura(asignatura_id: int):
+    print(f"aquiauiqiquqiuqiqu\n\n\n\n\n")
     asignaciones = asignacion_controller.obtener_grupos_por_asignatura(asignatura_id)
     if not asignaciones:
         raise HTTPException(status_code=404, detail="No se encontraron asignaciones para esta asignatura")

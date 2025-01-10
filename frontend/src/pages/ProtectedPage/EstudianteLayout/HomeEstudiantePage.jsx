@@ -36,19 +36,7 @@ function HomeEstudiantePage({ actions, store }) {
         { fecha: "Jun 2024", puntaje: 77, promedio: 73 },
     ];
 
-    return (
-        <div className="p-3">
-            {/* Main Content */}
-            <div className=" ">
-                <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                    {/* Columna Izquierda */}
-                    <div className="xl:col-span-4 flex flex-col gap-6">
-                        <TestDeEstresCard actions={actions} store={store} />
-                        <ActividadesPendientesCard
-                            actions={actions}
-                            store={store}
-                        />
-                    </div>
+
 
                     {/* Columna Central */}
                     <div className="xl:col-span-8">

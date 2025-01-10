@@ -69,4 +69,7 @@ class EstudianteAsignaturaControl:
             for est_asig in est_asigs:
                 asignatura = db.query(Asignatura).filter(Asignatura.id == est_asig.asignatura_id).first()
                 asignaturas.append(asignatura)
+
+                
             return asignaturas
+
