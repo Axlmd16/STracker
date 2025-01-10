@@ -1,7 +1,14 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Brain, Calendar, Clock, ClockAlert, Share2, Book } from "lucide-react";
+import {
+    Brain,
+    Calendar,
+    CircleCheckBig,
+    Clock,
+    ClockAlert,
+    Share2,
+} from "lucide-react";
 import { toast } from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function TestDeEstresCard({ actions, store }) {
     const [resultados, setResultados] = useState([]);
@@ -52,100 +59,91 @@ function TestDeEstresCard({ actions, store }) {
     }
 
     return (
-        <div className="grid gap-4 bg-base-200 rounded-xl">
-            {resultados.map((resultado, index) => (
-                <div
-                    key={index}
-                    className="card bg-white shadow-xl hover:shadow-2xl transition-shadow duration-300"
-                >
-                    <div className="card-body p-6">
-                        {/* Header */}
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                                <Brain className="w-8 h-8 text-primary" />
-                                <h2 className="card-title text-xl font-bold">
-                                    Test de Estrés
-                                </h2>
-                            </div>
-                            <div
-                                className={`badge badge-md ${
-                                    resultado.resultado
-                                        ? "badge-success font-semibold text-green-900"
-                                        : "badge-warning font-semibold text-yellow-900"
-                                }`}
-                            >
-                                {resultado.resultado ? (
-                                    `Resultado: ${resultado.resultado}`
-                                ) : (
-                                    <span className="flex items-center gap-1">
-                                        <ClockAlert size={15} /> Pendiente
-                                    </span>
-                                )}
-                            </div>
-                        </div>
+        <div className="bg-transparent h-3/5 overflow-y-scroll scrollbar-hide">
+            <div className="flex items-center gap-3 mb-4">
+                <Brain className="w-6 h-6 text-primary" />
+                <h2 className="text-lg font-bold">
+                    Tests de Estrés Pendientes
+                </h2>
+            </div>
 
-                        {/* Content */}
-                        <div className="space-y-3">
-                            <div className="flex items-center gap-2 text-base-content/80">
-                                <Book className="w-5 h-5" />
-                                <span className="text-sm">
-                                    Descripcion: {resultado.asignacion?.descripcion}
-                                </span>
-                            </div>
-
-                            <div className="flex items-center gap-2 text-base-content/80">
-                                <Calendar className="w-5 h-5" />
-                                <span className="text-sm">
-                                    Asignado:{" "}
-                                    {formatDate(
-                                        resultado.asignacion?.fecha_asignacion
-                                    )}
-                                </span>
-                            </div>
-
-                            <div className="flex items-center gap-2 text-base-content/80">
-                                <Clock className="w-5 h-5" />
-                                <span className="text-sm">
-                                    Fecha límite:{" "}
-                                    {formatDate(
-                                        resultado.asignacion?.fecha_limite
-                                    )}
-                                </span>
-                            </div>
-
-                            <div className="flex items-center gap-2 text-base-content/80">
-                                <Share2 className="w-5 h-5" />
-                                <span className="text-sm">
-                                    Estado:{" "}
-                                    {resultado.compartido ? (
-                                        <span className="text-success">
-                                            Compartido
-                                        </span>
-                                    ) : (
-                                        <span className="text-warning">
-                                            No compartido
-                                        </span>
-                                    )}
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Status Indicator */}
-                        <div className="mt-4 flex justify-end">
-                            {!resultado.fecha_realizacion && (
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={() =>
-                                        handleRealizarTest(resultado)
-                                    }
-                                >
-                                    Realizar Test
-                                </button>
-                            )}
-                        </div>
-                    </div>
+            {resultados.length === 0 ? (
+                <div className="flex justify-center items-center h-32">
+                    <p className="text-base-content/70">
+                        No hay tests de estrés pendientes.
+                    </p>
                 </div>
-            ))}
+            ) : (
+                <div className="space-y-4">
+                    {resultados.map((resultado, index) => (
+                        <button
+                            key={index}
+                            className="w-full"
+                            onClick={() => handleRealizarTest(resultado)}
+                        >
+                            <div className="card bg-white shadow hover:shadow-lg transition-shadow duration-300">
+                                <div className="card-body p-4">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div className="flex flex-col">
+                                            <div className="flex items-center gap-2 text-sm text-base-content/80">
+                                                <Calendar className="w-4 h-4" />
+                                                <span>
+                                                    Asignado:{" "}
+                                                    {formatDate(
+                                                        resultado.asignacion
+                                                            ?.fecha_asignacion
+                                                    )}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-sm text-base-content/80 mt-1">
+                                                <Clock className="w-4 h-4" />
+                                                <span>
+                                                    Límite:{" "}
+                                                    {formatDate(
+                                                        resultado.asignacion
+                                                            ?.fecha_limite
+                                                    )}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center">
+                                            <div
+                                                className={`${
+                                                    resultado.fecha_realizacion
+                                                        ? "text-green-900"
+                                                        : "text-yellow-900"
+                                                }`}
+                                            >
+                                                {resultado.fecha_realizacion ? (
+                                                    <CircleCheckBig size={27} />
+                                                ) : (
+                                                    <ClockAlert size={27} />
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-2 text-xs text-base-content/70">
+                                        <Share2 className="w-3 h-3" />
+                                        <span>
+                                            {resultado.compartido ? (
+                                                <span className="text-success">
+                                                    Compartido
+                                                </span>
+                                            ) : (
+                                                <span className="text-warning">
+                                                    No compartido
+                                                </span>
+                                            )}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

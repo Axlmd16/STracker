@@ -9,13 +9,12 @@ class ResultadoTestSchema(BaseModel):
     asignacion_id: Optional[int] = None
     grupo_id: Optional[int] = None
     actividad_academica_id: Optional[int] = None
-    estudiante_asignatura_id: int
+    estudiante_asignatura_id: Optional[int] = None
 
     class Config:
         from_attributes = True
 
 class RespuestaFormulario(BaseModel):
-    timestamp: str
-    puntuacion: str
+    puntuacion: float
     id_unico: str
-    tiene_estres: str
+
