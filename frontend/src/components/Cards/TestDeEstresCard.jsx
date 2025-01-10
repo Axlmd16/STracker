@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Brain, Calendar, Clock, ClockAlert, Share2 } from "lucide-react";
+import { Brain, Calendar, Clock, ClockAlert, Share2, Book } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -86,6 +86,13 @@ function TestDeEstresCard({ actions, store }) {
 
                         {/* Content */}
                         <div className="space-y-3">
+                            <div className="flex items-center gap-2 text-base-content/80">
+                                <Book className="w-5 h-5" />
+                                <span className="text-sm">
+                                    Descripcion: {resultado.asignacion?.descripcion}
+                                </span>
+                            </div>
+
                             <div className="flex items-center gap-2 text-base-content/80">
                                 <Calendar className="w-5 h-5" />
                                 <span className="text-sm">
