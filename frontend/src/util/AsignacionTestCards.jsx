@@ -1,6 +1,11 @@
 import { Edit, Trash2 } from "lucide-react";
 
 function AsignacionTestCards({ data, handleUpdate, handleDelete }) {
+    const formatDate = (date) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(date).toLocaleDateString('es-ES', options);
+    };
+
     return (
         <div className="flex flex-col w-full gap-6 p-4 bg-white rounded-lg">
             {data.map((item) => (
@@ -22,13 +27,13 @@ function AsignacionTestCards({ data, handleUpdate, handleDelete }) {
                             <span className="font-medium text-cyan-600">
                                 Fecha de asignación:
                             </span>{" "}
-                            {item.fecha_asignacion}
+                            {formatDate(item.fecha_asignacion)}
                         </p>
                         <p className="text-sm text-gray-600 mt-2">
                             <span className="font-medium text-cyan-600">
                                 Fecha Limite:
                             </span>{" "}
-                            {item.fecha_limite}
+                            {formatDate(item.fecha_limite)}
                         </p>
                     </div>
 

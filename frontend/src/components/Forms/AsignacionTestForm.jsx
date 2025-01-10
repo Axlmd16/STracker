@@ -2,17 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
-const dataEstudiantes = [
-    { id: 1, nombres: "Juan Pérez", estudiante_asignatura_id: 1 },
-    { id: 2, nombres: "María García", estudiante_asignatura_id: 2 },
-    { id: 3, nombres: "Carlos López", estudiante_asignatura_id: 3 },
-];
-
-const dataGrupos = [
-    { id: 1, nombre: "Grupo A" },
-    { id: 2, nombre: "Grupo B" },
-];
-
 function AsignacionTestForm({
     id,
     update,
@@ -25,6 +14,8 @@ function AsignacionTestForm({
     const [pending, setPending] = useState(false);
     const [tests, setTests] = useState([]);
     const [showActivitySelect, setShowActivitySelect] = useState(false);
+    const [estudiantes, setEstudiantes] = useState([]);
+    const [grupos, setGrupos] = useState([]); 
 
     const {
         register,
@@ -36,7 +27,7 @@ function AsignacionTestForm({
         watch,
     } = useForm({
         defaultValues: {
-            tipo_asignacion: "individual",
+            tipo_asignacion: "toIndividual",
             estudiante_asignatura_id: null,
             grupo_id: null,
         },
@@ -56,11 +47,26 @@ function AsignacionTestForm({
         }
     }, [actions]);
 
+    const fetchEstudiantesYGrupos = useCallback(async () => {
+        try {
+            const estudiantesData = await actions.getStudentsBySubject(id);
+            const gruposData = await actions.getGroupsByAsignatura(id);
+            setEstudiantes(estudiantesData);
+            setGrupos(gruposData); 
+        } catch (error) {
+            toast.error("Error al cargar los estudiantes o grupos");
+        }
+    }, [actions, id]);
+
     useEffect(() => {
         fetchTestEstres();
-    }, [fetchTestEstres]);
+        fetchEstudiantesYGrupos(); 
+    }, [fetchTestEstres, fetchEstudiantesYGrupos]);
 
     const onSubmit = async (data) => {
+
+        console.log("\n\n\n\nEsta es la data:", data, "\n\n\n\n");
+
         if (update && (data.estudiante_asignatura_id || data.grupo_id)) {
             toast.error(
                 "No se pueden cambiar el estudiante o el grupo en modo edición. Borre la asignación y cree una nueva."
@@ -76,20 +82,25 @@ function AsignacionTestForm({
         const asignacion = {
             fecha_asignacion: data.fecha_asignacion,
             fecha_limite: data.fecha_limite,
+            descripcion: data.descripcion,
             test_id: randomTest ? randomTest.id : null,
             asignatura_id: id,
         };
 
+
         const resultadoTest = {
             estudiante_asignatura_id:
                 seleccion_tipo_asignacion === "toIndividual"
-                    ? parseInt(data.estudiante_asignatura_id, 10) || null // Asegurar que sea un número
+                    ? data.estudiante_asignatura_id
                     : null,
             grupo_id:
                 seleccion_tipo_asignacion === "toGrupos"
                     ? parseInt(data.grupo_id, 10) || null
                     : null,
         };
+
+        console.log(`\n\n\n\nAsignacion: ${JSON.stringify(asignacion)}\n\n\n\n`);
+        console.log(`\n\n\n\nResultado Test: ${JSON.stringify(resultadoTest)}\n\n\n\n`);
 
         const formData = {
             asignacion,
@@ -100,9 +111,9 @@ function AsignacionTestForm({
         try {
             const promise = update
                 ? actions.updateAsignacionTest(row.id, {
-                      ...formData,
-                      id: row.id,
-                  })
+                    ...formData,
+                    id: row.id,
+                })
                 : actions.createAsignacionTest(formData);
 
             await toast.promise(promise, {
@@ -128,7 +139,7 @@ function AsignacionTestForm({
         if (update && row) {
             setValue(
                 "tipo_asignacion",
-                row.resultado_test ? "group" : "individual"
+                row.resultado_test ? "group" : "toIndividual"
             );
             setValue(
                 "estudiante_asignatura_id",
@@ -217,9 +228,9 @@ function AsignacionTestForm({
                                 <option value="">
                                     Seleccione un estudiante
                                 </option>
-                                {dataEstudiantes.map((student) => (
+                                {estudiantes.map((student) => (
                                     <option key={student.id} value={student.id}>
-                                        {student.nombres}
+                                        {student.nombres} {student.apellidos}
                                     </option>
                                 ))}
                             </select>
@@ -248,9 +259,9 @@ function AsignacionTestForm({
                                 disabled={update}
                             >
                                 <option value="">Seleccione un grupo</option>
-                                {dataGrupos.map((group) => (
-                                    <option key={group.id} value={group.id}>
-                                        {group.nombre}
+                                {grupos.map((group) => (
+                                    <option key={group.grupo_id} value={group.grupo_id}>
+                                        {group.nombre_grupo}
                                     </option>
                                 ))}
                             </select>
@@ -276,18 +287,19 @@ function AsignacionTestForm({
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
-                                className="stroke-current shrink-0 w-6 h-6"
+                                className="w-6 h-6"
                             >
                                 <path
+                                    stroke="currentColor"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth="2"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
+                                    d="M13 7v3l2 1-2 1V14m7 3h-4a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4m0-6h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4V3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3"
+                                />
                             </svg>
                             <span>
-                                La asignación se aplicará a todos los
-                                estudiantes de la clase
+                                Los resultados del test de estrés serán
+                                asignados a la clase completa.
                             </span>
                         </div>
                     )}
@@ -301,9 +313,8 @@ function AsignacionTestForm({
                         </label>
                         <textarea
                             id="descripcion"
-                            className={`textarea textarea-bordered h-24 ${
-                                errors.descripcion ? "textarea-error" : ""
-                            }`}
+                            className={`textarea textarea-bordered h-24 ${errors.descripcion ? "textarea-error" : ""
+                                }`}
                             {...register("descripcion", {
                                 required: "La descripción es obligatoria",
                             })}
@@ -319,73 +330,39 @@ function AsignacionTestForm({
                 {/* Dates */}
                 <div className="card bg-base-200 p-6">
                     <h2 className="text-xl font-semibold mb-4">Fechas</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="form-control">
-                            <label className="label" htmlFor="fecha_asignacion">
-                                <span className="label-text">
-                                    Fecha de Asignación
-                                </span>
-                            </label>
-                            <input
-                                type="datetime-local"
-                                className={`input input-bordered ${
-                                    errors.fecha_asignacion ? "input-error" : ""
-                                }`}
-                                {...register("fecha_asignacion", {
-                                    required:
-                                        "La fecha de asignación es obligatoria",
-                                })}
-                            />
-                            {errors.fecha_asignacion && (
-                                <p className="text-error text-sm mt-1">
-                                    {errors.fecha_asignacion.message}
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="form-control">
-                            <label className="label" htmlFor="fecha_limite">
-                                <span className="label-text">Fecha Límite</span>
-                            </label>
-                            <input
-                                type="datetime-local"
-                                className={`input input-bordered ${
-                                    errors.fecha_limite ? "input-error" : ""
-                                }`}
-                                {...register("fecha_limite", {
-                                    required: "La fecha límite es obligatoria",
-                                })}
-                            />
-                            {errors.fecha_limite && (
-                                <p className="text-error text-sm mt-1">
-                                    {errors.fecha_limite.message}
-                                </p>
-                            )}
-                        </div>
+                    <div className="form-control mb-4">
+                        <label className="label">
+                            <span className="label-text">Fecha de Asignación</span>
+                        </label>
+                        <input
+                            type="datetime-local"
+                            className="input input-bordered w-full"
+                            {...register("fecha_asignacion", { required: true })}
+                        />
+                    </div>
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Fecha de Limite</span>
+                        </label>
+                        <input
+                            type="datetime-local"
+                            className="input input-bordered w-full"
+                            {...register("fecha_limite", { required: true })}
+                        />
                     </div>
                 </div>
 
-                {/* Form Actions */}
-                <div className="flex justify-end gap-4">
+                {/* Buttons */}
+                <div className="flex justify-between mt-6">
                     <button
                         type="button"
-                        onClick={handleCancel}
                         className="btn btn-ghost"
+                        onClick={handleCancel}
                     >
                         Cancelar
                     </button>
-                    <button
-                        type="submit"
-                        className="btn btn-primary"
-                        disabled={pending}
-                    >
-                        {pending ? (
-                            <span className="loading loading-spinner"></span>
-                        ) : update ? (
-                            "Actualizar"
-                        ) : (
-                            "Registrar"
-                        )}
+                    <button type="submit" className="btn btn-primary">
+                        {pending ? "Guardando..." : "Guardar"}
                     </button>
                 </div>
             </form>

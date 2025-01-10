@@ -7,7 +7,7 @@ function TestDeEstresCard({ test, actions }) {
 
     const handleButtonClick = async (event) => {
         const testId = event.target.getAttribute("data-test-id");
-
+        
         const test = await actions.getTestEstres(testId);
         console.log(test);
         const { url } = test;
@@ -27,13 +27,9 @@ function TestDeEstresCard({ test, actions }) {
                     </div>
                     <div className="mt-4 mb-4">
                         <button
-                            className={`btn-status ${
-                                isPending
-                                    ? "btn-status-start"
-                                    : "btn-status-view"
-                            }`}
-                            data-test-id={test_id}
-                            onClick={handleButtonClick}
+                            className={`btn-status ${isPending ? "btn-status-start" : "btn-status-view"}`}
+                            data-test-id={test_id} 
+                            onClick={handleButtonClick} 
                         >
                             {isPending ? "Comenzar Test" : "Ver Resultados"}
                         </button>
