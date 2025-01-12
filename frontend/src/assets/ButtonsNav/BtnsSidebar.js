@@ -3,6 +3,7 @@ import {
     HeartHandshake,
     HomeIcon,
     Key,
+    Group,
     Settings,
     Star,
     UsersRound,
@@ -52,11 +53,11 @@ export const buttons_docente = [
         href: "/home/docente/asignatura/:id/asignaciones",
         tooltip: "Asignaciones",
     },
-    // {
-    //     icon: Group,
-    //     href: "/home/docente/asignatura/:id/grupos",
-    //     tooltip: "Asignaturas",
-    // },
+    {
+        icon: Group,
+        href: "/home/docente/asignatura/:id/grupos",
+        tooltip: "Asignaturas",
+    },
     {
         icon: Settings,
         href: "/home/docente/asignatura/:id/configuracion",

@@ -25,6 +25,9 @@ import CuentaCrudPage from "../pages/ProtectedPage/AdminLayout/CuentaCrudPage";
 import AsignaturaConfigPage from "../pages/ProtectedPage/DocenteLayout/AsignaturaConfigPage";
 import RecomendacionesTestEstres from "../components/Tables/RecomendacionesTestEstres";
 import PageRecomendaciones from "../pages/ProtectedPage/AdminLayout/PageRecomendaciones";
+import ResultadoTestPage from "../pages/ProtectedPage/EstudianteLayout/ResultadoTestPage";
+import GroupPage from "../pages/ProtectedPage/DocenteLayout/GroupPage";
+import GroupDetails from "../util/GroupDetails";
 
 function Rutas({ store, actions }) {
     const rol = store.access_role;
@@ -209,6 +212,28 @@ function Rutas({ store, actions }) {
                             }
                         />
                         <Route
+                            path="/home/docente/asignatura/:id/grupos"
+                            element={
+                                <ProtectedRoute>
+                                    <GroupPage
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/home/docente/gruposDetallesUpdate/:id/:idAsignatura"
+                            element={
+                                <ProtectedRoute>
+                                    <GroupDetails
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
                             path="/home/docente/asignatura/:id/actividades"
                             element={
                                 <ProtectedRoute>
@@ -236,6 +261,17 @@ function Rutas({ store, actions }) {
                             element={
                                 <ProtectedRoute>
                                     <HomeEstudiantePage
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/home/estudiante/resultado_test/:id"
+                            element={
+                                <ProtectedRoute>
+                                    <ResultadoTestPage
                                         actions={actions}
                                         store={store}
                                     />

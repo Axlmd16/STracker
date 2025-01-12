@@ -41,10 +41,12 @@ class EstudianteAsignaturaControl:
                 estudiantes = []
                 for data in estudiantes_asignatura:
                     est = UsuarioControl().obtener_usuario(data.estudiante_id)
-                    estudiantes.append(est)
+                    estudiante_dict = UsuarioBase.from_orm(est).dict()
+                    estudiante_dict['estudiante_asignatura_id'] = data.id
+                    estudiantes.append(estudiante_dict)
                     
-                dict_estudiantes = [UsuarioBase.from_orm(estudiante).dict() for estudiante in estudiantes]  
-                return dict_estudiantes
+                
+                return estudiantes
                 
             else:
                 raise HTTPException(status_code=404, detail="Asignatura no encontrada")
@@ -58,5 +60,16 @@ class EstudianteAsignaturaControl:
                 return True
             else:
                 return False
+            
+            
+    def obtener_asignaturas_estudiante(self, id: int):
+        with SessionLocal() as db:
+            est_asigs = db.query(EstudianteAsignatura).filter(EstudianteAsignatura.estudiante_id == id).all()
+            asignaturas = []
+            for est_asig in est_asigs:
+                asignatura = db.query(Asignatura).filter(Asignatura.id == est_asig.asignatura_id).first()
+                asignaturas.append(asignatura)
 
-        
+                
+            return asignaturas
+

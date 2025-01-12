@@ -16,7 +16,7 @@ class ResultadoTest(Base):
     actividad_academica_id = Column(Integer, ForeignKey("actividad_academica.id", ondelete="CASCADE"), nullable=True)
     
     # Relaciones
-    asignacion = relationship("AsignacionTest", back_populates="resultados")
+    asignacion = relationship("AsignacionTest", back_populates="resultados", lazy="subquery")
     estudiante_asignatura = relationship("EstudianteAsignatura", back_populates="test_realizados")
     grupo = relationship("Grupo", back_populates="resultados")
     actividad_academica = relationship("ActividadAcademica", back_populates="resultados")

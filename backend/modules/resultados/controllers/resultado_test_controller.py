@@ -1,6 +1,7 @@
 from core.database import SessionLocal
 from models.ResultadoTest import ResultadoTest
 from models.EstudianteAsignatura import EstudianteAsignatura
+from sqlalchemy import text
 
 class ResultadoTestControl:
     def __init__(self):
@@ -41,19 +42,26 @@ class ResultadoTestControl:
     
     def obtener_resultados_por_estudiante(self, estudiante_id: int):
         with SessionLocal() as db:
-            print(f"estudiante_id: {estudiante_id}")
             estudiante_asignatura_ids = db.query(EstudianteAsignatura.id).filter(EstudianteAsignatura.estudiante_id == estudiante_id).all()
-            print(f"estudiante_asignatura_ids: {estudiante_asignatura_ids}")
             estudiante_asignatura_ids = [ea.id for ea in estudiante_asignatura_ids]
-            print(f"estudiante_asignatura_ids: {estudiante_asignatura_ids}")
             resultados = db.query(ResultadoTest).filter(ResultadoTest.estudiante_asignatura_id.in_(estudiante_asignatura_ids)).all()
             
             return resultados
         
         
-        
-        
-        
     def obtener_resultados_por_test(self, test_id: int):
         with SessionLocal() as db:
             return db.query(ResultadoTest).filter(ResultadoTest.test_id == test_id).all()
+        
+    def obtener_estudiante_asignatura_id(self, estudiante_id: int):
+        with SessionLocal() as db:
+            query = text("""
+                SELECT id
+                FROM estudiante_asignatura 
+                WHERE estudiante_id = :estudiante_id
+            """)
+            result = db.execute(query, {"estudiante_id": estudiante_id}).fetchone()
+            if result:
+                return result[0]
+            else:
+                return None

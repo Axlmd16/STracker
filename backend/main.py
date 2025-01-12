@@ -7,6 +7,7 @@ from modules.test_estres.routes.test_estres_router import router_test_estres
 from modules.test_estres.routes.asignacion_test_router import router_asignacion_test
 from modules.academico.routes.router_asignatura import router_asignatura
 from modules.resultados.routes.resultado_test_router import router_resultados
+from modules.grupos.routes.grupos_routes import router_grupo
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from fastapi.staticfiles import StaticFiles
@@ -42,6 +43,7 @@ app.include_router(router_asignatura)
 app.include_router(router_actividades)
 app.include_router(router_resultados)
 app.include_router(router_recomendaciones)
+app.include_router(router_grupo)
 
 @app.get("/")
 def read_root():
