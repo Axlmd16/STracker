@@ -10,6 +10,7 @@ from modules.resultados.routes.resultado_test_router import router_resultados
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from fastapi.staticfiles import StaticFiles
+from modules.test_estres.routes.recomendaciones_routes import router_recomendaciones
 
 load_dotenv('.env')
 
@@ -40,6 +41,7 @@ app.include_router(router_asignacion_test)
 app.include_router(router_asignatura)
 app.include_router(router_actividades)
 app.include_router(router_resultados)
+app.include_router(router_recomendaciones)
 
 @app.get("/")
 def read_root():

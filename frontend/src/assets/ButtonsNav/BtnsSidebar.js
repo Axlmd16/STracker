@@ -4,6 +4,7 @@ import {
     HomeIcon,
     Key,
     Settings,
+    Star,
     UsersRound,
 } from "lucide-react";
 
@@ -22,6 +23,11 @@ export const buttons_admin = [
         icon: HeartHandshake,
         href: "/home/administrador/tests",
         tooltip: "Tests de estres",
+    },
+    {
+        icon: Star,
+        href: "/home/administrador/recomendaciones",
+        tooltip: "Recomendaciones",
     },
     {
         icon: UsersRound,

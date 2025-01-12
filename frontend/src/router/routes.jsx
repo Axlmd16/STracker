@@ -23,6 +23,8 @@ import NuevaActividadPage from "../pages/ProtectedPage/DocenteLayout/NuevaActivi
 import ActividadDetalles from "../pages/ProtectedPage/DocenteLayout/ActividadDetalles";
 import CuentaCrudPage from "../pages/ProtectedPage/AdminLayout/CuentaCrudPage";
 import AsignaturaConfigPage from "../pages/ProtectedPage/DocenteLayout/AsignaturaConfigPage";
+import RecomendacionesTestEstres from "../components/Tables/RecomendacionesTestEstres";
+import PageRecomendaciones from "../pages/ProtectedPage/AdminLayout/PageRecomendaciones";
 
 function Rutas({ store, actions }) {
     const rol = store.access_role;
@@ -46,13 +48,12 @@ function Rutas({ store, actions }) {
 
                 {/* Main Content */}
                 <div
-                    className={`flex-grow ${
-                        store.isAuthenticated
-                            ? rol === "ADMINISTRADOR"
-                                ? "ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
-                                : "mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
-                            : ""
-                    } bg-gray-100`}
+                    className={`flex-grow ${store.isAuthenticated
+                        ? rol === "ADMINISTRADOR"
+                            ? "ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
+                            : "mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
+                        : ""
+                        } bg-gray-100`}
                 >
                     <Routes>
                         {/* Rutas públicas */}
@@ -61,9 +62,8 @@ function Rutas({ store, actions }) {
                             element={
                                 <ProtectedRoute
                                     isPublic={true}
-                                    to={`/home/${
-                                        rol ? rol.toLowerCase() : "default"
-                                    }`}
+                                    to={`/home/${rol ? rol.toLowerCase() : "default"
+                                        }`}
                                 >
                                     <LandingPage />
                                 </ProtectedRoute>
@@ -74,9 +74,8 @@ function Rutas({ store, actions }) {
                             element={
                                 <ProtectedRoute
                                     isPublic={true}
-                                    to={`/home/${
-                                        rol ? rol.toLowerCase() : "default"
-                                    }`}
+                                    to={`/home/${rol ? rol.toLowerCase() : "default"
+                                        }`}
                                 >
                                     <LoginPage
                                         actions={actions}
@@ -114,6 +113,28 @@ function Rutas({ store, actions }) {
                             element={
                                 <ProtectedRoute>
                                     <PageTestEstresCrud
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/home/administrador/tests/recomendaciones/:idTest"
+                            element={
+                                <ProtectedRoute>
+                                    <RecomendacionesTestEstres
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/home/administrador/recomendaciones"
+                            element={
+                                <ProtectedRoute>
+                                    <PageRecomendaciones
                                         actions={actions}
                                         store={store}
                                     />
