@@ -1,6 +1,4 @@
 from fastapi import APIRouter, HTTPException
-from core.database import SessionLocal
-from sqlalchemy.orm import Session
 from models.EstudianteAsignatura import EstudianteAsignatura
 from sqlalchemy import text
 from middlewares.verify_token_route import VerifyTokenRoute

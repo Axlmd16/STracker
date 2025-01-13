@@ -1,5 +1,5 @@
 from models.Asignatura import Asignatura
-from core.database import SessionLocal
+from core.database import DatabaseEngine
 
 
 class AsignaturaControl:
@@ -7,15 +7,15 @@ class AsignaturaControl:
         pass
     
     def obtener_asignaturas(self):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(Asignatura).all()
         
     def obtener_asignatura(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(Asignatura).filter(Asignatura.id == id).first()
         
     def crear_asignatura(self, asig):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db_asignatura = Asignatura(**asig.dict())
             db.add(db_asignatura)
             db.commit()
@@ -23,13 +23,13 @@ class AsignaturaControl:
             return db_asignatura
         
     def actualizar_asignatura(self, id: int, asig):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db.query(Asignatura).filter(Asignatura.id == id).update(asig.dict())
             db.commit()
             return db.query(Asignatura).filter(Asignatura.id == id).first()
         
     def eliminar_asignatura(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             asignatura = db.query(Asignatura).filter(Asignatura.id == id).first()
             if asignatura:
                 db.delete(asignatura)
@@ -47,7 +47,7 @@ class AsignaturaControl:
 
 
     def obtener_detalles(self, id: int): 
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             asignatura = db.query(Asignatura).filter(Asignatura.id == id).first()
             if asignatura:
                 nro_estudiantes = len(asignatura.estudiantes)

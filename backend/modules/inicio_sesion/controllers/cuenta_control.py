@@ -1,5 +1,5 @@
 from models.Cuenta import Cuenta
-from core.database import SessionLocal
+from core.database import DatabaseEngine
 from models.Usuario import Usuario
 from modules.inicio_sesion.schemas.cuenta_schema import CuentaCreate, CuentaRol
 
@@ -8,15 +8,15 @@ class CuentaControl:
         pass
 
     def obtener_cuentas(self):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(Cuenta).all()
 
     def obtener_cuenta(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(Cuenta).filter(Cuenta.id == id).first()
         
     def crear_cuenta(self, cuenta):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db_cuenta = Cuenta(**cuenta.dict())
             db.add(db_cuenta)
             db.commit()
@@ -24,13 +24,13 @@ class CuentaControl:
             return db_cuenta
 
     def actualizar_cuenta(self, id: int, cuenta):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db.query(Cuenta).filter(Cuenta.id == id).update(cuenta.dict())
             db.commit()
             return db.query(Cuenta).filter(Cuenta.id == id).first()
 
     def eliminar_cuenta(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             cuenta = db.query(Cuenta).filter(Cuenta.id == id).first()
             if cuenta:
                 db.delete(cuenta)
@@ -45,7 +45,7 @@ class CuentaControl:
         
         username = f"{nombre.lower()}.{apellido.lower()}@unl.edu.ec"
         
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             cuenta_existente = db.query(Cuenta).filter(Cuenta.username == username).first()
             
             if cuenta_existente:
@@ -59,7 +59,7 @@ class CuentaControl:
 
     
     def cambiar_estado_cuenta(self, id: int, activar: bool):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             cuenta = db.query(Cuenta).filter(Cuenta.id == id).first()
             if not cuenta:
                 return None
@@ -69,7 +69,7 @@ class CuentaControl:
             return cuenta
 
     def login(self, data):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             cuenta = db.query(Cuenta).filter(Cuenta.username == data.username).first()
             if not cuenta:
                 return None
@@ -79,7 +79,7 @@ class CuentaControl:
         
 
     def combinar_usuario_cuenta(self, cuenta):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             usr =  db.query(Usuario).filter(Usuario.id == cuenta.usuario_id).first()
     
             return CuentaRol(

@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy import and_
 from models.ActividadAcademica import ActividadAcademica, EstadoActividadEnum
-from core.database import SessionLocal
+from core.database import DatabaseEngine
 
 
 class ActividadControl:
@@ -9,7 +9,7 @@ class ActividadControl:
         pass   
     
     def actualizar_estados_actividades(self):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             fecha_actual = datetime.now()
             
             # Actualizar a EN_PROGRESO
@@ -32,15 +32,15 @@ class ActividadControl:
             db.commit()
     
     def obtener_actividades(self):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(ActividadAcademica).all()
         
     def obtener_actividad(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(ActividadAcademica).filter(ActividadAcademica.id == id).first()
         
     def crear_actividad(self, actividad):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db_actividad = ActividadAcademica(**actividad.dict())
             db.add(db_actividad)
             db.commit()
@@ -48,13 +48,13 @@ class ActividadControl:
             return db_actividad
         
     def actualizar_actividad(self, id: int, actividad):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db.query(ActividadAcademica).filter(ActividadAcademica.id == id).update(actividad.dict())
             db.commit()
             return db.query(ActividadAcademica).filter(ActividadAcademica.id == id).first()
         
     def eliminar_actividad(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             actividad = db.query(ActividadAcademica).filter(ActividadAcademica.id == id).first()
             if actividad:
                 db.delete(actividad)
@@ -64,6 +64,6 @@ class ActividadControl:
                 return False
             
     def obtener_actividades_por_asignatura(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(ActividadAcademica).filter(ActividadAcademica.asignatura_id == id).all()
             
