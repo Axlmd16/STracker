@@ -46,3 +46,4 @@ app.include_router(router_grupo)
 @app.get("/")
 def read_root():
     return {"message": "Bienvenido a la aplicacion FastAPI!"}
+
