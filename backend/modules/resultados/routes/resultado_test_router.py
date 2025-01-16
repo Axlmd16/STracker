@@ -99,3 +99,4 @@ def validar_resultado(id: int):
         return {"message": "Resultado ya realizado", "data": True}
     
     return {"message": "Resultado aún no realizado", "data": False}
+

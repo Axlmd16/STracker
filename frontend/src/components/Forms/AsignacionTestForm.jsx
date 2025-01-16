@@ -91,7 +91,7 @@ function AsignacionTestForm({
         const resultadoTest = {
             estudiante_asignatura_id:
                 seleccion_tipo_asignacion === "toIndividual"
-                    ? data.estudiante_asignatura_id
+                    ? parseInt(data.estudiante_asignatura_id, 10) || null // Asegurar que sea un número
                     : null,
             grupo_id:
                 seleccion_tipo_asignacion === "toGrupos"
