@@ -1,7 +1,7 @@
 from sqlalchemy import text
 from models.Usuario import Usuario
 from models.Grupo import Grupo  
-from core.database import SessionLocal
+from core.database import DatabaseEngine
 from fastapi import HTTPException
 
 class GrupoController:
@@ -9,15 +9,15 @@ class GrupoController:
         pass
 
     def obtener_todos_grupos(self):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(Grupo).all()
 
     def obtener_grupo(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(Grupo).filter(Grupo.id == id).first()
     
     def crear_grupo(self, grupo):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db_grupo = Grupo(**grupo.dict())
             db.add(db_grupo)
             db.commit()
@@ -25,7 +25,7 @@ class GrupoController:
             return db_grupo
 
     def modificar_grupo(self, id: int, grupo):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db_grupo = db.query(Grupo).filter(Grupo.id == id).first()
             if db_grupo:
                 for key, value in grupo.dict(exclude_unset=True).items():
@@ -36,7 +36,7 @@ class GrupoController:
             return None
 
     def eliminar_grupo(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db_grupo = db.query(Grupo).filter(Grupo.id == id).first()
             if db_grupo:
                 db.delete(db_grupo)
@@ -44,7 +44,7 @@ class GrupoController:
                 return True
 
     def obtener_grupo_con_estudiantes(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             gea_registros = db.execute(
                 text("SELECT estudiante_asignatura_id FROM gea WHERE grupo_id = :grupo_id"),
                 {"grupo_id": id}
@@ -93,7 +93,7 @@ class GeaGrupoController:
         pass
     
     def agregar_estudiante_a_grupo(self, estudiante_id: int, grupo_id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             result = db.execute(
                 text("SELECT id FROM estudiante_asignatura WHERE estudiante_id = :estudiante_id"),
                 {"estudiante_id": estudiante_id}
@@ -120,7 +120,7 @@ class GeaGrupoController:
 
     
     def eliminar_estudiante_de_grupo(self, estudiante: int, grupo_id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             estudiante_asignatura = db.execute(
                 text("SELECT id FROM estudiante_asignatura WHERE estudiante_id = :estudiante_id"),
                 {"estudiante_id": estudiante}
@@ -149,7 +149,7 @@ class GeaGrupoController:
 
 
     def obtener_grupos_de_estudiante(self, estudiante_id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             estudiante = db.query(Usuario).filter(Usuario.id == estudiante_id).first()
 
             if not estudiante:
@@ -160,7 +160,7 @@ class GeaGrupoController:
             return estudiante.grupos
 
     def obtener_estudiantes_de_grupo(self, grupo_id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             grupo = db.query(Grupo).filter(Grupo.id == grupo_id).first()
 
             if not grupo:

@@ -2,7 +2,7 @@ from models.Grupo import Grupo
 from models.EstudianteAsignatura import EstudianteAsignatura
 from models.ActividadAcademica import ActividadAcademica
 from models.Asignacion import AsignacionTest
-from core.database import SessionLocal
+from core.database import DatabaseEngine
 from sqlalchemy import text
 
 #* Clase auxiliar
@@ -17,15 +17,15 @@ class AsignacionTestController:
         pass
 
     def obtener_all_asignaciones(self):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(AsignacionTest).all()
 
     def obtener_asignacion(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(AsignacionTest).filter(AsignacionTest.id == id).first()
 
     def crear_asignacion(self, asignacion):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db_asignacion = AsignacionTest(**asignacion.dict())
             db.add(db_asignacion)
             db.commit()
@@ -33,7 +33,7 @@ class AsignacionTestController:
             return db_asignacion
 
     def modificar_asignacion(self, id: int, asignacion):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db_asignacion = db.query(AsignacionTest).filter(AsignacionTest.id == id).first()
             if db_asignacion:
                 for key, value in asignacion.dict(exclude_unset=True).items():
@@ -44,7 +44,7 @@ class AsignacionTestController:
             return None
 
     def eliminar_asignacion(self, id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             db_asignacion = db.query(AsignacionTest).filter(AsignacionTest.id == id).first()
             if db_asignacion:
                 db.delete(db_asignacion)
@@ -53,11 +53,11 @@ class AsignacionTestController:
             return False
 
     def obtener_asignaciones_por_asignatura(self, asignatura_id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(AsignacionTest).filter(AsignacionTest.asignatura_id == asignatura_id).all()
 
     def obtener_grupos_por_asignatura(self, asignatura_id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             try:
                 # Consulta SQL cruda
                 query = text("""
@@ -79,11 +79,11 @@ class AsignacionTestController:
                 return None
 
     def obtener_actividades_por_asignatura(self, asignatura_id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             return db.query(ActividadAcademica).filter(ActividadAcademica.asignatura_id == asignatura_id).all()    
 
     def obtener_asignaciones_para_estudiantes(self, estudiante_id: int):
-        with SessionLocal() as db:
+        with DatabaseEngine.get_session() as db:
             try:
                 estudiante_asignaturas = db.query(EstudianteAsignatura).filter(
                     EstudianteAsignatura.estudiante_id == estudiante_id
