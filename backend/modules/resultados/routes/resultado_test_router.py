@@ -65,7 +65,6 @@ def get_resultados_por_estudiante(estudiante_id: int):
 @router_resultados.post("/respuestas/formulario/", tags=["Resultados"])
 async def recibir_respuesta(respuesta: RespuestaFormulario):
     try:
-
         id_resultado = respuesta.id_unico.split("-")[2]
         resultado = rc.obtener_resultado(int(id_resultado))
         
@@ -83,10 +82,11 @@ async def recibir_respuesta(respuesta: RespuestaFormulario):
         
         if response == None:
             raise HTTPException(status_code=500, detail="Error al actualizar el resultado")
-        # Procesar la respuesta del formulario
-        print(f"Datos recibidos: {respuesta}")
-        
 
+        return {"message": "Respuesta recibida correctamente"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al procesar la respuesta: {e}")
+    
     
 #* Validar si el la asignacion ya fue realizada
 @router_resultados.get("/resultados/{id}/validar", tags=["Resultados"])
