@@ -25,6 +25,8 @@ import CuentaCrudPage from "../pages/ProtectedPage/AdminLayout/CuentaCrudPage";
 import AsignaturaConfigPage from "../pages/ProtectedPage/DocenteLayout/AsignaturaConfigPage";
 import ResultadoTestPage from "../pages/ProtectedPage/EstudianteLayout/ResultadoTestPage";
 import GroupPage from "../pages/ProtectedPage/DocenteLayout/GroupPage";
+import PageRecomendaciones from "../pages/ProtectedPage/AdminLayout/PageRecomendaciones";
+import RecomendacionesTestEstres from "../components/Tables/RecomendacionesTestEstres";
 import GroupDetails from "../util/GroupDetails";
 
 function Rutas({ store, actions }) {
@@ -117,6 +119,28 @@ function Rutas({ store, actions }) {
                             element={
                                 <ProtectedRoute>
                                     <PageTestEstresCrud
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/home/administrador/tests/recomendaciones/:idTest"
+                            element={
+                                <ProtectedRoute>
+                                    <RecomendacionesTestEstres
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/home/administrador/recomendaciones"
+                            element={
+                                <ProtectedRoute>
+                                    <PageRecomendaciones
                                         actions={actions}
                                         store={store}
                                     />

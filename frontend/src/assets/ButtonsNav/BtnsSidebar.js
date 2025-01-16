@@ -6,6 +6,7 @@ import {
     Group,
     Settings,
     UsersRound,
+    Star,
 } from "lucide-react";
 
 export const buttons_admin = [
@@ -23,6 +24,11 @@ export const buttons_admin = [
         icon: HeartHandshake,
         href: "/home/administrador/tests",
         tooltip: "Tests de estres",
+    },
+    {
+        icon: Star,
+        href: "/home/administrador/recomendaciones",
+        tooltip: "Recomendaciones",
     },
     {
         icon: UsersRound,

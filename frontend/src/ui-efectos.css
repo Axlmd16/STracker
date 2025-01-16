@@ -132,7 +132,8 @@
 .btn-custom {
     padding: 10px 20px;
     border-radius: 5px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
+    border: 1px solid none;
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
     outline: none;
