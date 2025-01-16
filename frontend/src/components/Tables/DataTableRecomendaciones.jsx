@@ -5,7 +5,7 @@ import {
     Trash2Icon,
     ListOrdered,
     LayoutGrid,
-    Eye
+    Eye,
 } from "lucide-react";
 import React, { useEffect, useState, useCallback, useMemo, forwardRef, useImperativeHandle } from "react";
 import { toast } from "react-hot-toast";
@@ -14,7 +14,7 @@ import SearchBar from "../Navigation/search_bar";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const DataTableTestEstres = forwardRef(
+const DataTableRecomendaciones = forwardRef(
     ({ actions, handleUpdate, fetchData, data, pending, searchKeys }, ref) => {
         const [filteredData, setFilteredData] = useState([]);
         const navigate = useNavigate();
@@ -31,7 +31,7 @@ const DataTableTestEstres = forwardRef(
             navigate(`/home/administrador/tests/recomendaciones/${id}`);
         };
 
-        //* Filtrar datos según el término de búsqueda 
+        //* Filtrar datos según el término de búsqueda
         const handleSearch = useCallback(
             (e) => {
                 const value = e.target.value.toLowerCase();
@@ -45,12 +45,12 @@ const DataTableTestEstres = forwardRef(
             [data, searchKeys]
         );
 
-        //* Función para manejar actualizaciones 
+        //* Función para manejar actualizaciones
         const handleUpdateClick = (row) => {
             handleUpdate(row);
         };
 
-        //* Función para manejar eliminación 
+        //* Función para manejar eliminación
         const handleDeleteClick = async (row) => {
             Swal.fire({
                 title: "¿Estás seguro?",
@@ -63,18 +63,18 @@ const DataTableTestEstres = forwardRef(
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        await actions.deleteTestEstres(row.id);
+                        await actions.eliminarRecomendacion(row.id);
                         fetchData();
-                        toast.success("Test de estrés eliminado correctamente");
+                        toast.success("Recomendacion eliminada correctamente");
                     } catch (error) {
                         console.error(error);
-                        toast.error("Error al eliminar el test de estrés");
+                        toast.error("Error al eliminar la recomendacion");
                     }
                 }
             });
         };
 
-        //* Definición de las columnas de la tabla 
+        //* Definición de las columnas de la tabla
         const columns = useMemo(
             () => [
                 {
@@ -101,64 +101,32 @@ const DataTableTestEstres = forwardRef(
                 {
                     name: (
                         <div className="flex justify-center">
-                            <span>Descripción</span>
+                            <span>Titulo</span>
                         </div>
                     ),
-                    selector: (row) => row.descripcion,
+                    selector: (row) => row.titulo,
                     sortable: true,
                     width: "200px"
                 },
                 {
                     name: (
                         <div className="flex justify-center">
-                            <span>Ver Test</span>
+                            <span>Descripción</span>
                         </div>
                     ),
-                    cell: (row) => (
-                        <div className="flex justify-center">
-                            <button
-                                onClick={() => window.open(row.url, "_blank")}
-                                className="text-blue-500"
-                                title="Ver en nueva pestaña"
-                            >
-                                <Eye size={20} />
-                            </button>
-                        </div>
-                    ),
-                    width: "140px"
+                    selector: (row) => row.descripcion,
+                    sortable: true,
+                    width: "400px"
                 },
                 {
                     name: (
                         <div className="flex justify-center">
-                            <span>URL</span>
+                            <span>Prioridad</span>
                         </div>
                     ),
-                    selector: (row) => row.url,
+                    selector: (row) => row.prioridad,
                     sortable: true,
                     width: "150px"
-                },
-                {
-                    name: (
-                        <div className="flex justify-center">
-                            <span>Estado</span>
-                        </div>
-                    ),
-                    selector: (row) => (row.estado == 1 ? "Activo" : "Inactivo"),
-                    sortable: true,
-                    width: "120px",
-                },
-                {
-                    name: "Recomendaciones",
-                    cell: (row) => (
-                        <div className="flex justify-center items-center w-full">
-                            <button
-                                className="btn-custom btn-custom-success"
-                                onClick={() => handleRecomendacionesClick(row.id)}
-                            >
-                                Vincular
-                            </button>
-                        </div>
-                    ),
                 },
                 {
                     name: (
@@ -203,4 +171,4 @@ const DataTableTestEstres = forwardRef(
     }
 );
 
-export default DataTableTestEstres;
+export default DataTableRecomendaciones;
