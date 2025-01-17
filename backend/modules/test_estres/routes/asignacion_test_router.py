@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from modules.grupos.controllers.grupos_controller import GrupoController
 from models.EstudianteAsignatura import EstudianteAsignatura
 from sqlalchemy import text
 from middlewares.verify_token_route import VerifyTokenRoute
@@ -10,6 +11,7 @@ from ..schemas.asignacion_test_schema import AsignacionTestSchema
 router_asignacion_test =APIRouter(route_class=VerifyTokenRoute)
 asignacion_controller = AsignacionTestController()
 rc = ResultadoTestControl()
+grupo_controller = GrupoController()
 
 @router_asignacion_test.get("/asignacion_test/", tags=["Asignacion Test"])
 def get_asignaciones():
@@ -27,18 +29,29 @@ def get_asignacion(id: int):
 def crear_asignacion(asignacion: AsignacionTestSchema, resultadoTest: ResultadoTestSchema):
     asignacion_creada = asignacion_controller.crear_asignacion(asignacion)
     resultadoTest.asignacion_id = asignacion_creada.id
-
-    estudiante_asignatura_id = rc.obtener_estudiante_asignatura_id(resultadoTest.estudiante_asignatura_id)
-    
-    if estudiante_asignatura_id:
-        resultadoTest.estudiante_asignatura_id = estudiante_asignatura_id
-        print(f"\n\n\n\n", resultadoTest,"\n\n\n\n")
-        
-        rc.crear_resultado(resultadoTest)
-        
-        return {"message": "Asignación test creada"}
+    if resultadoTest.estudiante_asignatura_id != None:
+        print("\n\n\n\nEstudiante_id\n\n\n\n")
+        estudiante_asignatura_id = rc.obtener_estudiante_asignatura_id(resultadoTest.estudiante_asignatura_id)
+        if estudiante_asignatura_id:
+            resultadoTest.estudiante_asignatura_id = estudiante_asignatura_id
+            print(f"\n\n\n\n", resultadoTest,"\n\n\n\n")
+            rc.crear_resultado(resultadoTest)
+            return {"message": "Asignación test creada"}
+        else:
+            raise HTTPException(status_code=404, detail="No se encontró el registro para el estudiante_id proporcionado.")
+    elif resultadoTest.grupo_id != None:
+        print("\n\n\n\n\nGrupo\n\n\n\n")
+        grupo_con_estudiantes = grupo_controller.obtener_estudiante_para_resultados(resultadoTest.grupo_id)
+        for estudiante in grupo_con_estudiantes:
+            print('Estudiante: ', estudiante)
+            resultadoTest.estudiante_asignatura_id = estudiante 
+            rc.crear_resultado(resultadoTest)
     else:
-        raise HTTPException(status_code=404, detail="No se encontró el registro para el estudiante_id proporcionado.")
+        estudiante_asignatura = grupo_controller.obtener_estudiantes_asignatura_por_id(asignacion.asignatura_id)
+        for estudiante in estudiante_asignatura:
+            print('Estudiante: ', estudiante)
+            resultadoTest.estudiante_asignatura_id = estudiante 
+            rc.crear_resultado(resultadoTest)
 
 #* ----------------------------------------
 
