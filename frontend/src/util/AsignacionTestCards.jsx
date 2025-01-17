@@ -1,14 +1,35 @@
 import { Edit, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 function AsignacionTestCards({ data, handleUpdate, handleDelete }) {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
     const formatDate = (date) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(date).toLocaleDateString('es-ES', options);
     };
 
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedData = data.slice(startIndex, endIndex);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
     return (
         <div className="flex flex-col w-full gap-6 p-4 bg-white rounded-lg">
-            {data.map((item) => (
+            {paginatedData.map((item) => (
                 <div
                     key={item.id}
                     className="flex flex-col sm:flex-row items-center bg-gray-200 text-gray-800 rounded-lg shadow-xl p-6 relative overflow-hidden"
@@ -53,6 +74,29 @@ function AsignacionTestCards({ data, handleUpdate, handleDelete }) {
                     </div>
                 </div>
             ))}
+
+            {/* Paginacion */}
+            {data.length >= 10 && (
+                <div className="flex justify-center mt-4 gap-4">
+                    <button
+                        onClick={handlePreviousPage}
+                        className="btn-custom btn-custom-purple"
+                        disabled={currentPage === 1}
+                    >
+                        Anterior
+                    </button>
+                    <span className="text-sm text-gray-600">
+                        Página {currentPage} de {totalPages}
+                    </span>
+                    <button
+                        onClick={handleNextPage}
+                        className="btn-custom btn-custom-purple"
+                        disabled={currentPage === totalPages}
+                    >
+                        Siguiente
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

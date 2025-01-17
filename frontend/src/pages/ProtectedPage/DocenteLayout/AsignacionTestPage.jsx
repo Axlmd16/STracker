@@ -13,6 +13,8 @@ import ModalForm from "../../../components/Modals/ModalForm";
 import BreadCrumbs from "../../../components/Navigation/breadCrumbs";
 import Sidebar from "../../../components/Navigation/Sidebar";
 import AsignacionTestCards from "../../../util/AsignacionTestCards";
+import ModalConfirmacion from "./ModalConfirmacion";
+import { toast } from "react-hot-toast";
 
 function AsignacionTestPage({ actions, store }) {
     const { id } = useParams();
@@ -22,6 +24,9 @@ function AsignacionTestPage({ actions, store }) {
     const [update, setUpdate] = useState(false);
     const [dataTable, setDataTable] = useState([]);
     const [pending, setPending] = useState(false);
+    const [actualizarEstado, setActualizarEstado] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [idToDelete, setIdToDelete] = useState(null);
 
     const handleCreateAsignacionTest = () => {
         modalFormRef.current.openModal();
@@ -33,11 +38,11 @@ function AsignacionTestPage({ actions, store }) {
         if (triggerReset && modalFormRef.current) {
             modalFormRef.current.closeModal();
         }
-        if (triggerReset) {
-            if (modalFormRef.current) {
-                modalFormRef.current.closeModal();
-            }
-        }
+    };
+
+    const cambioEstado = () => {
+        setActualizarEstado(!actualizarEstado);
+        fetchAsignacionTest();
     };
 
     const handleUpdate = (row) => {
@@ -46,13 +51,25 @@ function AsignacionTestPage({ actions, store }) {
         modalFormRef.current.openModal();
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = (id) => {
+        setIdToDelete(id);
+        setModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
         try {
-            await actions.deleteAsignacionTest(id);
+            await actions.deleteAsignacionTest(idToDelete);
             fetchAsignacionTest();
+            setModalOpen(false);
+            toast.success("Asignación eliminada correctamente");
         } catch (error) {
             console.error("Error al eliminar la asignación:", error);
+            setModalOpen(false);
         }
+    };
+
+    const handleCloseModalConfirmation = () => {
+        setModalOpen(false);
     };
 
     const fetchAsignacionTest = useCallback(async () => {
@@ -71,7 +88,6 @@ function AsignacionTestPage({ actions, store }) {
         fetchAsignacionTest();
     }, [fetchAsignacionTest]);
 
-    //* Breadcrumbs items
     const breadcrumbItems = [
         {
             to: "/home/docente",
@@ -103,7 +119,6 @@ function AsignacionTestPage({ actions, store }) {
             </div>
             <div className="flex-grow ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-base-200">
                 <div className="flex flex-col h-full">
-                    {/* Breadcrumbs */}
                     <div className="px-6 py-3 flex items-center space-x-2 text-sm text-gray-600 border-b">
                         <BreadCrumbs items={breadcrumbItems} />
                     </div>
@@ -168,8 +183,15 @@ function AsignacionTestPage({ actions, store }) {
                             store={store}
                             row={data}
                             handleCloseModal={handleCloseModal}
+                            cambioEstado={cambioEstado}
                         />
                     </ModalForm>
+
+                    <ModalConfirmacion
+                        isOpen={modalOpen}
+                        onClose={handleCloseModalConfirmation}
+                        onConfirm={handleConfirmDelete}
+                    />
                 </div>
             </div>
         </div>

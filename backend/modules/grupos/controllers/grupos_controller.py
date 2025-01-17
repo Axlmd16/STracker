@@ -87,6 +87,42 @@ class GrupoController:
 
             return resultado
 
+    def obtener_estudiante_para_resultados(self, grupo_id: int):
+        with DatabaseEngine.get_session() as db:
+            try:
+                query = text("""
+                    SELECT estudiante_asignatura_id
+                    FROM gea
+                    WHERE grupo_id = :grupo_id
+                """)
+                result = db.execute(query, {'grupo_id': grupo_id}).fetchall()
+
+                estudiante_asignatura_ids = [row[0] for row in result]
+                
+                return estudiante_asignatura_ids
+
+            except Exception as e:
+                print(f"Error: {e}")
+                return None
+
+    def obtener_estudiantes_asignatura_por_id(self, id_asignatura: int):
+        with DatabaseEngine.get_session() as db:
+            try:
+                query = text("""
+                    SELECT id
+                    FROM estudiante_asignatura
+                    WHERE asignatura_id = :asignatura_id
+                """)
+                result = db.execute(query, {'asignatura_id': id_asignatura}).fetchall()
+
+                estudiante_asignatura_ids = [row[0] for row in result]
+                
+                return estudiante_asignatura_ids
+
+            except Exception as e:
+                print(f"Error: {e}")
+                return None
+
    
 class GeaGrupoController:
     def __init__(self):

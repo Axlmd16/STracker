@@ -10,13 +10,12 @@ function AsignacionTestForm({
     formRef,
     modalRef,
     handleCloseModal,
-    cambioEstado
 }) {
     const [pending, setPending] = useState(false);
     const [tests, setTests] = useState([]);
     const [showActivitySelect, setShowActivitySelect] = useState(false);
     const [estudiantes, setEstudiantes] = useState([]);
-    const [grupos, setGrupos] = useState([]);
+    const [grupos, setGrupos] = useState([]); 
 
     const {
         register,
@@ -53,7 +52,7 @@ function AsignacionTestForm({
             const estudiantesData = await actions.getStudentsBySubject(id);
             const gruposData = await actions.getGroupsByAsignatura(id);
             setEstudiantes(estudiantesData);
-            setGrupos(gruposData);
+            setGrupos(gruposData); 
         } catch (error) {
             toast.error("Error al cargar los estudiantes o grupos");
         }
@@ -61,7 +60,7 @@ function AsignacionTestForm({
 
     useEffect(() => {
         fetchTestEstres();
-        fetchEstudiantesYGrupos();
+        fetchEstudiantesYGrupos(); 
     }, [fetchTestEstres, fetchEstudiantesYGrupos]);
 
     const onSubmit = async (data) => {
@@ -88,22 +87,17 @@ function AsignacionTestForm({
             asignatura_id: id,
         };
 
-        // Aquí manejamos la asignación condicional de los IDs de estudiante y grupo
+
         const resultadoTest = {
             estudiante_asignatura_id:
                 seleccion_tipo_asignacion === "toIndividual"
-                    ? parseInt(data.estudiante_asignatura_id, 10) || null
+                    ? parseInt(data.estudiante_asignatura_id, 10) || null 
                     : null,
             grupo_id:
                 seleccion_tipo_asignacion === "toGrupos"
                     ? parseInt(data.grupo_id, 10) || null
                     : null,
         };
-
-        if (seleccion_tipo_asignacion === "toClase") {
-            resultadoTest.estudiante_asignatura_id = null;
-            resultadoTest.grupo_id = null;
-        }
 
         console.log(`\n\n\n\nAsignacion: ${JSON.stringify(asignacion)}\n\n\n\n`);
         console.log(`\n\n\n\nResultado Test: ${JSON.stringify(resultadoTest)}\n\n\n\n`);
@@ -129,7 +123,7 @@ function AsignacionTestForm({
                     : "Asignación registrada correctamente",
                 error: "Error al procesar la asignación",
             });
-            cambioEstado()
+
             handleCloseModal?.();
         } catch (error) {
             console.error(error);
@@ -281,69 +275,96 @@ function AsignacionTestForm({
 
                     {update && (
                         <p className="text-sm text-warning mt-2">
-                            No se puede cambiar el estudiante o el grupo en
-                            modo edición.
+                            No se puede cambiar el estudiante o el grupo en modo
+                            edición. Para realizar estos cambios, borre la
+                            asignación y cree una nueva.
                         </p>
+                    )}
+
+                    {seleccion_tipo_asignacion === "toClase" && (
+                        <div className="alert alert-info">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                className="w-6 h-6"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M13 7v3l2 1-2 1V14m7 3h-4a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4m0-6h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4V3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3"
+                                />
+                            </svg>
+                            <span>
+                                Los resultados del test de estrés serán
+                                asignados a la clase completa.
+                            </span>
+                        </div>
                     )}
                 </div>
 
+                {/* Description Field */}
                 <div className="card bg-base-200 p-6">
-                    <h2 className="text-xl font-semibold mb-4">Fechas</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">
-                                    Fecha de Asignación
-                                </span>
-                            </label>
-                            <input
-                                type="date"
-                                className="input input-bordered w-full"
-                                {...register("fecha_asignacion")}
-                            />
-                        </div>
-
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Fecha Limite</span>
-                            </label>
-                            <input
-                                type="date"
-                                className="input input-bordered w-full"
-                                {...register("fecha_limite")}
-                            />
-                        </div>
+                    <div className="form-control">
+                        <label className="label" htmlFor="descripcion">
+                            <span className="label-text">Descripción</span>
+                        </label>
+                        <textarea
+                            id="descripcion"
+                            className={`textarea textarea-bordered h-24 ${errors.descripcion ? "textarea-error" : ""
+                                }`}
+                            {...register("descripcion", {
+                                required: "La descripción es obligatoria",
+                            })}
+                        />
+                        {errors.descripcion && (
+                            <p className="text-error text-sm mt-1">
+                                {errors.descripcion.message}
+                            </p>
+                        )}
                     </div>
                 </div>
 
+                {/* Dates */}
                 <div className="card bg-base-200 p-6">
-                    <h2 className="text-xl font-semibold mb-4">Descripción</h2>
+                    <h2 className="text-xl font-semibold mb-4">Fechas</h2>
+                    <div className="form-control mb-4">
+                        <label className="label">
+                            <span className="label-text">Fecha de Asignación</span>
+                        </label>
+                        <input
+                            type="datetime-local"
+                            className="input input-bordered w-full"
+                            {...register("fecha_asignacion", { required: true })}
+                        />
+                    </div>
                     <div className="form-control">
-                        <textarea
-                            className="textarea textarea-bordered w-full"
-                            placeholder="Descripción de la asignación"
-                            {...register("descripcion")}
+                        <label className="label">
+                            <span className="label-text">Fecha de Limite</span>
+                        </label>
+                        <input
+                            type="datetime-local"
+                            className="input input-bordered w-full"
+                            {...register("fecha_limite", { required: true })}
                         />
                     </div>
                 </div>
 
-                <div className="flex gap-4">
+                {/* Buttons */}
+                <div className="flex justify-between mt-6">
                     <button
                         type="button"
-                        className="btn-custom btn-custom-warning w-1/2"
+                        className="btn btn-ghost"
                         onClick={handleCancel}
                     >
                         Cancelar
                     </button>
-                    <button
-                        type="submit"
-                        className="btn-custom btn-custom-success w-1/2"
-                        disabled={pending}
-                    >
-                        {update ? "Actualizar" : "Registrar"} Asignación
+                    <button type="submit" className="btn btn-primary">
+                        {pending ? "Guardando..." : "Guardar"}
                     </button>
                 </div>
-
             </form>
         </div>
     );
