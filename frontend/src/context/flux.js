@@ -11,6 +11,7 @@ import AsignacionTestApi from "../api/TestEstress/AsignacionTest";
 import TestEstresApi from "../api/TestEstress/TestEstresApi";
 import GroupApi from "../api/GroupApi/GroupApi";
 import RecomendacionesApi from "../api/TestEstress/RecomendacionesApi";
+import NotificaionApi from "../api/NotificacionApi/NotificaionApi";
 
 const getState = ({ getStore, getActions, setStore }) => {
     const API_BASE_URL = "http://127.0.0.1:8000";
@@ -59,6 +60,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             ...ResultadoTestApi({ getStore, getActions, setStore, api }),
             ...GroupApi({ getStore, getActions, setStore, api }),
             ...RecomendacionesApi({ getStore, getActions, setStore, api }),
+            ...NotificaionApi({ getStore, getActions, setStore, api }),
         },
     };
 };

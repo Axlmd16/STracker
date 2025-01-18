@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { HeartPulse, HomeIcon, PlusCircle, Star } from "lucide-react";
+import BreadCrumbs from "../Navigation/breadCrumbs";
 
 function RecomendacionesTestEstres({ actions }) {
     const { idTest } = useParams();
@@ -150,9 +152,36 @@ function RecomendacionesTestEstres({ actions }) {
         return <div className="text-center p-8">Cargando...</div>;
     }
 
+    const breadcrumbItems = [
+        {
+            to: "/home/administrador",
+            title: "Inicio",
+            icon: HomeIcon,
+        },
+        {
+            to: "/home/administrador/tests",
+            title: "Gestion de tests de estres",
+            icon: HeartPulse,
+            active: true,
+        },
+        {
+            title: "Recomendaciones del Test",
+            icon: Star,
+            active: true,
+        },
+    ];
+
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h2 className="text-4xl font-extrabold text-center mb-10  
+        // <div className="container mx-auto px-4 py-8">
+        <div className="w-full">
+
+            <div className="bg-white rounded-md shadow-md mb-5">
+                <div className="px-6 py-3 flex items-center space-x-2 text-sm text-gray-600 border-b">
+                    <BreadCrumbs items={breadcrumbItems} />
+                </div>
+            </div>
+
+            <h2 className="text-4xl font-extrabold text-center mb-5 
                bg-gradient-to-r from-teal-400 to-cyan-600 text-white 
                py-4 px-6 rounded-lg shadow-md transition-all duration-300">
                 Recomendaciones para el Test de Estrés:
@@ -205,7 +234,7 @@ function RecomendacionesTestEstres({ actions }) {
 
             {modalConfirmacion && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white rounded-lg p-8 w-11/12 sm:w-2/3">
+                    <div className="bg-white rounded-lg p-8 w-11/12 sm:w-1/3">
                         <h2 className="text-2xl font-semibold mb-6">¿Estás seguro?</h2>
                         <p className="text-gray-700 mb-4">
                             Estás a punto de eliminar esta recomendación. ¿Deseas continuar?
@@ -213,13 +242,13 @@ function RecomendacionesTestEstres({ actions }) {
                         <div className="flex justify-between mt-6">
                             <button
                                 onClick={closeModalConfirmacion}
-                                className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600"
+                                className="btn-custom btn-custom-warning"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={handleEliminarRecomendacion}
-                                className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+                                className="btn-custom btn-custom-purple"
                             >
                                 Confirmar
                             </button>
@@ -247,7 +276,7 @@ function RecomendacionesTestEstres({ actions }) {
                                         type="checkbox"
                                         checked={selectedRecomendaciones.includes(recomendacion.id)}
                                         onChange={() => handleSelectRecomendacion(recomendacion.id)}
-                                        className="checkbox"
+                                        className="checkbox border-cyan-600"
                                     />
                                 </div>
                             ))}

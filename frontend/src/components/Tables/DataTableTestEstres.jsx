@@ -88,16 +88,16 @@ const DataTableTestEstres = forwardRef(
                     sortable: true,
                     width: "80px",
                 },
-                {
-                    name: (
-                        <div className="flex justify-center">
-                            <span>ID</span>
-                        </div>
-                    ),
-                    selector: (row) => row.id,
-                    sortable: true,
-                    width: "80px"
-                },
+                // {
+                //     name: (
+                //         <div className="flex justify-center">
+                //             <span>ID</span>
+                //         </div>
+                //     ),
+                //     selector: (row) => row.id,
+                //     sortable: true,
+                //     width: "80px"
+                // },
                 {
                     name: (
                         <div className="flex justify-center">
@@ -106,7 +106,7 @@ const DataTableTestEstres = forwardRef(
                     ),
                     selector: (row) => row.descripcion,
                     sortable: true,
-                    width: "200px"
+                    // width: "300px"
                 },
                 {
                     name: (
@@ -125,7 +125,7 @@ const DataTableTestEstres = forwardRef(
                             </button>
                         </div>
                     ),
-                    width: "140px"
+                    width: "100px"
                 },
                 {
                     name: (
@@ -135,7 +135,7 @@ const DataTableTestEstres = forwardRef(
                     ),
                     selector: (row) => row.url,
                     sortable: true,
-                    width: "150px"
+                    width: "350px"
                 },
                 {
                     name: (

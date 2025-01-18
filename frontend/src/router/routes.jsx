@@ -28,6 +28,7 @@ import GroupPage from "../pages/ProtectedPage/DocenteLayout/GroupPage";
 import PageRecomendaciones from "../pages/ProtectedPage/AdminLayout/PageRecomendaciones";
 import RecomendacionesTestEstres from "../components/Tables/RecomendacionesTestEstres";
 import GroupDetails from "../util/GroupDetails";
+import PerfilPage from "../pages/PublicPages/PerfilPage";
 
 function Rutas({ store, actions }) {
     const rol = store.access_role;
@@ -51,13 +52,12 @@ function Rutas({ store, actions }) {
 
                 {/* Main Content */}
                 <div
-                    className={`flex-grow ${
-                        store.isAuthenticated
+                    className={`flex-grow ${store.isAuthenticated
                             ? rol === "ADMINISTRADOR"
                                 ? "ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
                                 : "mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
                             : ""
-                    } bg-gray-100`}
+                        } bg-gray-100`}
                 >
                     <Routes>
                         {/* Rutas públicas */}
@@ -66,9 +66,8 @@ function Rutas({ store, actions }) {
                             element={
                                 <ProtectedRoute
                                     isPublic={true}
-                                    to={`/home/${
-                                        rol ? rol.toLowerCase() : "default"
-                                    }`}
+                                    to={`/home/${rol ? rol.toLowerCase() : "default"
+                                        }`}
                                 >
                                     <LandingPage />
                                 </ProtectedRoute>
@@ -79,9 +78,8 @@ function Rutas({ store, actions }) {
                             element={
                                 <ProtectedRoute
                                     isPublic={true}
-                                    to={`/home/${
-                                        rol ? rol.toLowerCase() : "default"
-                                    }`}
+                                    to={`/home/${rol ? rol.toLowerCase() : "default"
+                                        }`}
                                 >
                                     <LoginPage
                                         actions={actions}
@@ -90,6 +88,18 @@ function Rutas({ store, actions }) {
                                 </ProtectedRoute>
                             }
                         />
+                        <Route
+                            path="/login/perfil"
+                            element={
+                                <ProtectedRoute>
+                                    <PerfilPage
+                                        actions={actions}
+                                        store={store}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+
 
                         {/* Rutas protegidas */}
                         <Route
