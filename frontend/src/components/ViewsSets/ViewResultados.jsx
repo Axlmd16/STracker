@@ -2,25 +2,18 @@ import {
     Activity,
     Brain,
     Calendar,
-    Check,
     Clock,
     Download,
-    Heart,
     HomeIcon,
     Info,
     MessageSquare,
     Phone,
     Share2,
-    Shield,
     Target,
-    TrendingUp,
 } from "lucide-react";
 import React from "react";
 import { toast } from "react-hot-toast";
 import {
-    Area,
-    AreaChart,
-    CartesianGrid,
     Legend,
     PolarAngleAxis,
     PolarGrid,
@@ -28,14 +21,12 @@ import {
     Radar,
     RadarChart,
     ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
 } from "recharts";
 import Swal from "sweetalert2";
+import RecomendacionesCard from "../Cards/RecomendacionesCard";
 import BreadCrumbs from "../Navigation/breadCrumbs";
 
-const ViewResultados = ({ actions, resultado }) => {
+const ViewResultados = ({ actions, resultado, id_test }) => {
     //* Funcion para compartir el resultado
     const shareResult = () => {
         Swal.fire({
@@ -53,16 +44,6 @@ const ViewResultados = ({ actions, resultado }) => {
             }
         });
     };
-
-    // Mock data mejorado para el historial
-    const historialData = [
-        { fecha: "Ene 2024", puntaje: 75, promedio: 70 },
-        { fecha: "Feb 2024", puntaje: 65, promedio: 68 },
-        { fecha: "Mar 2024", puntaje: 80, promedio: 72 },
-        { fecha: "Abr 2024", puntaje: 72, promedio: 71 },
-        { fecha: "May 2024", puntaje: 68, promedio: 69 },
-        { fecha: "Jun 2024", puntaje: 77, promedio: 73 },
-    ];
 
     const factoresEstres = [
         { factor: "Académico", value: 80, fullMark: 100 },
@@ -115,33 +96,6 @@ const ViewResultados = ({ actions, resultado }) => {
 
     const nivelActual = getNivelEstres(resultado?.resultado);
 
-    const recomendaciones = [
-        {
-            titulo: "Gestión Académica",
-            items: [
-                "Establece un horario de estudio estructurado",
-                "Implementa la técnica Pomodoro (25 min estudio, 5 min descanso)",
-                "Prioriza tareas según importancia y urgencia",
-            ],
-        },
-        {
-            titulo: "Bienestar Físico",
-            items: [
-                "Mantén una rutina de ejercicio de 30 minutos diarios",
-                "Asegura 7-8 horas de sueño reparador",
-                "Mantén una alimentación balanceada",
-            ],
-        },
-        {
-            titulo: "Salud Mental",
-            items: [
-                "Practica mindfulness o meditación por 10 minutos",
-                "Realiza ejercicios de respiración profunda",
-                "Mantén un diario de gratitud",
-            ],
-        },
-    ];
-
     const breadcrumbItems = [
         {
             to: "/home/estudiante",
@@ -158,8 +112,6 @@ const ViewResultados = ({ actions, resultado }) => {
 
     return (
         <div className="min-h-screen bg-gray-200">
-            {/* Header mejorado */}
-
             <div className="px-6 py-3 flex items-center space-x-2 text-sm text-gray-600 border-b bg-white">
                 <BreadCrumbs items={breadcrumbItems} />
             </div>
@@ -217,7 +169,10 @@ const ViewResultados = ({ actions, resultado }) => {
                                         <Download className="h-5 w-5" />
                                         Exportar PDF
                                     </button>
-                                    <button className="btn btn-primary btn-sm gap-2">
+                                    <button
+                                        className="btn btn-primary btn-sm gap-2"
+                                        onClick={shareResult}
+                                    >
                                         <Share2 className="h-5 w-5" />
                                         Compartir Resultado
                                     </button>
@@ -253,39 +208,6 @@ const ViewResultados = ({ actions, resultado }) => {
                                     </RadarChart>
                                 </ResponsiveContainer>
                             </div>
-                        </div>
-
-                        {/* Retroalimentación del docente mejorada */}
-                        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                            <div className="flex items-center gap-2 mb-4">
-                                <MessageSquare className="h-5 w-5 text-indigo-600" />
-                                <h2 className="text-lg font-semibold text-gray-800">
-                                    Retroalimentación del Docente
-                                </h2>
-                            </div>
-                            {resultado?.retroalimentacion ? (
-                                <div className="space-y-3">
-                                    <div class="chat chat-start">
-                                        <div className="chat-bubble chat-bubble-accent">
-                                            <span className="text-sm text-gray-700 leading-relaxed">
-                                                {resultado?.retroalimentacion}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <p className="text-xs text-gray-400 flex items-end gap-2 justify-end">
-                                        <Clock className="h-3 w-3" />
-                                        Última actualización:{" "}
-                                        {new Date().toLocaleDateString()}
-                                    </p>
-                                </div>
-                            ) : (
-                                <div className="flex items-center gap-2 p-4 bg-blue-50 text-blue-700 rounded-lg">
-                                    <Info className="h-4 w-4" />
-                                    <p className="text-sm">
-                                        No hay retroalimentación disponible aún.
-                                    </p>
-                                </div>
-                            )}
                         </div>
                     </div>
 
@@ -326,74 +248,94 @@ const ViewResultados = ({ actions, resultado }) => {
                         </div>
 
                         {/* Recomendaciones mejoradas */}
-                        {recomendaciones.map((seccion, idx) => (
-                            <div
-                                key={idx}
-                                className="bg-white rounded-xl shadow-sm p-6 border border-gray-100"
-                            >
-                                <div className="flex items-center gap-2 mb-4">
-                                    <Brain className="h-5 w-5 text-indigo-600" />
-                                    <h2 className="text-lg font-semibold text-gray-800">
-                                        {seccion.titulo}
-                                    </h2>
-                                </div>
-                                <ul className="space-y-3">
-                                    {seccion.items.map((item, itemIdx) => (
-                                        <li
-                                            key={itemIdx}
-                                            className="flex items-start gap-2"
-                                        >
-                                            <Check className="h-4 w-4 text-indigo-600 mt-1" />
-                                            <span className="text-sm text-gray-600">
-                                                {item}
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
+                        <RecomendacionesCard
+                            actions={actions}
+                            store={resultado}
+                            test_id={id_test}
+                            nivel_actual={
+                                nivelActual.nivel === "Alto"
+                                    ? "alto"
+                                    : nivelActual.nivel === "Moderado"
+                                    ? "medio"
+                                    : "bajo"
+                            }
+                        />
                     </div>
                 </div>
-                {/* Tercera fila: Recursos de apoyo horizontales */}
-                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-6">
-                        Recursos de Apoyo
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="flex flex-col gap-3">
-                            <button className="btn btn-primary w-full gap-2">
-                                <MessageSquare className="h-4 w-4" />
-                                Contactar Consejero
-                            </button>
-                            <button className="btn btn-outline w-full gap-2">
-                                <Brain className="h-4 w-4" />
-                                Biblioteca de Recursos
-                            </button>
+                <div className="space-y-6">
+                    {/* Retroalimentación del docente mejorada */}
+                    <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mt-6">
+                        <div className="flex items-center gap-2 mb-4">
+                            <MessageSquare className="h-5 w-5 text-indigo-600" />
+                            <h2 className="text-lg font-semibold text-gray-800">
+                                Retroalimentación del Docente
+                            </h2>
                         </div>
+                        {resultado?.retroalimentacion ? (
+                            <div className="space-y-3">
+                                <div class="chat chat-start">
+                                    <div className="chat-bubble chat-bubble-accent">
+                                        <span className="text-sm text-gray-700 leading-relaxed">
+                                            {resultado?.retroalimentacion}
+                                        </span>
+                                    </div>
+                                </div>
+                                <p className="text-xs text-gray-400 flex items-end gap-2 justify-end">
+                                    <Clock className="h-3 w-3" />
+                                    Última actualización:{" "}
+                                    {new Date().toLocaleDateString()}
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="flex items-center gap-2 p-4 bg-blue-50 text-blue-700 rounded-lg">
+                                <Info className="h-4 w-4" />
+                                <p className="text-sm">
+                                    No hay retroalimentación disponible aún.
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                    {/* Tercera fila: Recursos de apoyo horizontales */}
+                    <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                        <h2 className="text-xl font-semibold text-gray-800 mb-6">
+                            Recursos de Apoyo
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="flex flex-col gap-3">
+                                <button className="btn btn-primary w-full gap-2">
+                                    <MessageSquare className="h-4 w-4" />
+                                    Contactar Consejero
+                                </button>
+                                <button className="btn btn-outline w-full gap-2">
+                                    <Brain className="h-4 w-4" />
+                                    Biblioteca de Recursos
+                                </button>
+                            </div>
 
-                        <div className="p-4 bg-gray-50 rounded-lg md:col-span-2">
-                            <h3 className="font-medium text-gray-700 mb-2">
-                                Líneas de Ayuda 24/7
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                                Si necesitas apoyo inmediato, no dudes en
-                                contactar a nuestras líneas de ayuda:
-                            </p>
-                            <div className="mt-4 flex gap-4">
-                                <a
-                                    href="tel:+1234567890"
-                                    className="text-primary text-sm flex items-center gap-2"
-                                >
-                                    <Phone className="h-4 w-4" />
-                                    (123) 456-7890
-                                </a>
-                                <a
-                                    href="tel:+1234567890"
-                                    className="text-primary text-sm flex items-center gap-2"
-                                >
-                                    <Phone className="h-4 w-4" />
-                                    Línea de Emergencia
-                                </a>
+                            <div className="p-4 bg-gray-50 rounded-lg md:col-span-2">
+                                <h3 className="font-medium text-gray-700 mb-2">
+                                    Líneas de Ayuda 24/7
+                                </h3>
+                                <p className="text-sm text-gray-600">
+                                    Si necesitas apoyo inmediato, no dudes en
+                                    contactar a nuestras líneas de ayuda:
+                                </p>
+                                <div className="mt-4 flex gap-4">
+                                    <a
+                                        href="tel:+1234567890"
+                                        className="text-primary text-sm flex items-center gap-2"
+                                    >
+                                        <Phone className="h-4 w-4" />
+                                        (123) 456-7890
+                                    </a>
+                                    <a
+                                        href="tel:+1234567890"
+                                        className="text-primary text-sm flex items-center gap-2"
+                                    >
+                                        <Phone className="h-4 w-4" />
+                                        Línea de Emergencia
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

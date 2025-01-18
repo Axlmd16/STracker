@@ -117,8 +117,12 @@ function AsignaturaDetallePage({ actions, store }) {
 
                         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                             {/* Indicadores de Estrés */}
-                            <div className="lg:col-span-2 bg-white shadow-lg rounded-lg p-6 min-h-[800px]">
-                                <StressIndicators className="h-full" />
+                            <div className="lg:col-span-2 bg-white shadow-lg rounded-lg  min-h-[800px]">
+                                <StressIndicators
+                                    actions={actions}
+                                    store={store}
+                                    asignatura_id={id}
+                                />
                             </div>
 
                             <div className="lg:col-span-2 flex flex-col gap-6">

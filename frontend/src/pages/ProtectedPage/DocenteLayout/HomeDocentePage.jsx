@@ -17,7 +17,6 @@ function HomeDocentePage({ actions, store }) {
         const fetchAsignaturas = async () => {
             setLoading(true);
             try {
-                // const data = await actions.getProvAsignaturas();
                 const data = await actions.getAsignaturas();
                 setAsignaturas(data);
             } catch (error) {

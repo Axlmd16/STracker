@@ -17,3 +17,12 @@ class ResultadoTestSchema(BaseModel):
 class RespuestaFormulario(BaseModel):
     puntuacion: float
     id_unico: str
+    
+    
+class InformeResultadoAsignatura(BaseModel):
+    nivel_estres: str
+    cantidad: int
+    
+class InformeResultadoEstudiante(BaseModel):
+    nivel_estres: str
+    cantidad: int

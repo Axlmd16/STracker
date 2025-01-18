@@ -64,3 +64,8 @@ def obtener_recomendaciones_por_test(id_test: int):
 def obtener_recomendaciones_por_prioridad(prioridad: int):
     recomendaciones = recomendaciones_controller.obtener_recomendaciones_por_prioridad(prioridad)
     return {"message": "Recomendaciones encontradas", "data": recomendaciones}
+
+@router_recomendaciones.get('/recomendaciones/test/{id_test}', tags=['Recomendaciones'])
+def obtener_recomendaciones_de_test(id_test: int):
+    recomendaciones = recomendaciones_controller.obtener_recomendaciones_de_test(id_test)
+    return {"message": "Recomendaciones encontradas", "data": recomendaciones}

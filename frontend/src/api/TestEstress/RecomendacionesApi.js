@@ -1,5 +1,4 @@
 const RecomendacionesApi = ({ getStore, getActions, setStore, api }) => ({
-
     obtenerRecomendacionesPorTest: async (id_test) => {
         const response = await api.get("/recomendaciones/test/" + id_test);
         return response.data.data;
@@ -26,12 +25,20 @@ const RecomendacionesApi = ({ getStore, getActions, setStore, api }) => ({
     },
 
     agregarRecomendacionTest: async (id_test, id_recomendacion) => {
-        const response = await api.post(`/recomendaciones/test/${id_recomendacion}/${id_test}`);
+        const response = await api.post(
+            `/recomendaciones/test/${id_recomendacion}/${id_test}`
+        );
         return response.data;
     },
 
     eliminarRecomendacionTest: async (id_test, id_recomendacion) => {
-        const response = await api.delete(`/recomendaciones/test/${id_recomendacion}/${id_test}`);
+        const response = await api.delete(
+            `/recomendaciones/test/${id_recomendacion}/${id_test}`
+        );
+        return response.data;
+    },
+    obtener_recomendaciones_por_test: async (id_test) => {
+        const response = await api.get(`/recomendaciones/test/${id_test}`);
         return response.data;
     },
 });

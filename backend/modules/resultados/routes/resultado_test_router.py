@@ -100,3 +100,9 @@ def validar_resultado(id: int):
     
     return {"message": "Resultado aún no realizado", "data": False}
 
+#* Obtener info de nivel de estres de la asignatura
+@router_resultados.get("/resultados/asignatura/{asignatura_id}", tags=["Resultados"])
+def get_info_estres_asignatura(asignatura_id: int):
+    data = rc.obtener_niveles_estres_por_asignatura(asignatura_id)
+    return {"message": "Niveles de estres por asignatura", "data": data}
+         

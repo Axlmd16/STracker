@@ -15,6 +15,13 @@ const ResultadoTestApi = ({ getStore, getActions, setStore, api }) => ({
         const response = await api.get(`/resultados/${resultado_id}`);
         return response.data.data;
     },
+
+    getInfoResultadosAsignatura: async (asignatura_id) => {
+        const response = await api.get(
+            `/resultados/asignatura/${asignatura_id}`
+        );
+        return response.data;
+    },
 });
 
 export default ResultadoTestApi;

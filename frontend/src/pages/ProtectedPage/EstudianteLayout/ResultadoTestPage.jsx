@@ -119,7 +119,13 @@ const ResultadoTestPage = ({ actions }) => {
     }
 
     if (resultado?.fecha_realizacion) {
-        return <ViewResultados actions={actions} resultado={resultado} />;
+        return (
+            <ViewResultados
+                actions={actions}
+                resultado={resultado}
+                id_test={resultado.asignacion.test_id}
+            />
+        );
     }
 
     return (

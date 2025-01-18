@@ -122,3 +122,36 @@ class RecomendacionesController:
         with DatabaseEngine.get_session() as db:
             recomendaciones = db.query(Recomendacion).filter(Recomendacion.prioridad == prioridad).all()
             return recomendaciones if recomendaciones else []
+        
+    def obtener_recomendaciones_de_test(id):
+        with DatabaseEngine.get_session() as db:
+            recomendaciones = db.query(Recomendacion).join(RecomendacionesTest).filter(RecomendacionesTest.test_estres_id == id).all()
+            return recomendaciones if recomendaciones else []
+             
+        
+    # def obtener_recomendaciones_de_test(id):  
+    #     with DatabaseEngine.get_session() as db:
+    #         sql = text("""
+    #             SELECT recomendacion_id 
+    #             FROM recomendacion_test
+    #             WHERE test_estres_id = :id
+    #         """)
+    #         result = db.execute(sql, {"id": id}) 
+    #         recomendacion_ids = [row.recomendacion_id for row in result.fetchall()]
+            
+    #         if not recomendacion_ids:
+    #             return []
+            
+    #         sql_recomendaciones = text("""
+    #             SELECT *
+    #             FROM recomendacion
+    #             WHERE id IN :recomendacion_ids
+    #         """)
+    #         result_recomendaciones = db.execute(sql_recomendaciones, {"recomendacion_ids": tuple(recomendacion_ids)})
+            
+    #         columns = result_recomendaciones.keys()
+    #         recomendaciones = [
+    #             dict(zip(columns, row)) for row in result_recomendaciones.fetchall()
+    #         ]
+            
+    #         return recomendaciones if recomendaciones else []
