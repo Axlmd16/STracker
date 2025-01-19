@@ -86,18 +86,18 @@ const DataTableRecomendaciones = forwardRef(
                     ),
                     selector: (row) => filteredData.indexOf(row) + 1,
                     sortable: true,
-                    width: "80px",
+                    width: "150px",
                 },
-                {
-                    name: (
-                        <div className="flex justify-center">
-                            <span>ID</span>
-                        </div>
-                    ),
-                    selector: (row) => row.id,
-                    sortable: true,
-                    width: "80px"
-                },
+                // {
+                //     name: (
+                //         <div className="flex justify-center">
+                //             <span>ID</span>
+                //         </div>
+                //     ),
+                //     selector: (row) => row.id,
+                //     sortable: true,
+                //     width: "80px"
+                // },
                 {
                     name: (
                         <div className="flex justify-center">

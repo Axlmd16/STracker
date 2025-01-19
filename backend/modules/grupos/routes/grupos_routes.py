@@ -64,3 +64,9 @@ def eliminar_estudiante_de_grupo(estudiante_asignatura_id: int, grupo_id: int):
     if not estudiante_eliminado:
         raise HTTPException(status_code=404, detail="Algo salió mal")
     return {"message": "Estudiante Eliminado", "data": estudiante_eliminado}
+
+#Todo: mover este metodo al controlador de usuario
+@router_grupo.get("/asignatura_estudiante/{id}", tags=["Estudiante_Pruebas"])
+def get_asignatura_estudiante(id: int):
+    asignaturas_por_rol = controlador.obtener_asignaturas_por_rol(id)
+    return {"message": "Asignaturas del estudiante", "data": asignaturas_por_rol}
