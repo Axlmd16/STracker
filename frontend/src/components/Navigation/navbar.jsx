@@ -1,6 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import React, { useEffect } from "react";
 import { Bell, Search } from "lucide-react";
+import NotificationsDropdown from "./NotificationsDropdown";
 
 function Navbar({ actions, store, rol }) {
     const navigate = useNavigate();
@@ -53,9 +54,9 @@ function Navbar({ actions, store, rol }) {
                     <Search size="24" />
                 </button>
 
+                {/* //* CODIGO ANTIGUO POR SI ACASO */}
                 {/* Notification Icon */}
-
-                <div className="dropdown dropdown-end">
+                {/* <div className="dropdown dropdown-end">
                     <div
                         tabIndex={0}
                         role="button"
@@ -79,7 +80,13 @@ function Navbar({ actions, store, rol }) {
                             </span>
                         </li>
                     </ul>
-                </div>
+                </div> */}
+                {/* //*  */}
+
+                <NotificationsDropdown
+                    actions={actions}
+                    store={store}
+                />
 
                 {/* User Dropdown */}
                 <div className="dropdown dropdown-end">
@@ -98,7 +105,7 @@ function Navbar({ actions, store, rol }) {
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
                     >
                         <li>
-                            <Link to="#">Perfil</Link>
+                            <Link to="/login/perfil">Perfil</Link>
                         </li>
                         <li>
                             <Link to="#">Ajustes</Link>

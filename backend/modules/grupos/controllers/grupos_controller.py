@@ -204,4 +204,122 @@ class GeaGrupoController:
 
             return grupo.estudiantes
 
-    
+    #TODO: Mover esta funcion al controlador de usuario
+    def obtener_rol_por_usuario(self, usuario_id: int):
+        with DatabaseEngine.get_session() as db:
+            try:
+                query = text("""
+                    SELECT rol
+                    FROM usuario
+                    WHERE id = :usuario_id
+                """)
+                result = db.execute(query, {'usuario_id': usuario_id}).fetchone()
+                if not result:
+                    raise HTTPException(status_code=404, detail="Usuario no encontrado")
+                rol = result[0]
+                return rol
+
+            except Exception as e:
+                print(f"Error: {e}")
+                raise HTTPException(status_code=500, detail="Error al obtener el rol del usuario")
+
+
+    #TODO: Mover esta funcion al controlador de usuario
+    def obtener_asignaturas_por_rol(self, usuario_id: int):
+        rol_usuario = self.obtener_rol_por_usuario(usuario_id)
+        if rol_usuario == "ESTUDIANTE":
+            return self.obtener_asignaturas_por_estudiante(usuario_id)
+        elif rol_usuario == "DOCENTE":
+            return self.obtener_asignaturas_por_docente(usuario_id)
+        else: 
+            return []
+
+    #TODO: Mover esta funcion al controlador de usuario
+    def obtener_asignaturas_por_estudiante(self, estudiante_id: int):
+        with DatabaseEngine.get_session() as db:
+            try:
+                print("0")
+                query = text("""
+                    SELECT asignatura_id
+                    FROM estudiante_asignatura
+                    WHERE estudiante_id = :estudiante_id
+                """)
+                result = db.execute(query, {'estudiante_id': estudiante_id}).fetchall()
+
+                print("1")
+                if not result:
+                    raise HTTPException(status_code=404, detail="No se encontraron asignaturas para este estudiante")
+
+                asignatura_ids = [row[0] for row in result]
+
+                print("2")
+                query_asignaturas = text("""
+                    SELECT * 
+                    FROM asignatura
+                    WHERE id IN :asignatura_ids
+                """)
+                asignaturas = db.execute(query_asignaturas, {'asignatura_ids': tuple(asignatura_ids)}).fetchall()
+
+                print("3")
+                if not asignaturas:
+                    raise HTTPException(status_code=404, detail="No se encontraron detalles de las asignaturas")
+
+                print("4")
+                resultado = []
+                for asignatura in asignaturas:
+                    resultado.append({
+                        "id": asignatura[0], 
+                        "nombre": asignatura[1],  
+                        "nro_horas": asignatura[2], 
+                        "paralelo": asignatura[3], 
+                        "fecha_inicio": asignatura[4], 
+                        "fecha_fin": asignatura[5], 
+                    })
+
+                print("5")
+                print(f"Resultados: {resultado}")
+                return resultado
+
+            except Exception as e:
+                print(f"Error: {e}")
+                raise HTTPException(status_code=500, detail="Error al obtener las asignaturas")
+
+    #TODO: Mover esta funcion al controlador de usuario
+    def obtener_asignaturas_por_docente(self, usuario_id: int):
+        with DatabaseEngine.get_session() as db:
+            try:
+                query_usuario = text("""
+                    SELECT id
+                    FROM usuario
+                    WHERE id = :usuario_id
+                """)
+                usuario_result = db.execute(query_usuario, {'usuario_id': usuario_id}).fetchone()
+
+                if not usuario_result:
+                    raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+                query_asignaturas = text("""
+                    SELECT * 
+                    FROM asignatura
+                    WHERE docente_id = :usuario_id
+                """)
+                asignaturas_result = db.execute(query_asignaturas, {'usuario_id': usuario_id}).fetchall()
+
+                if not asignaturas_result:
+                    raise HTTPException(status_code=404, detail="No se encontraron asignaturas para este docente")
+
+                resultado = []
+                for asignatura in asignaturas_result:
+                    resultado.append({
+                        "id": asignatura[0], 
+                        "nombre": asignatura[1],  
+                        "nro_horas": asignatura[2], 
+                        "paralelo": asignatura[3], 
+                        "fecha_inicio": asignatura[4], 
+                        "fecha_fin": asignatura[5], 
+                    })
+                return resultado
+
+            except Exception as e:
+                print(f"Error: {e}")
+                raise HTTPException(status_code=500, detail="Error al obtener las asignaturas del docente")

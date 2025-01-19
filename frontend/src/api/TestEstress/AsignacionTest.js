@@ -44,6 +44,18 @@ const AsignacionTestApi = ({ getStore, getActions, setStore, api }) => ({
         const response = await api.get(`/grupo/asignatura/${id_asignatura}`);
         return response.data.data;
     },
+
+    //! Nota: Esto debo cambiarlo en otro archivo
+    getInfoUser: async (id) => {
+        const response = await api.get(`/usuarios/${id}`);
+        return response.data.data;
+    },
+
+    //! Nota: Esto debo cambiarlo en otro archivo
+    obtenerAsignaturaEstudiante: async (id) => {
+        const response = await api.get(`/asignatura_estudiante/${id}`);
+        return response.data.data;
+    },
 });
 
 export default AsignacionTestApi;
