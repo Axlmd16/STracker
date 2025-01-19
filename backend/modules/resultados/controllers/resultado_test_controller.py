@@ -107,3 +107,8 @@ class ResultadoTestControl:
             }
 
             return resultado_json
+        
+    def obtener_resultados_estudiante_resueltos(self, estudiante_id: int):
+        resultados = self.obtener_resultados_por_estudiante(estudiante_id)
+        resultados_resueltos = [resultado for resultado in resultados if resultado.fecha_realizacion is not None]
+        return resultados_resueltos

@@ -59,10 +59,10 @@ function TestDeEstresCard({ actions, store }) {
     }
 
     return (
-        <div className="bg-transparent h-3/5 overflow-y-scroll scrollbar-hide">
+        <div className="bg-white rounded-md shadow-sm p-6">
             <div className="flex items-center gap-3 mb-4">
                 <Brain className="w-6 h-6 text-primary" />
-                <h2 className="text-lg font-bold">
+                <h2 className="text-lg font-bold px-2 py-1">
                     Tests de Estrés Pendientes
                 </h2>
             </div>
@@ -74,14 +74,14 @@ function TestDeEstresCard({ actions, store }) {
                     </p>
                 </div>
             ) : (
-                <div className="space-y-4">
-                    {resultados.map((resultado, index) => (
+                <div className="space-y-4 max-h-96 overflow-y-scroll scrollbar-hide">
+                    {resultados.slice(0, 5).map((resultado, index) => (
                         <button
                             key={index}
                             className="w-full"
                             onClick={() => handleRealizarTest(resultado)}
                         >
-                            <div className="card bg-white shadow hover:shadow-lg transition-shadow duration-300">
+                            <div className="card bg-gray-200 shadow hover:shadow-lg transition-shadow duration-300">
                                 <div className="card-body p-4">
                                     <div className="flex justify-between items-start mb-2">
                                         <div className="flex flex-col">

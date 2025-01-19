@@ -16,6 +16,10 @@ class ResultadoTestSchema(BaseModel):
 
 class RespuestaFormulario(BaseModel):
     puntuacion: float
+    # id_unico: str
+    
+class IdRespuestaFormulario(BaseModel):
+    # puntuacion: float
     id_unico: str
     
     

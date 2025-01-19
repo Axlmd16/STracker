@@ -3,12 +3,14 @@ import datetime
 
 from middlewares.verify_token_route import VerifyTokenRoute
 from modules.resultados.controllers.resultado_test_controller import ResultadoTestControl
-from modules.resultados.schemas.resultado_test_schema import RespuestaFormulario, ResultadoTestSchema
+from modules.resultados.schemas.resultado_test_schema import IdRespuestaFormulario, RespuestaFormulario, ResultadoTestSchema
 from modules.test_estres.controllers.asignacion_test_controller import AsignacionTestController
+from redis import Redis
 
 
 # router_resultados = APIRouter(route_class=VerifyTokenRoute)
 router_resultados = APIRouter()
+redis_client = Redis(host="localhost", port=6379, db=0)
 
 #* CRUD RESULTADOS ----------------------------------------------------------------------------------------------------
 
@@ -63,30 +65,47 @@ def get_resultados_por_estudiante(estudiante_id: int):
 
 #* Obtener resultados del test desde el formulario
 @router_resultados.post("/respuestas/formulario/", tags=["Resultados"])
-async def recibir_respuesta(respuesta: RespuestaFormulario):
-    try:
-        id_resultado = respuesta.id_unico.split("-")[2]
-        resultado = rc.obtener_resultado(int(id_resultado))
-        
-        if not resultado:
-            raise HTTPException(status_code=404, detail="Result not found")
-        
-        data_nueva = ResultadoTestSchema(
-            fecha_realizacion=datetime.datetime.now(),
-            resultado=respuesta.puntuacion,
-            estudiante_asignatura_id=resultado.estudiante_asignatura_id,
-            asignacion_id=resultado.asignacion_id
-        )
-        
-        response = rc.actualizar_resultado(int(id_resultado), data_nueva)
-        
-        if response == None:
-            raise HTTPException(status_code=500, detail="Error al actualizar el resultado")
-
-        return {"message": "Respuesta recibida correctamente"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al procesar la respuesta: {e}")
+def recibir_respuesta(respuesta: RespuestaFormulario):
+    id_unico = redis_client.get("id_unico")
     
+    if id_unico is not None:
+        id_unico = id_unico.decode("utf-8") 
+
+    try:
+            print(f"1")
+            print(f"ID UNICO: {id_unico}")
+            id_resultado = id_unico.split("-")[2]
+            resultado = rc.obtener_resultado(int(id_resultado))
+            
+            if not resultado:
+                raise HTTPException(status_code=404, detail="Result not found")
+            
+            data_nueva = ResultadoTestSchema(
+                fecha_realizacion=datetime.datetime.now(),
+                resultado=respuesta.puntuacion,
+                estudiante_asignatura_id=resultado.estudiante_asignatura_id,
+                asignacion_id=resultado.asignacion_id
+            )
+            
+            response = rc.actualizar_resultado(int(id_resultado), data_nueva)
+            
+            if response == None:
+                raise HTTPException(status_code=500, detail="Error al actualizar el resultado")
+
+            return {"message": "Respuesta recibida correctamente"}
+    except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error al procesar la respuesta: {e}")
+
+
+@router_resultados.post("/redis/guardar-id-unico/")
+async def guardar_id_unico(data: IdRespuestaFormulario):
+    try:
+        redis_client.setex(f"id_unico", 3600, data.id_unico)  
+        print(f"ID UNICO GUARDADO: {redis_client.get(f'id_unico')}")
+        return {"message": "ID único guardado exitosamente"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+
     
 #* Validar si el la asignacion ya fue realizada
 @router_resultados.get("/resultados/{id}/validar", tags=["Resultados"])
@@ -106,3 +125,31 @@ def get_info_estres_asignatura(asignatura_id: int):
     data = rc.obtener_niveles_estres_por_asignatura(asignatura_id)
     return {"message": "Niveles de estres por asignatura", "data": data}
          
+
+@router_resultados.delete("/redis/eliminar-id-unico/")
+async def eliminar_id_unico():
+    try:
+        redis_client.delete("id_unico")
+        return {"message": "ID único eliminado exitosamente"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+    
+@router_resultados.get("/redis/obtener-id-unico/")
+async def obtener_id_unico():
+    try:
+        id_unico = redis_client.get("id_unico")
+        if id_unico is None:
+            return {"message": "ID único no encontrado"}
+        return {"message": "ID único encontrado", "data": id_unico}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+    
+    
+#* Obtener historial de resultados de un estudiante de todas las asignaturas
+@router_resultados.get("/resultados/estudiante/{estudiante_id}/historial", tags=["Resultados"])
+def get_historial_resultados_estudiante(estudiante_id: int):
+    #TODO: Optimizar la consulta para retornoar solo la info necesaria
+    data = rc.obtener_resultados_por_estudiante(estudiante_id)
+    return {"message": "Historial de resultados por estudiante", "data": data}
+
+    

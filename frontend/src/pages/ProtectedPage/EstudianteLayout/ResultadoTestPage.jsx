@@ -54,20 +54,26 @@ const ResultadoTestPage = ({ actions }) => {
         setProcessingResults(true);
         try {
             const response = await actions.verificarResultado(resultado.id);
+
             if (response === true) {
+                // Test completado correctamente
                 await fetchUpdatedResult();
                 setTestState((prev) => ({
                     ...prev,
                     isCompleted: true,
                 }));
+                await actions.eliminarIdUnico(); // Eliminar el ID de Redis
                 setProcessingResults(false);
             } else {
-                toast("Procesando resultados, inténtalo en unos segundos", {
-                    icon: "⏳",
-                });
-                setTimeout(() => {
-                    verifyCompletion();
-                }, 3000);
+                // // Test no completado aún, reintentar
+                // toast("Procesando resultados, inténtalo en unos segundos", {
+                //     icon: "⏳",
+                // });
+                // setTimeout(() => {
+                //     verifyCompletion();
+
+                // }, 3000);
+                await actions.eliminarIdUnico(); // Eliminar el ID de Redis
             }
         } catch (error) {
             console.error(
@@ -75,34 +81,39 @@ const ResultadoTestPage = ({ actions }) => {
                 error
             );
             toast.error("Error al verificar la finalización del test");
-            setProcessingResults(false); // Finaliza el procesamiento incluso en error
+            setProcessingResults(false);
         }
     }, [actions, resultado?.id, fetchUpdatedResult]);
 
-    const startTest = () => {
+    const startTest = async () => {
         if (!testState.info?.url) {
             toast.error("No se pudo obtener la URL del test");
             return;
         }
 
-        setTestState((prev) => ({ ...prev, isActive: true }));
+        try {
+            const id_unico = [
+                resultado.asignacion.asignatura_id,
+                resultado.asignacion.test_id,
+                resultado.id,
+                resultado.estudiante_asignatura_id,
+            ].join("-");
 
-        const id_unico = [
-            resultado.asignacion.asignatura_id,
-            resultado.asignacion.test_id,
-            resultado.id,
-            resultado.estudiante_asignatura_id,
-        ].join("-");
+            await actions.guardarIdUnico({ id_unico });
 
-        const formURL = `${testState.info.url}&entry.1292276143=${id_unico}`;
-        const testWindow = window.open(formURL, "_blank");
+            const formURL = `${testState.info.url}?id_unico=${id_unico}`;
+            const testWindow = window.open(formURL, "_blank");
 
-        const checkTestWindow = setInterval(() => {
-            if (testWindow?.closed) {
-                clearInterval(checkTestWindow);
-                verifyCompletion();
-            }
-        }, 500);
+            const checkTestWindow = setInterval(async () => {
+                if (testWindow?.closed) {
+                    clearInterval(checkTestWindow);
+                    await verifyCompletion();
+                }
+            }, 500);
+        } catch (error) {
+            console.error("Error al iniciar el test:", error);
+            toast.error("Error al iniciar el test");
+        }
     };
 
     if (loading || processingResults) {
