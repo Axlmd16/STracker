@@ -55,5 +55,16 @@ class NotificacionController:
             self.enviar_notificacion(numero_estudiante, mensaje) #TODO: Terminar de implementar enviar_notificaciones a wahtsapp
             return notificacion
 
+
+    def crear_notificacion_docente(self, notificacion):
+        with DatabaseEngine.get_session() as db:
+            notificacion = Notificacion(**notificacion.dict())
+            db.add(notificacion)
+            db.commit()
+            db.refresh(notificacion)
+            return notificacion
+
     def enviar_notificacion(self, numero_estudiante, mensaje):
         pass
+    
+    

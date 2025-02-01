@@ -27,26 +27,51 @@ const AsignaturaApi = ({ getStore, getActions, setStore, api }) => ({
         }
     },
 
+    //* Agregar varios estudiantes a asignatura
+    addStudentsToSubject: async (id, data) => {
+        // Procesar todas las solicitudes en paralelo
+        await Promise.all(
+            data.map((student) =>
+                api.post(`/asignaturas/${id}/estudiantes`, {
+                    id_estudiante: student.id,
+                })
+            )
+        );
+    },
+
     updateEstudiante: async (id, data) => {
         const response = await api.put(`/usuarios/${id}`, data);
         return response.data;
     },
 
     quitarEstudianteAsignatura: async (id_asignatura, id_estudiante) => {
-        console.log("Datos enviados al backend:", {
-            estudiante_id: id_estudiante,
-            asignatura_id: id_asignatura,
-        });
-
-        const response = await api.post(
+        const response = await api.delete(
             `/asignaturas/${id_asignatura}/estudiantes/${id_estudiante}`
         );
 
         return response.data;
     },
 
+    //* Obtener estudiantes disponibles para asignatura
+    getStudentsAvailable: async (id) => {
+        const response = await api.get(
+            `/asignatura/${id}/estudiantes/disponibles`
+        );
+        return response.data.data;
+    },
+
     createAsignatura: async (data) => {
         const response = await api.post("/asignaturas", data);
+        return response.data;
+    },
+
+    updateAsignatura: async (id, data) => {
+        const response = await api.put(`/asignaturas/${id}`, data);
+        return response.data;
+    },
+
+    deleteAsignatura: async (id) => {
+        const response = await api.delete(`/asignaturas/${id}`);
         return response.data;
     },
 

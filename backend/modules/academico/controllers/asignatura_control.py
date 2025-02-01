@@ -24,7 +24,8 @@ class AsignaturaControl:
         
     def actualizar_asignatura(self, id: int, asig):
         with DatabaseEngine.get_session() as db:
-            db.query(Asignatura).filter(Asignatura.id == id).update(asig.dict())
+            asig_dict = asig.dict(exclude={"id"})
+            db.query(Asignatura).filter(Asignatura.id == id).update(asig_dict)
             db.commit()
             return db.query(Asignatura).filter(Asignatura.id == id).first()
         

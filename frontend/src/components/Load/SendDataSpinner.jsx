@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 
-function SendDataSpinner({ data, onCancel, actions }) {
+function SendDataSpinner({ data, onCancel, actions, id }) {
     const [progress, setProgress] = useState(0);
     const hasRunRef = useRef(false);
 
@@ -26,7 +26,11 @@ function SendDataSpinner({ data, onCancel, actions }) {
                     });
                 }, 100);
 
-                await actions.importarDocentes(data);
+                if (id) {
+                    await actions.importarEstudiantes(id, data);
+                } else {
+                    await actions.importarDocentes(data);
+                }
 
                 clearInterval(interval);
                 setProgress(100);

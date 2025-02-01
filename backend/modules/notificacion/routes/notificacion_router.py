@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from modules.notificacion.controllers.notificacion_controller import NotificacionController
-from modules.notificacion.schemas.notificacio_schema import NotificacionSchema
+from modules.notificacion.schemas.notificacio_schema import NotificacionResultadoSchema, NotificacionSchema
 
 router_notificaciones = APIRouter()
 notificaciones_controller = NotificacionController()
@@ -19,3 +19,8 @@ def prueba(id: int):
 def prueba(id: int, titulo: str, mensaje: str):
     notificaion = notificaciones_controller.crear_notificacion(id, titulo, mensaje)
     return notificaion
+
+@router_notificaciones.post("/notificaciones/", tags=["Notificaciones"])
+def guardar_notificacion(notificacion: NotificacionSchema):
+    notificacion = notificaciones_controller.crear_notificacion(notificacion)
+    return notificacion

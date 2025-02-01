@@ -1,7 +1,9 @@
 import {
     GraduationCap,
     HomeIcon,
+    Import,
     LibraryBig,
+    Search,
     UserPlus2,
     UserRoundPlus,
 } from "lucide-react";
@@ -16,6 +18,7 @@ import Sidebar from "../../../components/Navigation/Sidebar";
 import DataTableUser from "../../../components/Tables/DataTableUser";
 import ImportDataPage from "../AdminLayout/ImportDataPage";
 import BreadCrumbs from "../../../components/Navigation/breadCrumbs";
+import StudentSearch from "../../../components/ViewsSets/StudentSearch";
 
 function StudentsSubjectPage({ actions, store }) {
     const { id } = useParams();
@@ -23,6 +26,7 @@ function StudentsSubjectPage({ actions, store }) {
     //* Referencias y estados
     const modalFormRef = useRef(null);
     const modalRef = useRef(null);
+    const modalSearchRef = useRef(null);
     const formRef = useRef(null);
     const tableRef = useRef(null);
     const [data, setData] = useState(null);
@@ -31,13 +35,18 @@ function StudentsSubjectPage({ actions, store }) {
     const [pending, setPending] = useState(false);
 
     //* Funcion abrir modal para crear
-    const handleCreateDocente = () => {
+    const handleCreate = () => {
         modalFormRef.current.openModal();
     };
 
     //* Funcion abrir modal para importar datos
-    const handleImportDocente = () => {
+    const handleImport = () => {
         modalRef.current.openModal();
+    };
+
+    //* Funcion para abrir modal de busqueda
+    const handleSearch = () => {
+        modalSearchRef.current.openModal();
     };
 
     //* Funcion para cerrar el modal
@@ -123,25 +132,31 @@ function StudentsSubjectPage({ actions, store }) {
                                 Estudiantes
                             </h1>
                             <div className="flex items-center mt-4">
-                                <p className="text-sm text-gray-500 mt-2">
-                                    Crear, editar, eliminar y listar estudiantes
-                                </p>
+                                <button
+                                    className="btn bg-blue-100 btn-secondary mt-4 btn-circle"
+                                    onClick={handleSearch}
+                                >
+                                    <Search
+                                        className="text-blue-900"
+                                        size={20}
+                                    />
+                                </button>
                                 <div className="ml-auto">
                                     <button
                                         className="btn bg-blue-100 btn-secondary mt-4 btn-circle"
-                                        onClick={handleCreateDocente}
+                                        onClick={handleCreate}
                                     >
                                         <UserRoundPlus
                                             className="text-blue-900"
                                             size={20}
                                         />
                                     </button>
-                                    {/* <button
-                                    className="btn btn-circle ml-3 bg-info"
-                                    onClick={handleImportDocente}
-                                >
-                                    <Import size={20} />
-                                </button> */}
+                                    <button
+                                        className="btn btn-circle ml-3 bg-info"
+                                        onClick={handleImport}
+                                    >
+                                        <Import size={20} />
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -186,12 +201,23 @@ function StudentsSubjectPage({ actions, store }) {
                     {/* Modal para importar */}
                     <Modal ref={modalRef}>
                         <h2 className="text-xl font-semibold mb-4">
-                            Importar docentes
+                            Importar Estudiantes
                             <ImportDataPage
                                 actions={actions}
                                 store={store}
                                 modalRef={modalRef}
                                 userRole={"ESTUDIANTE"}
+                                id={id}
+                            />
+                        </h2>
+                    </Modal>
+                    <Modal ref={modalSearchRef}>
+                        <h2 className="text-xl font-semibold mb-4">
+                            Buscar Estudiantes
+                            <StudentSearch
+                                actions={actions}
+                                store={store}
+                                id={id}
                             />
                         </h2>
                     </Modal>

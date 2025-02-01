@@ -13,10 +13,18 @@ const DocenteApi = ({ getStore, getActions, setStore, api }) => ({
         const requestData = {
             data: data,
         };
-        console.log("Datos a enviar:", requestData);
-
         const response = await api.post("/usuarios/importar", requestData);
-        console.log(response);
+        return response;
+    },
+
+    importarEstudiantes: async (id, data) => {
+        const requestData = {
+            data: data,
+        };
+        const response = await api.post(
+            `/asignatura/${id}/estudiantes/importar`,
+            requestData
+        );
         return response;
     },
 

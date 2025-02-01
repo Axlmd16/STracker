@@ -3,7 +3,7 @@ import ImportForm from "../../../components/Forms/ImportForm";
 import TablePreviewUser from "../../../components/Tables/TablePreviewUser";
 import SendDataSpinner from "../../../components/Load/SendDataSpinner";
 
-function ImportDataPage({ actions, store, modalRef, userRole }) {
+function ImportDataPage({ actions, store, modalRef, userRole, id = null }) {
     const [step, setStep] = useState(0);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -74,6 +74,7 @@ function ImportDataPage({ actions, store, modalRef, userRole }) {
                             data={data}
                             onCancel={handleCancel}
                             actions={actions}
+                            id={id}
                         />
                     )}
                 </div>

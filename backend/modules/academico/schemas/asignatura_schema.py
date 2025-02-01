@@ -18,8 +18,15 @@ class AsignaturaCreate(AsignaturaBase):
     pass
 
 class AsignaturaUpdate(AsignaturaBase):
-    id: int
-    pass
+    nombre: str
+    nro_horas: int
+    paralelo: str
+    fecha_inicio: datetime
+    fecha_fin: datetime
+    docente_id: Optional[int] = None
+    
+    class Config:
+        from_attributes = True
 
 class AsignaturaInDB(AsignaturaBase):
     id: int

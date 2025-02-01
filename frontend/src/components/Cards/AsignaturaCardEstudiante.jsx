@@ -54,6 +54,11 @@ function AsignaturaCardEstudiante({ actions, store }) {
             {/* Scroll container */}
             <div className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-base-100">
                 <div className="flex gap-4 pb-2 min-w-full">
+                    {asignaturas.length === 0 && (
+                        <span className="text-md text-base-content/70 p-4">
+                            No estas inscrito en ninguna asignatura
+                        </span>
+                    )}
                     {asignaturas.map((asignatura, index) => (
                         <div
                             key={index}

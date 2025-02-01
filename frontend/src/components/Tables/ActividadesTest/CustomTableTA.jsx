@@ -113,15 +113,3 @@ const CustomTableTA = ({
 };
 
 export default CustomTableTA;
-
-{
-    /* Próximos Eventos */
-}
-// <div className="card bg-base-100 shadow-lg">
-//     <div className="card-body">
-//         <span>
-//             Espacio para informacion sobre los
-//             grupos
-//         </span>
-//     </div>
-// </div>

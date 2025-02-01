@@ -2,6 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import CustomTableTA from "./CustomTableTA";
 import { useNavigate } from "react-router-dom";
+import {
+    EllipsisVertical,
+    FilePenLine,
+    PencilLine,
+    Trash2,
+} from "lucide-react";
 
 function InterfaceTableActividades({ actions, store, id }) {
     const [data, setData] = useState([]);
@@ -54,6 +60,14 @@ function InterfaceTableActividades({ actions, store, id }) {
         return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
     };
 
+    const handleUpdate = (row) => {
+        console.log("Actualizar", row);
+    };
+
+    const handleDelete = (row) => {
+        console.log("Eliminar", row);
+    };
+
     const columns = useMemo(
         () => [
             {
@@ -86,20 +100,58 @@ function InterfaceTableActividades({ actions, store, id }) {
                 sortable: true,
                 center: "true",
             },
+            {
+                name: "Acciones",
+                cell: (row) => (
+                    <div className="dropdown dropdown-right ">
+                        <div
+                            tabIndex={0}
+                            role="button"
+                            className="btn m-1 btn-sm btn-ghost btn-circle"
+                        >
+                            <EllipsisVertical size={20} />
+                        </div>
+                        <ul
+                            tabIndex={0}
+                            className="dropdown-content menu bg-white rounded-box z-50 w-auto shadow"
+                        >
+                            <li>
+                                <button
+                                    className="btn btn-ghost btn-circle btn-sm my-1 text-primary"
+                                    onClick={() => handleUpdate(row)}
+                                >
+                                    <PencilLine size={20} />
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    className="btn btn-ghost btn-circle btn-sm my-1 text-warning"
+                                    onClick={() => handleDelete(row)}
+                                >
+                                    <Trash2 size={20} />
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                ),
+                center: true,
+            },
         ],
         [data]
     );
 
     return (
         <div>
-            <div className="">
-                <CustomTableTA
-                    columns={columns}
-                    data={data}
-                    title={"Actividades asignadas"}
-                    to={`/home/docente/asignatura/${id}/actividades`}
-                    handleDetails={handleDetails}
-                />
+            <div className="relative">
+                <div className="overflow-x-auto">
+                    <CustomTableTA
+                        columns={columns}
+                        data={data}
+                        title={"Actividades asignadas"}
+                        to={`/home/docente/asignatura/${id}/actividades`}
+                        handleDetails={handleDetails}
+                    />
+                </div>
             </div>
         </div>
     );

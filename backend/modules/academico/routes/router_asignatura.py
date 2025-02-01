@@ -3,9 +3,10 @@ from fastapi.responses import JSONResponse
 from middlewares.verify_token_route import VerifyTokenRoute
 from modules.academico.controllers.asignatura_control import AsignaturaControl
 from modules.academico.controllers.estudiante_asignatura_control import EstudianteAsignaturaControl
-from modules.academico.schemas.asignatura_schema import AsignaturaCreate, AsignaturaResponse, AsignaturaUpdate, EstudianteAsignatura
+from modules.academico.schemas.asignatura_schema import AsignaturaBase, AsignaturaCreate, AsignaturaResponse, AsignaturaUpdate, EstudianteAsignatura
 from modules.academico.schemas.estudiante_asignatura_schema import EstudianteAsig, EstudianteAsignaturaBase
 from modules.inicio_sesion.controllers.usuario_control import UsuarioControl
+from modules.inicio_sesion.schemas.usuario_schema import ImportarUsuariosRequest
 
 
 router_asignatura = APIRouter(route_class=VerifyTokenRoute)
@@ -56,7 +57,7 @@ def editar_asignatura(id: int, asignatura: AsignaturaUpdate):
     response = ac.actualizar_asignatura(id, asignatura)
     if not response:
         raise HTTPException(status_code=404, detail="Subject not found")
-    return {"message": f"Subject with id: {id} updated correctly", "data": response}
+    return {"message": f"Asignatura con id: {id} actualizada correctamente", "data": response}
 
 @router_asignatura.delete("/asignaturas/{id}",  tags=["Aginaturas"])
 def remover_asignatura(id: int):
@@ -104,6 +105,31 @@ def remover_estudiante_asignatura(id: int, id_est: int):
 def obtener_estudiantes_asignatura(id: int):
     data = eac.obtener_estudiantes_en_asignatura(id)
     return JSONResponse(content=data, status_code=200)
+
+#* Funcion para obtener los estudiantes registrados pero no asignados a una asignatura
+@router_asignatura.get("/asignatura/{id}/estudiantes/disponibles",  tags=["Aginaturas"])
+def obtener_estudiantes_disponibles(id: int):
+    data = eac.obtener_estudiantes_disponibles_asignatura(id)
+    return {"message": f"Students available for subject with id: {id}", "data": data}
+
+#*¨Funcion para importar estudiantes a asignaturas
+@router_asignatura.post("/asignatura/{id}/estudiantes/importar",  tags=["Aginaturas"])
+def importar_estudiantes_asignaturas(id: int, request: ImportarUsuariosRequest):
+    try:
+        response = uc.importar_usuarios(request.data)
+        if response is None:
+            raise HTTPException(status_code=500, detail="Error al importar los estudiantes a las asignaturas")
+        
+        for estudiante in response:
+            eac.agregar_estudiante_a_asignatura(id, estudiante)
+
+        return {"message": "Estudiantes agregados correctamente a las asignaturas", "code": 200}
+    except HTTPException as http_exc:
+        print(http_exc)
+        raise http_exc
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
 
 
 #* Funcion para obtener las asignaturas de un estudiante

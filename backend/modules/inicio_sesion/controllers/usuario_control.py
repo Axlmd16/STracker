@@ -1,4 +1,4 @@
-from models import Cuenta
+from models.Cuenta import Cuenta
 from models.TestEstres import TestEstres
 from models.Usuario import Usuario
 from core.database import DatabaseEngine
@@ -43,6 +43,7 @@ class UsuarioControl:
         
     def importar_usuarios(self, usuarios):
         with DatabaseEngine.get_session() as db:
+            ids_usuarios_creados = []  # Lista para almacenar los IDs de los usuarios creados
             for usuario in usuarios:
                 # Validar si el usuario ya existe
                 self.validar_usuario_unico(usuario.cedula, usuario.email)
@@ -52,10 +53,13 @@ class UsuarioControl:
                 db.add(db_usuario)
                 db.commit()
                 db.refresh(db_usuario)
-
+    
+                # Agregar el ID del usuario creado a la lista
+                ids_usuarios_creados.append(db_usuario.id)
+    
                 # Generar username
                 username = CuentaControl().generar_username(db_usuario)
-
+    
                 # Crear cuenta 
                 cuenta = Cuenta(
                     username=username,
@@ -65,7 +69,7 @@ class UsuarioControl:
                 )
                 db.add(cuenta)
             db.commit()
-        return True
+        return ids_usuarios_creados  # Devolver la lista de IDs de los usuarios creados
 
 
     def actualizar_usuario(self, id: int, usuario):

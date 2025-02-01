@@ -101,7 +101,6 @@ def recibir_respuesta(respuesta: RespuestaFormulario):
 async def guardar_id_unico(data: IdRespuestaFormulario):
     try:
         redis_client.setex(f"id_unico", 3600, data.id_unico)  
-        print(f"ID UNICO GUARDADO: {redis_client.get(f'id_unico')}")
         return {"message": "ID único guardado exitosamente"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
@@ -151,5 +150,7 @@ def get_historial_resultados_estudiante(estudiante_id: int):
     #TODO: Optimizar la consulta para retornoar solo la info necesaria
     data = rc.obtener_resultados_por_estudiante(estudiante_id)
     return {"message": "Historial de resultados por estudiante", "data": data}
+
+
 
     

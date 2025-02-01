@@ -1,8 +1,9 @@
 from fastapi import HTTPException
+from sqlalchemy import text
 from core.database import DatabaseEngine
 from models.Asignatura import Asignatura
 from models.EstudianteAsignatura import EstudianteAsignatura
-from modules.academico.schemas.estudiante_asignatura_schema import EstudianteAsignaturaBase
+from models.Usuario import Usuario
 from modules.inicio_sesion.controllers.usuario_control import UsuarioControl
 from modules.inicio_sesion.schemas.usuario_schema import UsuarioBase
 
@@ -44,7 +45,6 @@ class EstudianteAsignaturaControl:
                     estudiante_dict = UsuarioBase.from_orm(est).dict()
                     estudiante_dict['estudiante_asignatura_id'] = data.id
                     estudiantes.append(estudiante_dict)
-                    
                 
                 return estudiantes
                 
@@ -72,4 +72,26 @@ class EstudianteAsignaturaControl:
 
                 
             return asignaturas
+        
 
+    def obtener_estudiantes_disponibles_asignatura(self, id: int):
+        with DatabaseEngine.get_session() as db:
+                query = text("""
+                    select 
+                        e.id,
+                        e.nombres,
+                        e.apellidos,
+                        e.cedula
+                    from
+                        estudiante_asignatura ea join asignatura a on ea.asignatura_id = a.id
+                        join usuario e on e.id = ea.estudiante_id
+                    where
+                        asignatura_id != :asignatura_id
+                """)
+                result = db.execute(query, {'asignatura_id': id}).fetchall()
+                
+                estudiantes = [{'id': row[0], 'nombres': row[1], 'apellidos': row[2], 'cedula': row[3]} for row in result]
+                
+                return estudiantes
+            
+            

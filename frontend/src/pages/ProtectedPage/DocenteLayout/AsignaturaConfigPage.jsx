@@ -20,11 +20,15 @@ import { buttons_docente } from "../../../assets/ButtonsNav/BtnsSidebar";
 import SelectForm from "../../../components/Forms/Fields/SelectForm";
 import BreadCrumbs from "../../../components/Navigation/breadCrumbs";
 import Sidebar from "../../../components/Navigation/Sidebar";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function AsignaturaConfigPage({ actions, store }) {
     //* Constantes
+    const navigate = useNavigate();
     const { id } = useParams();
     const [isEditing, setIsEditing] = useState(false);
+    const id_docente = store.id_user_auth;
     const {
         register,
         handleSubmit,
@@ -37,28 +41,21 @@ function AsignaturaConfigPage({ actions, store }) {
     const [asignatura, setAsignatura] = useState({});
 
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [subjectData, setSubjectData] = useState({
-        name: "Matemáticas Discretas",
-        code: "MAT-234",
-        hours: 64,
-        parallel: "A",
-        startDate: "2024-03-01",
-        endDate: "2024-07-31",
-        description:
-            "Curso fundamental de matemáticas discretas que cubre teoría de conjuntos, lógica, y estructuras algebraicas.",
-    });
 
+    //* Función para guardar los cambios
     const handleSave = async (data) => {
-        // Aquí iría la lógica para guardar los cambios
-        // console.log(data);
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setSubjectData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        try {
+            console.log("Datos enviados al backend:", data);
+            const response = await actions.updateAsignatura(id, data);
+            if (response) {
+                toast.success("Cambios guardados correctamente");
+            }
+        } catch (error) {
+            console.error("Error al guardar los cambios:", error.response.data);
+            toast.error("Error al guardar los cambios");
+        } finally {
+            setIsEditing(false);
+        }
     };
 
     //* Breadcrumbs items
@@ -116,6 +113,35 @@ function AsignaturaConfigPage({ actions, store }) {
         { value: "E", label: "E" },
     ];
 
+    const handleEdit = () => {
+        setIsEditing(!isEditing);
+    };
+
+    //* Función para manejar eliminación
+    const handleDelete = async () => {
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Estás a punto de eliminar la asignatura. Esta acción no se puede deshacer.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#8da579",
+            cancelButtonColor: "#ccb078",
+            confirmButtonText: "Sí, borrar!",
+            cancelButtonText: "Cancelar",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await actions.deleteAsignatura(id);
+                    navigate("/home/docente");
+                    toast.success("Asignatura eliminada correctamente");
+                } catch (error) {
+                    console.error(error);
+                    toast.error("Error al eliminar el elemento");
+                }
+            }
+        });
+    };
+
     return (
         <div>
             <div className="fixed left-0 top-16 h-full bg-gray-800">
@@ -141,18 +167,7 @@ function AsignaturaConfigPage({ actions, store }) {
                                         Configuración de Asignatura
                                     </h1>
                                     <div className="flex items-center space-x-3">
-                                        {!isEditing ? (
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    setIsEditing(true)
-                                                }
-                                                className="flex items-center space-x-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
-                                            >
-                                                <Edit3 className="w-4 h-4" />
-                                                <span>Editar</span>
-                                            </button>
-                                        ) : (
+                                        {isEditing && (
                                             <button
                                                 type="submit"
                                                 className="flex items-center space-x-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors"
@@ -161,6 +176,14 @@ function AsignaturaConfigPage({ actions, store }) {
                                                 <span>Guardar</span>
                                             </button>
                                         )}
+                                        <button
+                                            type="button"
+                                            onClick={handleEdit}
+                                            className="flex items-center space-x-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                                        >
+                                            <Edit3 className="w-4 h-4" />
+                                            <span>Editar</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -188,7 +211,6 @@ function AsignaturaConfigPage({ actions, store }) {
                                                             required:
                                                                 "Este campo es obligatorio",
                                                         })}
-                                                        onChange={handleChange}
                                                         disabled={!isEditing}
                                                         className={`w-full p-3 border rounded-lg bg-gray-50 disabled:opacity-75 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
                                                             errors.nombre
@@ -229,7 +251,6 @@ function AsignaturaConfigPage({ actions, store }) {
                                                         required:
                                                             "Este campo es obligatorio",
                                                     })}
-                                                    onChange={handleChange}
                                                     disabled={!isEditing}
                                                     className="w-full p-3 border rounded-lg bg-gray-50 disabled:opacity-75 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                                                 />
@@ -283,7 +304,6 @@ function AsignaturaConfigPage({ actions, store }) {
                                                                     "Este campo es obligatorio",
                                                             }
                                                         )}
-                                                        onChange={handleChange}
                                                         disabled={!isEditing}
                                                         className={`w-full p-3 border rounded-lg bg-gray-50 disabled:opacity-75 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
                                                             errors.fecha_inicio
@@ -314,7 +334,6 @@ function AsignaturaConfigPage({ actions, store }) {
                                                                     "Este campo es obligatorio",
                                                             }
                                                         )}
-                                                        onChange={handleChange}
                                                         disabled={!isEditing}
                                                         className={`w-full p-3 border rounded-lg bg-gray-50 disabled:opacity-75 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
                                                             errors.fecha_fin
@@ -331,6 +350,12 @@ function AsignaturaConfigPage({ actions, store }) {
                                                         </p>
                                                     )}
                                                 </div>
+                                                <input
+                                                    type="number"
+                                                    value={id_docente}
+                                                    hidden
+                                                    {...register("docente_id")}
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -344,49 +369,14 @@ function AsignaturaConfigPage({ actions, store }) {
                                             </h2>
                                         </div>
                                         <div className="p-6">
-                                            {showDeleteConfirm ? (
-                                                <div className="space-y-4">
-                                                    <Alert variant="destructive">
-                                                        <AlertTriangle className="w-4 h-4" />
-                                                        <AlertDescription>
-                                                            ¿Estás seguro de que
-                                                            deseas eliminar esta
-                                                            asignatura? Esta
-                                                            acción no se puede
-                                                            deshacer.
-                                                        </AlertDescription>
-                                                    </Alert>
-                                                    <div className="flex space-x-3">
-                                                        <button
-                                                            onClick={() =>
-                                                                setShowDeleteConfirm(
-                                                                    false
-                                                                )
-                                                            }
-                                                            className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                                                        >
-                                                            Cancelar
-                                                        </button>
-                                                        <button className="flex-1 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
-                                                            Confirmar
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <button
-                                                    onClick={() =>
-                                                        setShowDeleteConfirm(
-                                                            true
-                                                        )
-                                                    }
-                                                    className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                    <span>
-                                                        Eliminar Asignatura
-                                                    </span>
-                                                </button>
-                                            )}
+                                            <button
+                                                type="button"
+                                                onClick={() => handleDelete()}
+                                                className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                                <span>Eliminar Asignatura</span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

@@ -3,6 +3,7 @@ from models.ResultadoTest import ResultadoTest
 from sqlalchemy import func, case
 from models.EstudianteAsignatura import EstudianteAsignatura
 from sqlalchemy import text
+from models.Usuario import Usuario
 from datetime import datetime, timedelta
 
 from modules.resultados.schemas.resultado_test_schema import InformeResultadoAsignatura
@@ -98,7 +99,6 @@ class ResultadoTestControl:
             # Construir la respuesta en formato JSON
             resultado_json = {
                 "asignatura_id": asignatura_id,
-                "periodo": "última semana",
                 "niveles_estres": [
                     {"nivel_estres": "alto", "cantidad": niveles["alto"]},
                     {"nivel_estres": "medio", "cantidad": niveles["medio"]},
@@ -112,3 +112,4 @@ class ResultadoTestControl:
         resultados = self.obtener_resultados_por_estudiante(estudiante_id)
         resultados_resueltos = [resultado for resultado in resultados if resultado.fecha_realizacion is not None]
         return resultados_resueltos
+    

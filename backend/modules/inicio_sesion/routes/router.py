@@ -115,6 +115,9 @@ def importar_usuarios(request: ImportarUsuariosRequest):
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+    
+    
+
 
 
 @router.get("/usuarios/", tags=["Usuarios"])
