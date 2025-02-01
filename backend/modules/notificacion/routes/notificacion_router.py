@@ -17,6 +17,7 @@ router_notificaciones = APIRouter()
 notificaciones_controller = NotificacionController()
 token_store = {}
 
+
 @router_notificaciones.get("/notificaciones/usuario/{id}", tags=["Notificaciones"])
 def prueba(id: int):
     notificaciones_usuario = notificaciones_controller.obtener_notificaciones_por_usuario(id)

@@ -4,6 +4,8 @@ from sqlalchemy import text
 from core.database import DatabaseEngine
 from models.Notificacion import Notificacion
 import colorama
+import os
+
 
 class NotificacionController:
     def __init__(self):
@@ -70,3 +72,4 @@ class NotificacionController:
             return {
                 "id": usuario[0],
             }
+
