@@ -13,6 +13,7 @@
         "@headlessui/react": "^2.2.0",
         "axios": "^1.7.9",
         "clsx": "^2.1.1",
+        "crypto-js": "^4.2.0",
         "exceljs": "^4.4.0",
         "jwt-decode": "^4.0.0",
         "lucide-react": "^0.468.0",
@@ -28,6 +29,7 @@
         "react-tooltip": "^5.28.0",
         "recharts": "^2.15.0",
         "sweetalert2": "^11.15.3",
+        "sweetalert2-react-content": "^5.1.0",
         "tailwind-merge": "^2.6.0",
         "tailwind-scrollbar-hide": "^2.0.0",
         "tailwind-variants": "^0.3.0"

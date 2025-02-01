@@ -49,8 +49,6 @@ def guardar_asignatura(asignatura: AsignaturaCreate):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
     
-
-    
 @router_asignatura.put("/asignaturas/{id}", response_model=AsignaturaResponse,  tags=["Aginaturas"])
 def editar_asignatura(id: int, asignatura: AsignaturaUpdate):
     response = ac.actualizar_asignatura(id, asignatura)
