@@ -16,11 +16,6 @@ const AsignacionTestApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data;
     },
 
-    createAsignacionTestGrupal: async (asignacion) => {
-        const response = await api.post("/asignacion_test/grupal", asignacion);
-        return response.data;
-    },
-
     updateAsignacionTest: async (id, data) => {
         const response = await api.put(`/asignacion_test/${id}`, data);
         return response.data;

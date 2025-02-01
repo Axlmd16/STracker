@@ -25,6 +25,18 @@ const CuentasApi = ({ getStore, getActions, setStore, api }) => ({
         const response = await api.get("/test_estres_ultimos");
         return response.data.data;
     },
+
+    recuperar_password: async (data) => {
+        const api = getStore().api;
+        const response = await api.post(`/send-recovery-email`, data)
+        return response.data
+    },
+
+    reset_password: async (data) => {
+        const api = getStore().api;
+        const response = await api.put(`/send-reset_password-email`, data)
+        return response.data
+    },
 });
 
 export default CuentasApi;

@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from sqlalchemy import text
 from core.database import DatabaseEngine
 from models.Notificacion import Notificacion
-import os
+import colorama
 
 class NotificacionController:
     def __init__(self):
@@ -40,20 +40,33 @@ class NotificacionController:
             return {
                 "id": usuario[0],
                 "nombres": usuario[1],
-                "telefono": usuario[4],
+                "apellidos": usuario[2],
+                "email": usuario[3],
             }
 
-    def crear_notificacion(self, estudiante_asignatura_id, titulo, mensaje):
+    def crear_notificacion_estudiante(self, estudiante_asignatura_id, titulo, nombre_asignatura):
         with DatabaseEngine.get_session() as db:
             estudiante = self.obtener_estudiante_para_notificacion(estudiante_asignatura_id)
-
+            mensaje = f"Estimado estudiante {estudiante["nombres"]} {estudiante["apellidos"]}\nEn la asignatura '{nombre_asignatura}' hay un nuevo test disponible para realizar. No pierdas la oportunidad de completarlo dentro del plazo establecido."
             notificacion = Notificacion(titulo=titulo, mensaje=mensaje, fecha=datetime.now(), usuario_id=estudiante["id"])
+            email = estudiante["email"]
+            info_notificacion = [notificacion.titulo, notificacion.mensaje, email]
             db.add(notificacion)
             db.commit()
             db.refresh(notificacion)
-            numero_estudiante = f"+{estudiante['telefono']}"
-            self.enviar_notificacion(numero_estudiante, mensaje) #TODO: Terminar de implementar enviar_notificaciones a wahtsapp
-            return notificacion
+            return info_notificacion
 
-    def enviar_notificacion(self, numero_estudiante, mensaje):
-        pass
+    #* Para recuperar contraseñas
+    def verificar_usuario(self, email: str, cedula: str):
+        with DatabaseEngine.get_session() as db:
+            usuario = db.execute(
+                text("SELECT * FROM usuario WHERE email = :email AND cedula = :cedula"),
+                {"email": email, "cedula": cedula}
+            ).fetchone()
+
+            if not usuario:
+                return None
+
+            return {
+                "id": usuario[0],
+            }
