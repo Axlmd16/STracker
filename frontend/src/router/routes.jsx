@@ -29,6 +29,8 @@ import PageRecomendaciones from "../pages/ProtectedPage/AdminLayout/PageRecomend
 import RecomendacionesTestEstres from "../components/Tables/RecomendacionesTestEstres";
 import GroupDetails from "../util/GroupDetails";
 import PerfilPage from "../pages/PublicPages/PerfilPage";
+import RecuperarPassword from "../pages/PublicPages/RecuperarPassword";
+import ResetPassword from "../pages/PublicPages/ResetPassword";
 
 function Rutas({ store, actions }) {
     const rol = store.access_role;
@@ -52,12 +54,13 @@ function Rutas({ store, actions }) {
 
                 {/* Main Content */}
                 <div
-                    className={`flex-grow ${store.isAuthenticated
+                    className={`flex-grow ${
+                        store.isAuthenticated
                             ? rol === "ADMINISTRADOR"
                                 ? "ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
                                 : "mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
                             : ""
-                        } bg-gray-100`}
+                    } bg-gray-100`}
                 >
                     <Routes>
                         {/* Rutas públicas */}
@@ -82,17 +85,6 @@ function Rutas({ store, actions }) {
                                         }`}
                                 >
                                     <LoginPage
-                                        actions={actions}
-                                        store={store}
-                                    />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/login/perfil"
-                            element={
-                                <ProtectedRoute>
-                                    <PerfilPage
                                         actions={actions}
                                         store={store}
                                     />

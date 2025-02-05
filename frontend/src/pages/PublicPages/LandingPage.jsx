@@ -17,14 +17,14 @@ function LandingPage() {
                         Una solución innovadora para monitorear y gestionar el
                         estrés académico de estudiantes de manera eficiente.
                     </p>
-                    <div className="mt-8">
+                    {/* <div className="mt-8">
                         <a
                             href="/login"
                             className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-8 rounded-lg font-medium text-lg transition"
                         >
                             Comenzar Ahora
                         </a>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 

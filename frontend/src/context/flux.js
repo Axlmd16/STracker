@@ -5,6 +5,7 @@ import EstudianteApi from "../api/AcademicApi/EstudianteApi";
 import TareasApi from "../api/AcademicApi/TareasApi";
 import DocenteApi from "../api/AdminApi/DocenteApi";
 import AuthApi from "../api/LoginApi/AuthApi";
+import RecuperacionApi from "../api/LoginApi/Recuperacion";
 import CuentasApi from "../api/LoginApi/CuentasApi";
 import ResultadoTestApi from "../api/Resultados/resultadoTestApi";
 import AsignacionTestApi from "../api/TestEstress/AsignacionTest";
