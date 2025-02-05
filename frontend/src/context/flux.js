@@ -13,6 +13,8 @@ import TestEstresApi from "../api/TestEstress/TestEstresApi";
 import GroupApi from "../api/GroupApi/GroupApi";
 import RecomendacionesApi from "../api/TestEstress/RecomendacionesApi";
 import NotificaionApi from "../api/NotificacionApi/NotificaionApi";
+import RecuperacionApi from "../api/LoginApi/Recuperacion";
+
 
 const getState = ({ getStore, getActions, setStore }) => {
     const API_BASE_URL = "http://127.0.0.1:8000";

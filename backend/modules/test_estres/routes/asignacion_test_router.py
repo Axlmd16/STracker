@@ -157,7 +157,6 @@ async def enviarNotificacionEstudiante(titulo, mensaje, email):
         print(f"Error al enviar la notificación: {e}")
         return False
 
-
 #* ----------------------------------------
 
 @router_asignacion_test.put("/asignacion_test/{id}", tags=["Asignacion Test"])

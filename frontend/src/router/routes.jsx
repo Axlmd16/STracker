@@ -54,12 +54,13 @@ function Rutas({ store, actions }) {
 
                 {/* Main Content */}
                 <div
-                    className={`flex-grow ${store.isAuthenticated
-                        ? rol === "ADMINISTRADOR"
-                            ? "ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
-                            : "mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
-                        : ""
-                        } bg-gray-100`}
+                    className={`flex-grow ${
+                        store.isAuthenticated
+                            ? rol === "ADMINISTRADOR"
+                                ? "ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
+                                : "mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
+                            : ""
+                    } bg-gray-100`}
                 >
                     <Routes>
                         {/* Rutas públicas */}
@@ -88,35 +89,6 @@ function Rutas({ store, actions }) {
                                         store={store}
                                     />
                                 </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/login/perfil"
-                            element={
-                                <ProtectedRoute>
-                                    <PerfilPage
-                                        actions={actions}
-                                        store={store}
-                                    />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/recuperar/password"
-                            element={
-                                <RecuperarPassword
-                                    actions={actions}
-                                    store={store}
-                                />
-                            }
-                        />
-                        <Route
-                            path="/reset_password/:token/:id_cuenta"
-                            element={
-                                <ResetPassword
-                                    actions={actions}
-                                    store={store}
-                                />
                             }
                         />
 

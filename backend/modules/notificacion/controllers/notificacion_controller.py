@@ -4,6 +4,8 @@ from sqlalchemy import text
 from core.database import DatabaseEngine
 from models.Notificacion import Notificacion
 import colorama
+import os
+
 
 class NotificacionController:
     def __init__(self):
@@ -55,4 +57,19 @@ class NotificacionController:
             db.commit()
             db.refresh(notificacion)
             return info_notificacion
+
+    #* Para recuperar contraseñas
+    def verificar_usuario(self, email: str, cedula: str):
+        with DatabaseEngine.get_session() as db:
+            usuario = db.execute(
+                text("SELECT * FROM usuario WHERE email = :email AND cedula = :cedula"),
+                {"email": email, "cedula": cedula}
+            ).fetchone()
+
+            if not usuario:
+                return None
+
+            return {
+                "id": usuario[0],
+            }
 

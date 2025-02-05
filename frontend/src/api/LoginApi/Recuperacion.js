@@ -1,7 +1,6 @@
 const RecuperacionApi = ({ getStore, getActions, setStore, api }) => ({
 
     validar_usuario_cambio_password: async (data) => {
-        console.log("Entro a validar usuario cambio de contrasenia");
         const api = getStore().api;
         const response = await api.post(`/validar_usuario_cambio_password`, data)
         return response.data
@@ -15,7 +14,7 @@ const RecuperacionApi = ({ getStore, getActions, setStore, api }) => ({
 
     reset_password: async (data) => {
         const api = getStore().api;
-        const response = await api.put(`/reset_password`, data)
+        const response = await api.put(`/send-reset_password-email`, data)
         return response.data
     },
 });
