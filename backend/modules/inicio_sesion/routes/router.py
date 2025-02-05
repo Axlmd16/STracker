@@ -5,9 +5,11 @@ from modules.inicio_sesion.controllers.usuario_control import UsuarioControl
 from modules.inicio_sesion.schemas.usuario_schema import ImportarUsuariosRequest, UsuarioBase, UsuarioCreate, UsuarioResponse, UsuarioUpdate
 from modules.inicio_sesion.controllers.cuenta_control import CuentaControl
 from modules.inicio_sesion.schemas.cuenta_schema import CuentaCreate, CuentaResponse, CuentaUpdate, CuentaUpdateEstado
+from modules.adaptadores.encriptados import PasswordAdapter
 
 
 router = APIRouter(route_class=VerifyTokenRoute)
+manejador_encriptado = PasswordAdapter()
 
 uc = UsuarioControl()
 cc = CuentaControl()
@@ -83,11 +85,12 @@ def guardar_usuario(usuario: UsuarioCreate):
             raise HTTPException(status_code=500, detail="Error al crear el usuario")
 
         username = cc.generar_username(usuario_creado)
-
+        contrasenia_cifrada = manejador_encriptado.encrypt(usuario.cedula)
         # Crear cuenta 
         cuenta = CuentaCreate(
             username=username,
-            password=usuario_creado.cedula,  
+            # password=usuario_creado.cedula,  
+            password=contrasenia_cifrada,  
             estado=True,
             usuario_id=usuario_creado.id
         )

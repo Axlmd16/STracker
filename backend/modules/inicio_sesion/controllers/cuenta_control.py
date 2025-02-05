@@ -2,9 +2,12 @@ from models.Cuenta import Cuenta
 from core.database import DatabaseEngine
 from models.Usuario import Usuario
 from modules.inicio_sesion.schemas.cuenta_schema import CuentaCreate, CuentaRol
+from modules.adaptadores.encriptados import PasswordAdapter
+from sqlalchemy import text
 
 class CuentaControl:
     def __init__(self):
+        self.manejador_encriptado = PasswordAdapter()
         pass
 
     def obtener_cuentas(self):
@@ -73,7 +76,8 @@ class CuentaControl:
             cuenta = db.query(Cuenta).filter(Cuenta.username == data.username).first()
             if not cuenta:
                 return None
-            if cuenta.password != data.password:
+            # if cuenta.password != data.password:
+            if self.manejador_encriptado.verify(data.password, cuenta.password) == False:
                 return None
             return cuenta
         
@@ -91,7 +95,37 @@ class CuentaControl:
                 id_usuario=usr.id
                 )
         
-        
+    def actualizar_password(self, id_cuenta: int, password_hasheado: str):
+        with DatabaseEngine.get_session() as db:
+            cuenta = db.execute(
+                text("SELECT id, password FROM cuenta WHERE id = :id_cuenta"),
+                {"id_cuenta": id_cuenta}
+            ).fetchone()
+
+            if not cuenta:
+                return False
+
+            db.execute(
+                text("UPDATE cuenta SET password = :password_hasheado WHERE id = :id_cuenta"),
+                {"password_hasheado": password_hasheado, "id_cuenta": id_cuenta}
+            )
+            db.commit()
+
+            return True
 
         
     
+    #* Para recuperar contraseñas
+    def verificar_usuario(self, email: str, cedula: str):
+        with DatabaseEngine.get_session() as db:
+            usuario = db.execute(
+                text("SELECT * FROM usuario WHERE email = :email AND cedula = :cedula"),
+                {"email": email, "cedula": cedula}
+            ).fetchone()
+
+            if not usuario:
+                return None
+
+            return {
+                "id": usuario[0],
+            }

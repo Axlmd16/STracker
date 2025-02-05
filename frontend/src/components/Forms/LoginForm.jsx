@@ -100,7 +100,7 @@ const LoginForm = ({ actions, store }) => {
                 </form>
                 <p className="text-center text-gray-500 mt-4">
                     ¿Olvidaste tu contraseña?{" "}
-                    <a href="#" className="text-blue-600 hover:underline">
+                    <a href="/recuperar/password" className="text-blue-600 hover:underline">
                         Recuperar
                     </a>
                 </p>

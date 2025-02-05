@@ -56,17 +56,3 @@ class NotificacionController:
             db.refresh(notificacion)
             return info_notificacion
 
-    #* Para recuperar contraseñas
-    def verificar_usuario(self, email: str, cedula: str):
-        with DatabaseEngine.get_session() as db:
-            usuario = db.execute(
-                text("SELECT * FROM usuario WHERE email = :email AND cedula = :cedula"),
-                {"email": email, "cedula": cedula}
-            ).fetchone()
-
-            if not usuario:
-                return None
-
-            return {
-                "id": usuario[0],
-            }
