@@ -17,7 +17,8 @@ const LeftPanel = ({ activities, name, register, clearErrors, watch }) => {
                             Nueva Actividad Académica
                         </h1>
                         <p className="text-gray-600">
-                            Selecciona y crea una nueva actividad académica
+                            Crea y configura una nueva actividad para tus
+                            estudiantes
                         </p>
                     </div>
                     <div className="space-y-3">

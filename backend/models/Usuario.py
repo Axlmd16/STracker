@@ -26,6 +26,9 @@ class Usuario(Base):
         passive_deletes=True  
     )
     notificaciones = relationship("Notificacion", back_populates="usuario")
+    asignaciones = relationship("AsignacionTest", back_populates="docente")
+    test_realizados = relationship("ResultadoTest", back_populates="estudiante")
+    asignaturas_estudiante = relationship("Asignatura", secondary="estudiante_asignatura", back_populates="estudiantes")
     asignaturas_dictadas = relationship("Asignatura", back_populates="docente")
     
-    asignaturas_estudiante = relationship("EstudianteAsignatura", back_populates="estudiantes")
+    grupos = relationship("Grupo", secondary="estudiante_grupo", back_populates="estudiantes")

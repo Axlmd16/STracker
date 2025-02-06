@@ -32,16 +32,8 @@ const AsignaturaApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data;
     },
 
-    quitarEstudianteAsignatura: async (id_asignatura, id_estudiante) => {
-        console.log("Datos enviados al backend:", {
-            estudiante_id: id_estudiante,
-            asignatura_id: id_asignatura,
-        });
-
-        const response = await api.post(
-            `/asignaturas/${id_asignatura}/estudiantes/${id_estudiante}`
-        );
-
+    deleteUser: async (id) => {
+        const response = await api.delete(`/usuarios/${id}`);
         return response.data;
     },
 
@@ -54,12 +46,6 @@ const AsignaturaApi = ({ getStore, getActions, setStore, api }) => ({
     getStudentsBySubject: async (id) => {
         const response = await api.get(`/asignaturas/${id}/estudiantes`);
         return response.data;
-    },
-
-    //* Asignaturas de un estudiante
-    getAsignaturasEstudiante: async (id) => {
-        const response = await api.get(`/asignaturas/estudiante/${id}`);
-        return response.data.data;
     },
 });
 

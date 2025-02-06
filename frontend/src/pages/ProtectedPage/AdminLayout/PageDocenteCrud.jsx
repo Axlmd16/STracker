@@ -1,4 +1,4 @@
-import { HomeIcon, Import, UserRoundPlus, Users2Icon } from "lucide-react";
+import { Import, UserRoundPlus } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import DocenteForm from "../../../components/Forms/DocenteForm";
 import Modal from "../../../components/Modals/Modal";
@@ -6,7 +6,6 @@ import ModalForm from "../../../components/Modals/ModalForm";
 import DataTableUser from "../../../components/Tables/DataTableUser";
 import ImportDataPage from "./ImportDataPage";
 import { toast } from "react-hot-toast";
-import BreadCrumbs from "../../../components/Navigation/breadCrumbs";
 
 function PageDocenteCrud({ actions, store }) {
     //* Referencias y estados
@@ -70,50 +69,30 @@ function PageDocenteCrud({ actions, store }) {
         fetchDocentes();
     }, [fetchDocentes]);
 
-    //* Items
-    const breadcrumbItems = [
-        {
-            to: "/home/administrador",
-            title: "Inicio",
-            icon: HomeIcon,
-        },
-        {
-            to: "/home/administrador/docentes",
-            title: "Gestion de docentes",
-            icon: Users2Icon,
-            active: true,
-        },
-    ];
-
     return (
         <div className="flex flex-col h-full">
             {/* Encabezado */}
-            <div className="bg-white rounded-md shadow-md">
-                <div className="px-6 py-3 flex items-center space-x-2 text-sm text-gray-600 border-b">
-                    <BreadCrumbs items={breadcrumbItems} />
-                </div>
-                <div className="p-6">
-                    <h1 className="text-2xl font-semibold text-gray-700">
-                        Docentes
-                    </h1>
-                    <div className="flex items-center mt-4">
-                        <p className="text-sm text-gray-500 mt-2">
-                            Crear, editar, eliminar y listar docentes
-                        </p>
-                        <div className="ml-auto">
-                            <button
-                                className="btn btn-primary mt-4 btn-circle"
-                                onClick={handleCreateDocente}
-                            >
-                                <UserRoundPlus size={20} />
-                            </button>
-                            <button
-                                className="btn btn-circle ml-3 bg-info"
-                                onClick={handleImportDocente}
-                            >
-                                <Import size={20} />
-                            </button>
-                        </div>
+            <div className="bg-white p-6 rounded-md shadow-md">
+                <h1 className="text-2xl font-semibold text-gray-700">
+                    Docentes
+                </h1>
+                <div className="flex items-center mt-4">
+                    <p className="text-sm text-gray-500 mt-2">
+                        Crear, editar, eliminar y listar docentes
+                    </p>
+                    <div className="ml-auto">
+                        <button
+                            className="btn btn-primary mt-4 btn-circle"
+                            onClick={handleCreateDocente}
+                        >
+                            <UserRoundPlus size={20} />
+                        </button>
+                        <button
+                            className="btn btn-circle ml-3 bg-info"
+                            onClick={handleImportDocente}
+                        >
+                            <Import size={20} />
+                        </button>
                     </div>
                 </div>
             </div>

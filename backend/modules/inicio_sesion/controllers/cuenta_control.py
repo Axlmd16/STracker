@@ -1,25 +1,22 @@
 from models.Cuenta import Cuenta
-from core.database import DatabaseEngine
-from models.Usuario import Usuario
+from core.database import SessionLocal
+from modules.inicio_sesion.controllers.usuario_control import UsuarioControl
 from modules.inicio_sesion.schemas.cuenta_schema import CuentaCreate, CuentaRol
-from modules.adaptadores.encriptados import PasswordAdapter
-from sqlalchemy import text
 
 class CuentaControl:
     def __init__(self):
-        self.manejador_encriptado = PasswordAdapter()
         pass
 
     def obtener_cuentas(self):
-        with DatabaseEngine.get_session() as db:
+        with SessionLocal() as db:
             return db.query(Cuenta).all()
 
     def obtener_cuenta(self, id: int):
-        with DatabaseEngine.get_session() as db:
+        with SessionLocal() as db:
             return db.query(Cuenta).filter(Cuenta.id == id).first()
         
     def crear_cuenta(self, cuenta):
-        with DatabaseEngine.get_session() as db:
+        with SessionLocal() as db:
             db_cuenta = Cuenta(**cuenta.dict())
             db.add(db_cuenta)
             db.commit()
@@ -27,13 +24,13 @@ class CuentaControl:
             return db_cuenta
 
     def actualizar_cuenta(self, id: int, cuenta):
-        with DatabaseEngine.get_session() as db:
+        with SessionLocal() as db:
             db.query(Cuenta).filter(Cuenta.id == id).update(cuenta.dict())
             db.commit()
             return db.query(Cuenta).filter(Cuenta.id == id).first()
 
     def eliminar_cuenta(self, id: int):
-        with DatabaseEngine.get_session() as db:
+        with SessionLocal() as db:
             cuenta = db.query(Cuenta).filter(Cuenta.id == id).first()
             if cuenta:
                 db.delete(cuenta)
@@ -48,7 +45,7 @@ class CuentaControl:
         
         username = f"{nombre.lower()}.{apellido.lower()}@unl.edu.ec"
         
-        with DatabaseEngine.get_session() as db:
+        with SessionLocal() as db:
             cuenta_existente = db.query(Cuenta).filter(Cuenta.username == username).first()
             
             if cuenta_existente:
@@ -62,7 +59,7 @@ class CuentaControl:
 
     
     def cambiar_estado_cuenta(self, id: int, activar: bool):
-        with DatabaseEngine.get_session() as db:
+        with SessionLocal() as db:
             cuenta = db.query(Cuenta).filter(Cuenta.id == id).first()
             if not cuenta:
                 return None
@@ -72,61 +69,20 @@ class CuentaControl:
             return cuenta
 
     def login(self, data):
-        with DatabaseEngine.get_session() as db:
+        with SessionLocal() as db:
             cuenta = db.query(Cuenta).filter(Cuenta.username == data.username).first()
             if not cuenta:
                 return None
-            # if cuenta.password != data.password:
-            # if self.manejador_encriptado.verify(data.password, cuenta.password) == False:
-            if cuenta.password != data.password and self.manejador_encriptado.verify(data.password, cuenta.password) == False:
+            if cuenta.password != data.password:
                 return None
             return cuenta
-
-
+        
     def combinar_usuario_cuenta(self, cuenta):
-        with DatabaseEngine.get_session() as db:
-            usr =  db.query(Usuario).filter(Usuario.id == cuenta.usuario_id).first()
-    
-            return CuentaRol(
-                id=cuenta.id,
-                username=cuenta.username, 
-                password=cuenta.password, 
-                estado=cuenta.estado, 
-                rol=usr.rol, 
-                id_usuario=usr.id
-                )
+        usuario = UsuarioControl().obtener_usuario(cuenta.usuario_id)
         
-    def actualizar_password(self, id_cuenta: int, password_hasheado: str):
-        with DatabaseEngine.get_session() as db:
-            cuenta = db.execute(
-                text("SELECT id, password FROM cuenta WHERE id = :id_cuenta"),
-                {"id_cuenta": id_cuenta}
-            ).fetchone()
-
-            if not cuenta:
-                return False
-
-            db.execute(
-                text("UPDATE cuenta SET password = :password_hasheado WHERE id = :id_cuenta"),
-                {"password_hasheado": password_hasheado, "id_cuenta": id_cuenta}
-            )
-            db.commit()
-
-            return True
+        return CuentaRol(username=cuenta.username, password=cuenta.password, estado=cuenta.estado, rol=usuario.rol, id_usuario=usuario.id)
+        
+        
 
         
     
-    #* Para recuperar contraseñas
-    def verificar_usuario(self, email: str, cedula: str):
-        with DatabaseEngine.get_session() as db:
-            usuario = db.execute(
-                text("SELECT * FROM usuario WHERE email = :email AND cedula = :cedula"),
-                {"email": email, "cedula": cedula}
-            ).fetchone()
-
-            if not usuario:
-                return None
-
-            return {
-                "id": usuario[0],
-            }

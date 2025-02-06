@@ -12,11 +12,11 @@ function InterfaceTableActividades({ actions, store, id }) {
     const cargarActividades = async () => {
         setLoading(true);
         try {
-            const data = await actions.getAcividadesPorAsignatura(id);
+            const data = await actions.getActividades();
             setData(data);
         } catch (error) {
-            console.error("Error al cargar las actividades:", error.message);
-            toast.error("Error al cargar las actividades:  " + error.message);
+            console.error("Error al cargar las actividades:", error);
+            toast.error("Error al cargar las actividades");
         } finally {
             setLoading(false);
         }
@@ -40,8 +40,13 @@ function InterfaceTableActividades({ actions, store, id }) {
             }
         };
 
+        // Ejecutar la actualización inicial
         actualizarEstados();
-        const intervalo = setInterval(actualizarEstados, 60000);
+
+        // Configurar el intervalo para actualizaciones periódicas
+        const intervalo = setInterval(actualizarEstados, 60000); // cada minuto
+
+        // Limpiar el intervalo cuando el componente se desmonte
         return () => clearInterval(intervalo);
     }, []);
 
@@ -72,12 +77,12 @@ function InterfaceTableActividades({ actions, store, id }) {
                 selector: (row) => row.estado,
                 cell: (row) => (
                     <span
-                        className={`px-3 py-1 rounded-full  text-sm font-medium  ${
-                            row.estado === "PENDIENTE"
-                                ? "text-yellow-800 bg-yellow-100"
+                        className={`px-3 py-1 rounded-full  text-sm ${
+                            row.estado === "Pendiente"
+                                ? "bg-yellow-400"
                                 : row.estado === "EN_PROGRESO"
-                                ? "text-green-800 bg-green-100"
-                                : "text-red-800 bg-red-100"
+                                ? "bg-green-300"
+                                : "bg-red-400"
                         }`}
                     >
                         {capitalize(row.estado.replace("_", " "))}{" "}

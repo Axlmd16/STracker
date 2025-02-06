@@ -9,8 +9,6 @@ const ImputForm = ({
     required = true,
     icon: Icon,
     type = "text",
-    disabled = false,
-    maxLength,
 }) => (
     <div className="relative z-0 w-full mb-5 group">
         <input
@@ -23,8 +21,6 @@ const ImputForm = ({
             placeholder=" "
             {...register(name, { required: required })}
             onFocus={() => clearErrors(name)}
-            disabled={disabled}
-            maxLength={maxLength}
         />
         <label
             htmlFor={name}

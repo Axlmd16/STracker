@@ -21,16 +21,6 @@ import PageTestEstresCrud from "../pages/ProtectedPage/AdminLayout/TestEstres";
 import AsignacionTestPage from "../pages/ProtectedPage/DocenteLayout/AsignacionTestPage";
 import NuevaActividadPage from "../pages/ProtectedPage/DocenteLayout/NuevaActividadPage";
 import ActividadDetalles from "../pages/ProtectedPage/DocenteLayout/ActividadDetalles";
-import CuentaCrudPage from "../pages/ProtectedPage/AdminLayout/CuentaCrudPage";
-import AsignaturaConfigPage from "../pages/ProtectedPage/DocenteLayout/AsignaturaConfigPage";
-import ResultadoTestPage from "../pages/ProtectedPage/EstudianteLayout/ResultadoTestPage";
-import GroupPage from "../pages/ProtectedPage/DocenteLayout/GroupPage";
-import PageRecomendaciones from "../pages/ProtectedPage/AdminLayout/PageRecomendaciones";
-import RecomendacionesTestEstres from "../components/Tables/RecomendacionesTestEstres";
-import GroupDetails from "../util/GroupDetails";
-import PerfilPage from "../pages/PublicPages/PerfilPage";
-import RecuperarPassword from "../pages/PublicPages/RecuperarPassword";
-import ResetPassword from "../pages/PublicPages/ResetPassword";
 
 function Rutas({ store, actions }) {
     const rol = store.access_role;
@@ -54,12 +44,13 @@ function Rutas({ store, actions }) {
 
                 {/* Main Content */}
                 <div
-                    className={`flex-grow ${store.isAuthenticated
+                    className={`flex-grow ${
+                        store.isAuthenticated
                             ? rol === "ADMINISTRADOR"
                                 ? "ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
                                 : "mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-slate-200"
                             : ""
-                        } bg-gray-100`}
+                    } bg-gray-100`}
                 >
                     <Routes>
                         {/* Rutas públicas */}
@@ -68,8 +59,9 @@ function Rutas({ store, actions }) {
                             element={
                                 <ProtectedRoute
                                     isPublic={true}
-                                    to={`/home/${rol ? rol.toLowerCase() : "default"
-                                        }`}
+                                    to={`/home/${
+                                        rol ? rol.toLowerCase() : "default"
+                                    }`}
                                 >
                                     <LandingPage />
                                 </ProtectedRoute>
@@ -80,43 +72,15 @@ function Rutas({ store, actions }) {
                             element={
                                 <ProtectedRoute
                                     isPublic={true}
-                                    to={`/home/${rol ? rol.toLowerCase() : "default"
-                                        }`}
+                                    to={`/home/${
+                                        rol ? rol.toLowerCase() : "default"
+                                    }`}
                                 >
                                     <LoginPage
                                         actions={actions}
                                         store={store}
                                     />
                                 </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/login/perfil"
-                            element={
-                                <ProtectedRoute>
-                                    <PerfilPage
-                                        actions={actions}
-                                        store={store}
-                                    />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/recuperar/password"
-                            element={
-                                <RecuperarPassword
-                                    actions={actions}
-                                    store={store}
-                                />
-                            }
-                        />
-                        <Route
-                            path="/reset_password/:token/:id_cuenta"
-                            element={
-                                <ResetPassword
-                                    actions={actions}
-                                    store={store}
-                                />
                             }
                         />
 
@@ -146,45 +110,10 @@ function Rutas({ store, actions }) {
                         <Route
                             path="/home/administrador/tests"
                             element={
-                                <ProtectedRoute>
                                     <PageTestEstresCrud
                                         actions={actions}
                                         store={store}
                                     />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/home/administrador/tests/recomendaciones/:idTest"
-                            element={
-                                <ProtectedRoute>
-                                    <RecomendacionesTestEstres
-                                        actions={actions}
-                                        store={store}
-                                    />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/home/administrador/recomendaciones"
-                            element={
-                                <ProtectedRoute>
-                                    <PageRecomendaciones
-                                        actions={actions}
-                                        store={store}
-                                    />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/home/administrador/cuentas"
-                            element={
-                                <ProtectedRoute>
-                                    <CuentaCrudPage
-                                        actions={actions}
-                                        store={store}
-                                    />
-                                </ProtectedRoute>
                             }
                         />
                         {/* Rutas docente */}
@@ -200,7 +129,7 @@ function Rutas({ store, actions }) {
                             }
                         />
                         <Route
-                            path="/home/docente/asignatura/:id/asignaciones"
+                            path="/home/docente/asignacion"
                             element={
                                 <ProtectedRoute>
                                     <AsignacionTestPage
@@ -208,24 +137,13 @@ function Rutas({ store, actions }) {
                                         store={store}
                                     />
                                 </ProtectedRoute>
-                            }
+                            }   
                         />
                         <Route
                             path="/home/docente/asignatura/:id"
                             element={
                                 <ProtectedRoute>
                                     <AsignaturaDetallePage
-                                        actions={actions}
-                                        store={store}
-                                    />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/home/docente/asignatura/:id/configuracion"
-                            element={
-                                <ProtectedRoute>
-                                    <AsignaturaConfigPage
                                         actions={actions}
                                         store={store}
                                     />
@@ -244,28 +162,6 @@ function Rutas({ store, actions }) {
                             }
                         />
                         <Route
-                            path="/home/docente/asignatura/:id/grupos"
-                            element={
-                                <ProtectedRoute>
-                                    <GroupPage
-                                        actions={actions}
-                                        store={store}
-                                    />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/home/docente/gruposDetallesUpdate/:id/:idAsignatura"
-                            element={
-                                <ProtectedRoute>
-                                    <GroupDetails
-                                        actions={actions}
-                                        store={store}
-                                    />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
                             path="/home/docente/asignatura/:id/actividades"
                             element={
                                 <ProtectedRoute>
@@ -277,7 +173,7 @@ function Rutas({ store, actions }) {
                             }
                         />
                         <Route
-                            path="/home/docente/asignatura/:asignaturaId/actividades/:actividadId"
+                            path="/home/docente/asignatura/:id/actividades/:id"
                             element={
                                 <ProtectedRoute>
                                     <ActividadDetalles
@@ -293,17 +189,6 @@ function Rutas({ store, actions }) {
                             element={
                                 <ProtectedRoute>
                                     <HomeEstudiantePage
-                                        actions={actions}
-                                        store={store}
-                                    />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/home/estudiante/resultado_test/:id"
-                            element={
-                                <ProtectedRoute>
-                                    <ResultadoTestPage
                                         actions={actions}
                                         store={store}
                                     />

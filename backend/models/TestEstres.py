@@ -12,4 +12,3 @@ class TestEstres(Base):
     
     # Relación
     asignaciones_test = relationship("AsignacionTest", back_populates="test")
-    recomendaciones = relationship("Recomendacion", secondary="recomendacion_test", back_populates="tests")
