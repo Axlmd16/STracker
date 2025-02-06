@@ -12,11 +12,11 @@ function InterfaceTableActividades({ actions, store, id }) {
     const cargarActividades = async () => {
         setLoading(true);
         try {
-            const data = await actions.getActividades();
+            const data = await actions.getAcividadesPorAsignatura(id);
             setData(data);
         } catch (error) {
-            console.error("Error al cargar las actividades:", error);
-            toast.error("Error al cargar las actividades");
+            console.error("Error al cargar las actividades:", error.message);
+            toast.error("Error al cargar las actividades:  " + error.message);
         } finally {
             setLoading(false);
         }
@@ -40,13 +40,8 @@ function InterfaceTableActividades({ actions, store, id }) {
             }
         };
 
-        // Ejecutar la actualización inicial
         actualizarEstados();
-
-        // Configurar el intervalo para actualizaciones periódicas
-        const intervalo = setInterval(actualizarEstados, 60000); // cada minuto
-
-        // Limpiar el intervalo cuando el componente se desmonte
+        const intervalo = setInterval(actualizarEstados, 60000);
         return () => clearInterval(intervalo);
     }, []);
 
@@ -77,12 +72,12 @@ function InterfaceTableActividades({ actions, store, id }) {
                 selector: (row) => row.estado,
                 cell: (row) => (
                     <span
-                        className={`px-3 py-1 rounded-full  text-sm ${
-                            row.estado === "Pendiente"
-                                ? "bg-yellow-400"
+                        className={`px-3 py-1 rounded-full  text-sm font-medium  ${
+                            row.estado === "PENDIENTE"
+                                ? "text-yellow-800 bg-yellow-100"
                                 : row.estado === "EN_PROGRESO"
-                                ? "bg-green-300"
-                                : "bg-red-400"
+                                ? "text-green-800 bg-green-100"
+                                : "text-red-800 bg-red-100"
                         }`}
                     >
                         {capitalize(row.estado.replace("_", " "))}{" "}

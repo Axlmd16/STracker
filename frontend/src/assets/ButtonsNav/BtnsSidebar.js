@@ -1,6 +1,20 @@
-import { BookA, HeartHandshake, Key, UsersRound } from "lucide-react";
+import {
+    ClipboardList,
+    HeartHandshake,
+    HomeIcon,
+    Key,
+    Group,
+    Settings,
+    UsersRound,
+    Star,
+} from "lucide-react";
 
 export const buttons_admin = [
+    {
+        icon: HomeIcon,
+        href: "/home/administrador",
+        tooltip: "Inicio",
+    },
     {
         icon: Key,
         href: "/home/administrador/cuentas",
@@ -12,6 +26,11 @@ export const buttons_admin = [
         tooltip: "Tests de estres",
     },
     {
+        icon: Star,
+        href: "/home/administrador/recomendaciones",
+        tooltip: "Recomendaciones",
+    },
+    {
         icon: UsersRound,
         href: "/home/administrador/docentes",
         tooltip: "Docentes",
@@ -20,23 +39,38 @@ export const buttons_admin = [
 
 export const buttons_docente = [
     {
+        icon: HomeIcon,
+        href: "/home/docente",
+        tooltip: "Inicio",
+    },
+    {
         icon: UsersRound,
         href: "/home/docente/asignatura/:id/estudiantes",
         tooltip: "Estudiantes",
     },
     {
-        icon: BookA,
-        href: "/home/docente/asignaturas",
+        icon: ClipboardList,
+        href: "/home/docente/asignatura/:id/asignaciones",
+        tooltip: "Asignaciones",
+    },
+    {
+        icon: Group,
+        href: "/home/docente/asignatura/:id/grupos",
         tooltip: "Asignaturas",
     },
     {
-        icon: BookA,
-        href: "/home/docente/asignacion",
-        tooltip: "Asignacion de tests",
+        icon: Settings,
+        href: "/home/docente/asignatura/:id/configuracion",
+        tooltip: "Configuracion",
     },
 ];
 
 export const buttons_estudiante = [
+    {
+        icon: HomeIcon,
+        href: "/home/estudiante",
+        tooltip: "Inicio",
+    },
     {
         icon: UsersRound,
         href: "/home/estudiante/asignaturas",

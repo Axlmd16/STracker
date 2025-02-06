@@ -5,17 +5,19 @@ import {
     Trash2Icon,
     ListOrdered,
     LayoutGrid,
-    Eye 
+    Eye
 } from "lucide-react";
 import React, { useEffect, useState, useCallback, useMemo, forwardRef, useImperativeHandle } from "react";
 import { toast } from "react-hot-toast";
 import CustomDataTable from "./CustomDataTable";
 import SearchBar from "../Navigation/search_bar";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const DataTableTestEstres = forwardRef(
     ({ actions, handleUpdate, fetchData, data, pending, searchKeys }, ref) => {
         const [filteredData, setFilteredData] = useState([]);
+        const navigate = useNavigate();
 
         useEffect(() => {
             setFilteredData(data);
@@ -25,7 +27,11 @@ const DataTableTestEstres = forwardRef(
             reload: fetchData,
         }));
 
-        //* Filtrar datos según el término de búsqueda
+        const handleRecomendacionesClick = (id) => {
+            navigate(`/home/administrador/tests/recomendaciones/${id}`);
+        };
+
+        //* Filtrar datos según el término de búsqueda 
         const handleSearch = useCallback(
             (e) => {
                 const value = e.target.value.toLowerCase();
@@ -39,12 +45,12 @@ const DataTableTestEstres = forwardRef(
             [data, searchKeys]
         );
 
-        //* Función para manejar actualizaciones
+        //* Función para manejar actualizaciones 
         const handleUpdateClick = (row) => {
             handleUpdate(row);
         };
 
-        //* Función para manejar eliminación
+        //* Función para manejar eliminación 
         const handleDeleteClick = async (row) => {
             Swal.fire({
                 title: "¿Estás seguro?",
@@ -68,7 +74,7 @@ const DataTableTestEstres = forwardRef(
             });
         };
 
-        //* Definición de las columnas de la tabla
+        //* Definición de las columnas de la tabla 
         const columns = useMemo(
             () => [
                 {
@@ -82,16 +88,16 @@ const DataTableTestEstres = forwardRef(
                     sortable: true,
                     width: "80px",
                 },
-                {
-                    name: (
-                        <div className="flex justify-center">
-                            <span>ID</span>
-                        </div>
-                    ),
-                    selector: (row) => row.id,
-                    sortable: true,
-                     width: "80px"
-                },
+                // {
+                //     name: (
+                //         <div className="flex justify-center">
+                //             <span>ID</span>
+                //         </div>
+                //     ),
+                //     selector: (row) => row.id,
+                //     sortable: true,
+                //     width: "80px"
+                // },
                 {
                     name: (
                         <div className="flex justify-center">
@@ -100,7 +106,7 @@ const DataTableTestEstres = forwardRef(
                     ),
                     selector: (row) => row.descripcion,
                     sortable: true,
-                     width: "250px"
+                    // width: "300px"
                 },
                 {
                     name: (
@@ -119,7 +125,7 @@ const DataTableTestEstres = forwardRef(
                             </button>
                         </div>
                     ),
-                     width: "140px"
+                    width: "100px"
                 },
                 {
                     name: (
@@ -127,9 +133,9 @@ const DataTableTestEstres = forwardRef(
                             <span>URL</span>
                         </div>
                     ),
-                    selector: (row) => row.url, 
+                    selector: (row) => row.url,
                     sortable: true,
-                     width: "250px"
+                    width: "350px"
                 },
                 {
                     name: (
@@ -137,9 +143,22 @@ const DataTableTestEstres = forwardRef(
                             <span>Estado</span>
                         </div>
                     ),
-                    selector: (row) => (row.estado == 1 ? "Activo" : "Inactivo"), 
+                    selector: (row) => (row.estado == 1 ? "Activo" : "Inactivo"),
                     sortable: true,
-                    width: "120px", 
+                    width: "120px",
+                },
+                {
+                    name: "Recomendaciones",
+                    cell: (row) => (
+                        <div className="flex justify-center items-center w-full">
+                            <button
+                                className="btn-custom btn-custom-success"
+                                onClick={() => handleRecomendacionesClick(row.id)}
+                            >
+                                Vincular
+                            </button>
+                        </div>
+                    ),
                 },
                 {
                     name: (

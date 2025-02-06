@@ -1,10 +1,11 @@
-import { Import, PlusCircle } from "lucide-react";
+import { HeartPulse, HomeIcon, Import, PlusCircle } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import TestEstresForm from "../../../components/Forms/TestEstresForm";
 import Modal from "../../../components/Modals/Modal";
 import ModalForm from "../../../components/Modals/ModalForm";
 import ImportDataPage from "./ImportDataPage";
 import DataTableTestEstres from "../../../components/Tables/DataTableTestEstres";
+import BreadCrumbs from "../../../components/Navigation/breadCrumbs";
 
 function PageTestEstresCrud({ actions, store }) {
     const modalFormRef = useRef(null);
@@ -57,37 +58,48 @@ function PageTestEstresCrud({ actions, store }) {
         fetchTestEstres();
     }, [fetchTestEstres]);
 
+    //* Items
+    const breadcrumbItems = [
+        {
+            to: "/home/administrador",
+            title: "Inicio",
+            icon: HomeIcon,
+        },
+        {
+            to: "/home/administrador/tests",
+            title: "Gestion de tests de estres",
+            icon: HeartPulse,
+            active: true,
+        },
+    ];
+
     return (
         <div className="flex flex-col h-full">
-            <div className="bg-white p-6 rounded-md shadow-md">
-                <h1 className="text-2xl font-semibold text-gray-700">
-                    Test de Estrés
-                </h1>
-                <div className="flex items-center mt-4">
-                    <p className="text-sm text-gray-500 mt-2">
-                        Crear, editar, eliminar y listar test de estrés
-                    </p>
-                    {/* <div className="ml-auto">
-                        <button
-                            className="btn btn-primary mt-4 btn-circle"
-                            onClick={handleCreateTestEstres}
-                        >
-                            <PlusCircle size={20} />
-                        </button>
-                    </div> */}
-                     <div className="ml-auto">
+            <div className="bg-white rounded-md shadow-md">
+                <div className="px-6 py-3 flex items-center space-x-2 text-sm text-gray-600 border-b">
+                    <BreadCrumbs items={breadcrumbItems} />
+                </div>
+                <div className="p-6">
+                    <h1 className="text-2xl font-semibold text-gray-700">
+                        Test de Estrés
+                    </h1>
+                    <div className="flex items-center mt-4">
+                        <p className="text-sm text-gray-500 mt-2">
+                            Crear, editar, eliminar y listar test de estrés
+                        </p>
                         <div className="ml-auto">
-                            <button className="btn-form" onClick={handleCreateTestEstres}>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <PlusCircle size={20} className="btn-icon" />
-                                <span className="btn-text">Agregar</span>
+                            <button
+                                className="wave-button"
+                                onClick={handleCreateTestEstres}
+                            >
+                                <span className="button-content">
+                                    <PlusCircle size={20} className="icon" />
+                                    <span className="button-text">ADD</span>
+                                </span>
                             </button>
                         </div>
-                        </div>
                     </div>
+                </div>
             </div>
 
             <div className="flex-grow mt-6 bg-white p-6 rounded-md shadow-md overflow-x-auto">
@@ -108,7 +120,9 @@ function PageTestEstresCrud({ actions, store }) {
                 handleCloseModal={handleCloseModal}
             >
                 <h2 className="text-xl font-semibold mb-4">
-                    {data ? "Actualizar test de estrés" : "Crear test de estrés"}
+                    {data
+                        ? "Actualizar test de estrés"
+                        : "Crear test de estrés"}
                 </h2>
                 <TestEstresForm
                     actions={actions}

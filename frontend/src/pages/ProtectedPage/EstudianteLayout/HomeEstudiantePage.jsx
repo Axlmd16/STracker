@@ -1,214 +1,143 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-    BookOpen,
-    Calendar,
-    Clock,
-    AlertCircle,
-    CheckCircle,
-    Brain,
-    Award,
-    FileSpreadsheet,
-} from "lucide-react";
+    Area,
+    AreaChart,
+    CartesianGrid,
+    Legend,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from "recharts";
+import ActividadesPendientesCard from "../../../components/Cards/ActvididadesCard";
+import AsignaturaCardEstudiante from "../../../components/Cards/AsignaturaCardEstudiante";
+import TestDeEstresCard from "../../../components/Cards/TestDeEstresCard";
 
 function HomeEstudiantePage({ actions, store }) {
+    const [userInfo, setUserInfo] = useState(null);
+    const [pending, setPending] = useState(false);
+
+    useEffect(() => {
+        const getUserInfo = async () => {
+            const userInfo = await actions.getUserInfo(store.id_user_auth);
+            setUserInfo(userInfo);
+        };
+
+        getUserInfo();
+    }, [actions, store]);
+
+    // Mock data mejorado para el historial
+    const historialData = [
+        { fecha: "Ene 2024", puntaje: 75, promedio: 70 },
+        { fecha: "Feb 2024", puntaje: 65, promedio: 68 },
+        { fecha: "Mar 2024", puntaje: 80, promedio: 72 },
+        { fecha: "Abr 2024", puntaje: 72, promedio: 71 },
+        { fecha: "May 2024", puntaje: 68, promedio: 69 },
+        { fecha: "Jun 2024", puntaje: 77, promedio: 73 },
+    ];
+
     return (
-        <div className="bg-base-200 min-h-screen p-6">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-                <div>
-                    <h1 className="text-2xl font-bold">Panel de Estudiante</h1>
-                    <p className="text-base-content/70">
-                        Bienvenido de vuelta, Juan Pérez
-                    </p>
-                </div>
-                <div className="stats bg-base-100 shadow">
-                    <div className="stat">
-                        <div className="stat-title">Promedio General</div>
-                        <div className="stat-value text-primary">8.5</div>
+        <div className="p-3">
+            {/* Main Content */}
+            <div className=" ">
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                    {/* Columna Izquierda */}
+                    <div className="xl:col-span-4 flex flex-col gap-6">
+                        <TestDeEstresCard actions={actions} store={store} />
+                        <ActividadesPendientesCard
+                            actions={actions}
+                            store={store}
+                        />
                     </div>
-                </div>
-            </div>
 
-            {/* Actividades Pendientes */}
-            <div className="card bg-base-100 shadow-lg mb-6">
-                <div className="card-body">
-                    <h2 className="card-title text-xl mb-4">
-                        Próximas Actividades
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div className="alert alert-warning">
-                            <AlertCircle className="w-5 h-5" />
-                            <div>
-                                <div className="font-bold">
-                                    Entrega Proyecto Final
-                                </div>
-                                <div className="text-sm">
-                                    Matemáticas - Vence en 2 días
-                                </div>
-                            </div>
+                    {/* Columna Central */}
+                    <div className="xl:col-span-8">
+                        <div className="mb-6">
+                            <AsignaturaCardEstudiante
+                                actions={actions}
+                                store={store}
+                            />
                         </div>
-                        <div className="alert alert-error">
-                            <FileSpreadsheet className="w-5 h-5" />
-                            <div>
-                                <div className="font-bold">Examen Parcial</div>
-                                <div className="text-sm">
-                                    Física - Mañana 10:00 AM
-                                </div>
-                            </div>
-                        </div>
-                        <div className="alert alert-info">
-                            <CheckCircle className="w-5 h-5" />
-                            <div>
-                                <div className="font-bold">Tarea Grupal</div>
-                                <div className="text-sm">
-                                    Programación - Próxima semana
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            {/* Grid de Estadísticas */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div className="stat bg-base-100 shadow rounded-box">
-                    <div className="stat-figure text-primary">
-                        <BookOpen className="w-8 h-8" />
-                    </div>
-                    <div className="stat-title">Materias Activas</div>
-                    <div className="stat-value">6</div>
-                </div>
-                <div className="stat bg-base-100 shadow rounded-box">
-                    <div className="stat-figure text-secondary">
-                        <Clock className="w-8 h-8" />
-                    </div>
-                    <div className="stat-title">Horas Semanales</div>
-                    <div className="stat-value">24</div>
-                </div>
-                <div className="stat bg-base-100 shadow rounded-box">
-                    <div className="stat-figure text-accent">
-                        <Brain className="w-8 h-8" />
-                    </div>
-                    <div className="stat-title">Tareas Pendientes</div>
-                    <div className="stat-value text-accent">8</div>
-                </div>
-                <div className="stat bg-base-100 shadow rounded-box">
-                    <div className="stat-figure text-success">
-                        <Award className="w-8 h-8" />
-                    </div>
-                    <div className="stat-title">Asistencia</div>
-                    <div className="stat-value text-success">92%</div>
-                </div>
-            </div>
-
-            {/* Asignaturas y Actividades */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Lista de Asignaturas */}
-                <div className="lg:col-span-2">
-                    <div className="card bg-base-100 shadow-lg">
-                        <div className="card-body">
-                            <h2 className="card-title mb-4">Mis Asignaturas</h2>
-                            <div className="overflow-x-auto">
-                                <table className="table table-zebra">
-                                    <thead>
-                                        <tr>
-                                            <th>Asignatura</th>
-                                            <th>Profesor</th>
-                                            <th>Progreso</th>
-                                            <th>Calificación</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Matemáticas</td>
-                                            <td>Dr. García</td>
-                                            <td>
-                                                <progress
-                                                    className="progress progress-primary w-20"
-                                                    value="70"
-                                                    max="100"
-                                                ></progress>
-                                            </td>
-                                            <td>8.5</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Física</td>
-                                            <td>Dra. Martínez</td>
-                                            <td>
-                                                <progress
-                                                    className="progress progress-primary w-20"
-                                                    value="85"
-                                                    max="100"
-                                                ></progress>
-                                            </td>
-                                            <td>9.0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Programación</td>
-                                            <td>Ing. Rodríguez</td>
-                                            <td>
-                                                <progress
-                                                    className="progress progress-primary w-20"
-                                                    value="60"
-                                                    max="100"
-                                                ></progress>
-                                            </td>
-                                            <td>8.0</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div className="bg-white rounded-xl shadow-sm p-6 ">
+                            <h2 className="text-xl font-semibold text-gray-800 mb-6">
+                                Evolución Temporal
+                            </h2>
+                            <div className="h-80">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={historialData}>
+                                        <defs>
+                                            <linearGradient
+                                                id="colorPuntaje"
+                                                x1="0"
+                                                y1="0"
+                                                x2="0"
+                                                y2="1"
+                                            >
+                                                <stop
+                                                    offset="5%"
+                                                    stopColor="#8884d8"
+                                                    stopOpacity={0.8}
+                                                />
+                                                <stop
+                                                    offset="95%"
+                                                    stopColor="#8884d8"
+                                                    stopOpacity={0}
+                                                />
+                                            </linearGradient>
+                                            <linearGradient
+                                                id="colorPromedio"
+                                                x1="0"
+                                                y1="0"
+                                                x2="0"
+                                                y2="1"
+                                            >
+                                                <stop
+                                                    offset="5%"
+                                                    stopColor="#82ca9d"
+                                                    stopOpacity={0.8}
+                                                />
+                                                <stop
+                                                    offset="95%"
+                                                    stopColor="#82ca9d"
+                                                    stopOpacity={0}
+                                                />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="fecha" />
+                                        <YAxis domain={[0, 100]} />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Area
+                                            type="monotone"
+                                            dataKey="puntaje"
+                                            stroke="#8884d8"
+                                            fillOpacity={1}
+                                            fill="url(#colorPuntaje)"
+                                            name="Nivel de Estrés"
+                                        />
+                                        <Area
+                                            type="monotone"
+                                            dataKey="promedio"
+                                            stroke="#82ca9d"
+                                            fillOpacity={1}
+                                            fill="url(#colorPromedio)"
+                                            name="Promedio Grupal"
+                                        />
+                                    </AreaChart>
+                                </ResponsiveContainer>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Calendario y Eventos */}
-                <div className="card bg-base-100 shadow-lg">
-                    <div className="card-body">
-                        <h2 className="card-title mb-4">Próximos Eventos</h2>
-                        <div className="space-y-4">
-                            <div className="flex gap-4 items-start p-3 bg-base-200 rounded-lg">
-                                <Calendar className="w-5 h-5 text-primary mt-1" />
-                                <div>
-                                    <div className="font-medium">
-                                        Examen Parcial
-                                    </div>
-                                    <div className="text-sm text-base-content/70">
-                                        Física
-                                    </div>
-                                    <div className="text-sm text-base-content/70">
-                                        24 Abril, 10:00 AM
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex gap-4 items-start p-3 bg-base-200 rounded-lg">
-                                <Calendar className="w-5 h-5 text-secondary mt-1" />
-                                <div>
-                                    <div className="font-medium">
-                                        Presentación Grupal
-                                    </div>
-                                    <div className="text-sm text-base-content/70">
-                                        Programación
-                                    </div>
-                                    <div className="text-sm text-base-content/70">
-                                        26 Abril, 2:00 PM
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex gap-4 items-start p-3 bg-base-200 rounded-lg">
-                                <Calendar className="w-5 h-5 text-accent mt-1" />
-                                <div>
-                                    <div className="font-medium">
-                                        Entrega Proyecto
-                                    </div>
-                                    <div className="text-sm text-base-content/70">
-                                        Matemáticas
-                                    </div>
-                                    <div className="text-sm text-base-content/70">
-                                        28 Abril, 11:59 PM
-                                    </div>
-                                </div>
-                            </div>
+                    {/* Columna Derecha */}
+                    <div className="xl:col-span-3">
+                        <div className="sticky top-6">
+                            {/* <RecomendacionesCard
+                                actions={actions}
+                                store={store}
+                            /> */}
                         </div>
                     </div>
                 </div>

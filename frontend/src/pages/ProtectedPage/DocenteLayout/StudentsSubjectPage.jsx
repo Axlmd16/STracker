@@ -1,15 +1,21 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import Sidebar from "../../../components/Navigation/Sidebar";
-import { buttons_docente } from "../../../assets/ButtonsNav/BtnsSidebar";
-import ModalForm from "../../../components/Modals/ModalForm";
-import Modal from "../../../components/Modals/Modal";
-import { Import, UserRoundPlus } from "lucide-react";
-import DocenteForm from "../../../components/Forms/DocenteForm";
-import ImportDataPage from "../AdminLayout/ImportDataPage";
-import DataTableUser from "../../../components/Tables/DataTableUser";
+import {
+    GraduationCap,
+    HomeIcon,
+    LibraryBig,
+    UserPlus2,
+    UserRoundPlus,
+} from "lucide-react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import { buttons_docente } from "../../../assets/ButtonsNav/BtnsSidebar";
 import EstudianteForm from "../../../components/Forms/EstudianteForm";
+import Modal from "../../../components/Modals/Modal";
+import ModalForm from "../../../components/Modals/ModalForm";
+import Sidebar from "../../../components/Navigation/Sidebar";
+import DataTableUser from "../../../components/Tables/DataTableUser";
+import ImportDataPage from "../AdminLayout/ImportDataPage";
+import BreadCrumbs from "../../../components/Navigation/breadCrumbs";
 
 function StudentsSubjectPage({ actions, store }) {
     const { id } = useParams();
@@ -73,6 +79,32 @@ function StudentsSubjectPage({ actions, store }) {
     useEffect(() => {
         fetchData();
     }, [fetchData]);
+
+    //* Breadcrumbs items
+    const breadcrumbItems = [
+        {
+            to: "/home/docente",
+            title: "Inicio",
+            icon: HomeIcon,
+        },
+        {
+            to: `/home/docente`,
+            title: "Asignaturas",
+            icon: LibraryBig,
+        },
+        {
+            to: `/home/docente/asignatura/${id}`,
+            title: "Base de datos",
+            icon: GraduationCap,
+        },
+        {
+            to: `/home/docente/asignatura/${id}/estudiantes`,
+            title: "Gestion de estudiantes",
+            icon: UserPlus2,
+            active: true,
+        },
+    ];
+
     return (
         <div>
             <div className="fixed left-0 top-16 h-full bg-gray-800">
@@ -81,27 +113,36 @@ function StudentsSubjectPage({ actions, store }) {
             <div className="flex-grow ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-base-200">
                 <div className="flex flex-col h-full">
                     {/* Encabezado */}
-                    <div className="bg-white p-6 rounded-md shadow-md">
-                        <h1 className="text-2xl font-semibold text-gray-700">
-                            Estudiantes
-                        </h1>
-                        <div className="flex items-center mt-4">
-                            <p className="text-sm text-gray-500 mt-2">
-                                Crear, editar, eliminar y listar estudiantes
-                            </p>
-                            <div className="ml-auto">
-                                <button
-                                    className="btn btn-primary mt-4 btn-circle"
-                                    onClick={handleCreateDocente}
-                                >
-                                    <UserRoundPlus size={20} />
-                                </button>
-                                {/* <button
+                    <div className="bg-white rounded-md shadow-md">
+                        {/* Breadcrumbs */}
+                        <div className="px-6 py-3 flex items-center space-x-2 text-sm text-gray-600 border-b">
+                            <BreadCrumbs items={breadcrumbItems} />
+                        </div>
+                        <div className="p-6">
+                            <h1 className="text-2xl font-semibold text-gray-700">
+                                Estudiantes
+                            </h1>
+                            <div className="flex items-center mt-4">
+                                <p className="text-sm text-gray-500 mt-2">
+                                    Crear, editar, eliminar y listar estudiantes
+                                </p>
+                                <div className="ml-auto">
+                                    <button
+                                        className="btn bg-blue-100 btn-secondary mt-4 btn-circle"
+                                        onClick={handleCreateDocente}
+                                    >
+                                        <UserRoundPlus
+                                            className="text-blue-900"
+                                            size={20}
+                                        />
+                                    </button>
+                                    {/* <button
                                     className="btn btn-circle ml-3 bg-info"
                                     onClick={handleImportDocente}
                                 >
                                     <Import size={20} />
                                 </button> */}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -116,6 +157,7 @@ function StudentsSubjectPage({ actions, store }) {
                             data={dataTable}
                             pending={pending}
                             searchKeys={["nombres", "apellidos", "cedula"]}
+                            idAsig={id}
                         />
                     </div>
 

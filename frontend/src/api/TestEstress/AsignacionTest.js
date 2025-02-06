@@ -4,8 +4,20 @@ const AsignacionTestApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data.data;
     },
 
+    getAllAsignacionTestForAsignature: async (id_asignatura) => {
+        const response = await api.get(
+            `/asignacion_test/asignatura/${id_asignatura}`
+        );
+        return response.data.data;
+    },
+
     createAsignacionTest: async (asignacion) => {
         const response = await api.post("/asignacion_test/", asignacion);
+        return response.data;
+    },
+
+    createAsignacionTestGrupal: async (asignacion) => {
+        const response = await api.post("/asignacion_test/grupal", asignacion);
         return response.data;
     },
 
@@ -17,6 +29,32 @@ const AsignacionTestApi = ({ getStore, getActions, setStore, api }) => ({
     deleteAsignacionTest: async (id) => {
         const response = await api.delete(`/asignacion_test/${id}`);
         return response.data;
+    },
+
+    //! Nota: Esto debo cambiarlo en otro archivo
+    getAllActivitiesForAsignature: async (id_asignatura) => {
+        const response = await api.get(
+            `/actividades/asignatura/${id_asignatura}`
+        );
+        return response.data.data;
+    },
+
+    //! Nota: Esto debo cambiarlo en otro archivo
+    getAllGroupsForAsignature: async (id_asignatura) => {
+        const response = await api.get(`/grupo/asignatura/${id_asignatura}`);
+        return response.data.data;
+    },
+
+    //! Nota: Esto debo cambiarlo en otro archivo
+    getInfoUser: async (id) => {
+        const response = await api.get(`/usuarios/${id}`);
+        return response.data.data;
+    },
+
+    //! Nota: Esto debo cambiarlo en otro archivo
+    obtenerAsignaturaEstudiante: async (id) => {
+        const response = await api.get(`/asignatura_estudiante/${id}`);
+        return response.data.data;
     },
 });
 
