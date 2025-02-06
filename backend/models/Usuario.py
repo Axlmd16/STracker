@@ -29,3 +29,7 @@ class Usuario(Base):
     asignaturas_dictadas = relationship("Asignatura", back_populates="docente")
     
     asignaturas_estudiante = relationship("EstudianteAsignatura", back_populates="estudiantes")
+
+
+def __repr__(self):
+    return f"<Usuario {self.nombres} {self.apellidos}>"

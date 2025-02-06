@@ -23,3 +23,6 @@ class EstudianteAsignatura(Base):
     asignatura = relationship("Asignatura", back_populates="estudiantes")
     grupos = relationship("Grupo", secondary="gea", back_populates="estudiantes_asignaturas")
     estudiantes = relationship("Usuario", back_populates="asignaturas_estudiante")
+
+def __repr__(self):
+    return f"<EstudianteAsignatura(id={self.id}, estudiante_id={self.estudiante_id}, asignatura_id={self.asignatura_id})>"

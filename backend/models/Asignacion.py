@@ -16,4 +16,4 @@ class AsignacionTest(Base):
     # Relaciones
     asignatura = relationship("Asignatura", back_populates="asignaciones")
     test = relationship("TestEstres", back_populates="asignaciones_test", lazy="subquery")
-    resultados = relationship("ResultadoTest", back_populates="asignacion", cascade="all, delete-orphan")
+    resultados = relationship("ResultadoTest", back_populates="asignacion", cascade="all, delete-orphan", lazy="subquery")

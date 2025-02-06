@@ -11,6 +11,11 @@ const AsignacionTestApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data.data;
     },
 
+    getAsignacionTest: async (id) => {
+        const response = await api.get(`/asignacion_test/${id}`);
+        return response.data.data;
+    },
+
     createAsignacionTest: async (asignacion) => {
         const response = await api.post("/asignacion_test/", asignacion);
         return response.data;

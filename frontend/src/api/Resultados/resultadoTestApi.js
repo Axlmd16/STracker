@@ -6,6 +6,14 @@ const ResultadoTestApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data.data;
     },
 
+    agregarRetroalimentacion: async (resultado_id, retroalimentacion) => {
+        const response = await api.put(
+            `/resultados/${resultado_id}/retroalimentacion/`,
+            { retroalimentacion }
+        );
+        return response;
+    },
+
     getResultadosResueltosPorEstudiante: async (estudiante_id) => {
         const response = await api.get(
             `/resultados/estudiante/${estudiante_id}/historial/`

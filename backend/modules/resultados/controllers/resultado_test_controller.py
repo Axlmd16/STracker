@@ -5,6 +5,7 @@ from models.EstudianteAsignatura import EstudianteAsignatura
 from sqlalchemy import text
 from models.Usuario import Usuario
 from datetime import datetime, timedelta
+from sqlalchemy.orm import joinedload
 
 from modules.resultados.schemas.resultado_test_schema import InformeResultadoAsignatura
 
@@ -19,7 +20,20 @@ class ResultadoTestControl:
     def obtener_resultado(self, id: int):
         with DatabaseEngine.get_session() as db:
             return db.query(ResultadoTest).filter(ResultadoTest.id == id).first()
-
+        
+    def obtener_resultado_estudiante(self, id: int):
+        with DatabaseEngine.get_session() as db:
+            resultado = (
+                db.query(ResultadoTest)
+                .options(
+                    joinedload(ResultadoTest.estudiante_asignatura)
+                    .joinedload(EstudianteAsignatura.asignatura)
+                )
+                .filter(ResultadoTest.id == id)
+                .first()
+            )
+            return resultado
+        
     def crear_resultado(self, resultado):
         with DatabaseEngine.get_session() as db:
             db_resultado = ResultadoTest(**resultado.dict())
@@ -113,3 +127,13 @@ class ResultadoTestControl:
         resultados_resueltos = [resultado for resultado in resultados if resultado.fecha_realizacion is not None]
         return resultados_resueltos
     
+
+    def agregar_retroalimentacion_resultado(self, id: int, retroalimentacion: str):
+        with DatabaseEngine.get_session() as db:
+            resultado = db.query(ResultadoTest).filter(ResultadoTest.id == id).first()
+            if resultado:
+                resultado.retroalimentacion = retroalimentacion
+                db.commit()
+                return True
+            else:
+                return False

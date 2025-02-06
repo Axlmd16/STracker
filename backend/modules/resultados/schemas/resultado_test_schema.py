@@ -30,3 +30,8 @@ class InformeResultadoAsignatura(BaseModel):
 class InformeResultadoEstudiante(BaseModel):
     nivel_estres: str
     cantidad: int
+    
+    
+class UpdateRetroalimentacionResultado(BaseModel):
+    retroalimentacion: str = Field(..., max_length=255)
+    

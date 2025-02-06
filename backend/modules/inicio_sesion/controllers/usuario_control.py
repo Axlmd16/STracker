@@ -1,6 +1,7 @@
 from models.Cuenta import Cuenta
 from models.TestEstres import TestEstres
 from models.Usuario import Usuario
+from models.Recomendacion import Recomendacion
 from core.database import DatabaseEngine
 from fastapi import HTTPException
 from modules.inicio_sesion.controllers.cuenta_control import CuentaControl
@@ -108,4 +109,5 @@ class UsuarioControl:
             estudiantes = db.query(Usuario).filter(Usuario.rol == "ESTUDIANTE").count()
             total_usuarios = docentes + estudiantes
             total_test = db.query(TestEstres).filter(TestEstres.estado == True).count()
-            return {"total_docentes": docentes, "total_estudiantes": estudiantes, "total_usuarios": total_usuarios, "total_test": total_test}
+            total_recomendaciones = db.query(Recomendacion).count()
+            return {"total_docentes": docentes, "total_estudiantes": estudiantes, "total_usuarios": total_usuarios, "total_test": total_test, "total_recomendaciones": total_recomendaciones}

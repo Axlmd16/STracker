@@ -74,7 +74,7 @@ function AsignaturaDetallePage({ actions, store }) {
                 ) : (
                     <>
                         {/* Header de la asignatura */}
-                        <div className="card bg-white shadow-lg mb-6">
+                        <div className=" bg-white shadow-lg mb-6">
                             {/* Breadcrumbs */}
                             <div className="px-6 py-3 flex items-center space-x-2 text-sm text-gray-600 border-b">
                                 <BreadCrumbs items={breadcrumbItems} />

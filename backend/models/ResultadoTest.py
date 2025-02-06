@@ -17,7 +17,10 @@ class ResultadoTest(Base):
     
     # Relaciones
     asignacion = relationship("AsignacionTest", back_populates="resultados", lazy="subquery")
-    estudiante_asignatura = relationship("EstudianteAsignatura", back_populates="test_realizados")
+    estudiante_asignatura = relationship("EstudianteAsignatura", back_populates="test_realizados", lazy="subquery")
     grupo = relationship("Grupo", back_populates="resultados")
     actividad_academica = relationship("ActividadAcademica", back_populates="resultados")
+    
+    def __repr__(self):
+        return f"<ResultadoTest(id={self.id}, fecha_realizacion={self.fecha_realizacion}, resultado={self.resultado}, retroalimentacion={self.retroalimentacion}, compartido={self.compartido}, asignacion_id={self.asignacion_id}, estudiante_asignatura_id={self.estudiante_asignatura_id}, grupo_id={self.grupo_id}, actividad_academica_id={self.actividad_academica_id})>"
 

@@ -65,7 +65,7 @@ const StatisticsCards = ({ actions, store }) => {
                     <div>
                         <p className="text-gray-500">Recomendaciones</p>
                         <h3 className="text-2xl font-bold">
-                            {stats.recomendaciones}
+                            {stats.total_recomendaciones}
                         </h3>
                     </div>
                     <FileText className="h-10 w-10 text-primary" />

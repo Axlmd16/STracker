@@ -6,6 +6,8 @@ from models.Notificacion import Notificacion
 import colorama
 import os
 
+from models.Usuario import Usuario
+
 
 class NotificacionController:
     def __init__(self):
@@ -72,4 +74,15 @@ class NotificacionController:
             return {
                 "id": usuario[0],
             }
+
+    def notificar_usuario(self, user_id, titulo, mensaje, fecha):
+        with DatabaseEngine.get_session() as db:
+            docente = db.query(Usuario).filter(Usuario.id == user_id).first()
+            if not docente:
+                raise HTTPException(status_code=404, detail="Docente no encontrado")
+            notificacion = Notificacion(titulo=titulo, mensaje=mensaje, fecha=fecha, usuario_id=user_id)
+            db.add(notificacion)
+            db.commit()
+            db.refresh(notificacion)
+            return notificacion
 

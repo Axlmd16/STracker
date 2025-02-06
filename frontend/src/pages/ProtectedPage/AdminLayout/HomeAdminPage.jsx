@@ -76,7 +76,7 @@ function HomeAdminPage({ actions, store }) {
                         <button className="p-4 rounded-lg bg-primary bg-opacity-10 hover:bg-opacity-20 transition-all">
                             <Brain className="h-6 w-6 text-primary mx-auto mb-2" />
                             <span className="text-sm font-medium text-primary">
-                                Crear Test
+                                Nuevo Test
                             </span>
                         </button>
                         <button className="p-4 rounded-lg bg-primary bg-opacity-10 hover:bg-opacity-20 transition-all">
