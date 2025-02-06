@@ -11,23 +11,15 @@ class Asignatura(Base):
     paralelo = Column(CHAR, nullable=False)
     fecha_inicio = Column(DateTime, nullable=False)
     fecha_fin = Column(DateTime, nullable=False)
-    docente_id = Column(Integer, ForeignKey("usuario.id", ondelete="CASCADE"))
-
+    docente_id = Column(Integer, ForeignKey("usuario.id"))
+    
     # Relaciones
     docente = relationship("Usuario", back_populates="asignaturas_dictadas")
+    estudiantes = relationship("Usuario", secondary="estudiante_asignatura", back_populates="asignaturas_estudiante")
     actividades_academicas = relationship(
         "ActividadAcademica", 
         back_populates="asignatura",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan"  
     )
-    asignaciones = relationship(
-        "AsignacionTest", 
-        back_populates="asignatura",
-        cascade="all, delete-orphan"
-    )
-    estudiantes = relationship(
-        "EstudianteAsignatura", 
-        back_populates="asignatura", 
-        cascade="all, delete-orphan"
-    )
+
 

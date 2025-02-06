@@ -23,10 +23,10 @@ class ActividadAcademica(Base):
     fecha_inicio = Column(DateTime, nullable=False)
     fecha_fin = Column(DateTime, nullable=False)
     asignatura_id = Column(Integer, ForeignKey("asignatura.id", ondelete="CASCADE"), nullable=False)
-    estado = Column(Enum_sql(EstadoActividadEnum), nullable=False, default=EstadoActividadEnum.PENDIENTE)
+    estado = Column(Enum_sql(EstadoActividadEnum), nullable= False, default=EstadoActividadEnum.PENDIENTE)
     tipo_actividad = Column(Enum_sql(TipoActividad), nullable=False, default=TipoActividad.ACTIVIDAD_EXTRA_CLASE)
-    url_archivo = Column(String(255), nullable=True)
-
+    
+    
     # Relaciones
     asignatura = relationship("Asignatura", back_populates="actividades_academicas")
-    resultados = relationship("ResultadoTest", back_populates="actividad_academica", cascade="all, delete-orphan")
+    asignaciones_test_ac = relationship("AsignacionTest", back_populates="actividad_academica", overlaps="actividad_academica")

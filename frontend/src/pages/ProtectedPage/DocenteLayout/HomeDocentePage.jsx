@@ -46,8 +46,8 @@ function HomeDocentePage({ actions, store }) {
     };
 
     return (
-        <div className="bg-base-200">
-            <div className="container mx-auto ">
+        <div className="min-h-screen bg-base-200">
+            <div className="container mx-auto px-4 py-8">
                 {/* Header Section */}
                 <div className="card bg-white shadow-xl mb-8">
                     <div className="card-body">

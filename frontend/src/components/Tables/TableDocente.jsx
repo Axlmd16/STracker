@@ -7,8 +7,6 @@ import {
     UsersRound,
     LayoutGrid,
     ListOrdered,
-    ToggleRight,
-    ScanEye,
 } from "lucide-react";
 import React, {
     useEffect,
@@ -23,36 +21,40 @@ import CustomDataTable from "./CustomDataTable";
 import SearchBar from "../Navigation/search_bar";
 import Swal from "sweetalert2";
 
-const TableCuentas = forwardRef(({ actions }) => {
+const TableDocente = forwardRef(({ actions, handleUpdate }, ref) => {
     const [data, setData] = useState([]);
     const [pending, setPending] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
 
     //* Obtener data
-    const fetchData = useCallback(async () => {
+    const fetchDocentes = useCallback(async () => {
         setPending(true);
         try {
-            const data = await actions.getCuentas();
+            const data = await actions.getDocentes();
             setData(data);
             setFilteredData(data);
         } catch (error) {
-            toast.error("Error al cargar las cuentas de usuario");
+            toast.error("Error al cargar los docentes");
         } finally {
             setPending(false);
         }
     }, [actions]);
 
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        fetchDocentes();
+    }, [fetchDocentes]);
+
+    useImperativeHandle(ref, () => ({
+        reload: fetchDocentes,
+    }));
 
     //* Filtrar data
     const handleSearch = useCallback(
         (e) => {
             const value = e.target.value.toLowerCase();
-            const filtered = data.filter((cuenta) =>
-                ["username", "estado", "rol"].some((key) =>
-                    cuenta[key].toLowerCase().includes(value)
+            const filtered = data.filter((docente) =>
+                ["nombres", "apellidos", "cedula"].some((key) =>
+                    docente[key].toLowerCase().includes(value)
                 )
             );
             setFilteredData(filtered);
@@ -65,30 +67,29 @@ const TableCuentas = forwardRef(({ actions }) => {
         handleUpdate(row);
     };
 
-    //* Funcion para actualizar estado de la cuenta
-    const handleUpdateState = async (row) => {
-        const estado = row.estado;
+    //* Funcion para eliminar
+    async function handleDeleteClick(row) {
         Swal.fire({
             title: "Estás seguro?",
-            text: "Se cambiará el estado de la cuenta",
-            icon: "question",
+            text: "No podrás revertir esto!",
+            icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#8da579",
             cancelButtonColor: "#ccb078",
-            confirmButtonText: "Sí, cambiar!",
+            confirmButtonText: "Sí, borrar!",
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await actions.updateEstadoCuenta(row.id, !estado);
-                    fetchData();
-                    toast.success("Estado actualizado correctamente");
+                    await actions.deleteDocente(row.id);
+                    fetchDocentes();
+                    toast.success("Docente eliminado correctamente");
                 } catch (error) {
                     console.log(error);
-                    toast.error("Error al actualizar el estado");
+                    toast.error("Error al eliminar el docente");
                 }
             }
         });
-    };
+    }
 
     //* Columnas de la tabla
     const columns = useMemo(
@@ -102,44 +103,56 @@ const TableCuentas = forwardRef(({ actions }) => {
                 ),
                 selector: (row) => filteredData.indexOf(row) + 1,
                 sortable: true,
+                width: "130px",
             },
             {
                 name: (
                     <div className="flex justify-center">
                         <UsersRound className="mr-2" size={20} />
-                        <span>Nombre de usuario</span>
+                        <span>Nombres</span>
                     </div>
                 ),
-                selector: (row) => row.username,
+                selector: (row) => row.nombres,
                 sortable: true,
             },
             {
                 name: (
                     <div className="flex justify-center">
-                        <ScanEye className="mr-2" size={20} />
-                        <span>Rol</span>
+                        <UsersRound className="mr-2" size={20} />
+                        <span>Apellidos</span>
                     </div>
                 ),
-                selector: (row) => row.rol,
+                selector: (row) => row.apellidos,
                 sortable: true,
             },
             {
                 name: (
                     <div className="flex justify-center">
-                        <ToggleRight className="mr-2" size={20} />
-                        <span>Estado</span>
+                        <IdCard className="mr-2" size={20} />
+                        <span>Cédula</span>
                     </div>
                 ),
-                selector: (row) =>
-                    row.estado === true ? (
-                        <span className="px-3 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800">
-                            Activo
-                        </span>
-                    ) : (
-                        <span className="px-3 py-1 text-sm font-medium rounded-full bg-red-100 text-red-800">
-                            Inactivo
-                        </span>
-                    ),
+                selector: (row) => row.cedula,
+                sortable: true,
+            },
+            {
+                name: (
+                    <div className="flex justify-center">
+                        <Mail className="mr-2" size={20} />
+                        <span>Email</span>
+                    </div>
+                ),
+                selector: (row) => row.email,
+                sortable: true,
+            },
+            {
+                name: (
+                    <div className="flex justify-center">
+                        <Phone className="mr-2" size={20} />
+                        <span>Telefono</span>
+                    </div>
+                ),
+                selector: (row) => row.telefono,
                 sortable: true,
             },
             {
@@ -149,18 +162,22 @@ const TableCuentas = forwardRef(({ actions }) => {
                         <span>Acciones</span>
                     </div>
                 ),
-                selector: (row) => (
+                cell: (row) => (
                     <div className="flex">
-                        <div className="form-control w-52">
-                            <label className="label cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    className="toggle toggle-primary"
-                                    checked={row.estado}
-                                    onChange={() => handleUpdateState(row)}
-                                />
-                            </label>
-                        </div>
+                        <button
+                            className="btn-ghost btn btn-sm btn-circle text-blue-700"
+                            onClick={() => handleUpdateClick(row)}
+                        >
+                            <Pencil size={20} />
+                        </button>
+                        <button
+                            className="btn-ghost btn btn-sm btn-circle mx-5 text-red-500"
+                            onClick={() => {
+                                handleDeleteClick(row);
+                            }}
+                        >
+                            <Trash2Icon size={20} />
+                        </button>
                     </div>
                 ),
             },
@@ -182,4 +199,4 @@ const TableCuentas = forwardRef(({ actions }) => {
     );
 });
 
-export default TableCuentas;
+export default TableDocente;

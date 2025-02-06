@@ -34,10 +34,5 @@ def modificar_test_estres(id: int, test_estres: TestEstresSchema):
 def eliminar_test_estres(id: int):
     test_estres_eliminado = test_controller.eliminar_test_estres(id)
     if not test_estres_eliminado:
-        raise HTTPException(status_code=    404, detail="TestEstres no encontrado para eliminar")
+        raise HTTPException(status_code=404, detail="TestEstres no encontrado para eliminar")
     return {"message": "test_estres eliminado", "data": test_estres_eliminado}
-
-@router_test_estres.get("/test_estres_ultimos", tags=["Test Estres"])
-def get_ultimos_test_estres():
-    ultimos_test_estres = test_controller.get_ultimos_test()
-    return {"message": "Ultimos test_estres", "data": ultimos_test_estres}

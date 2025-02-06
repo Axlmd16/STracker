@@ -37,16 +37,10 @@ class CuentaLogin(BaseModel):
         from_attributes = True
 
 class CuentaRol(BaseModel):
-    id: int
     username: EmailStr
     password: str
     estado: Optional[bool] = True
     rol: str
     id_usuario: int
-    class Config:
-        from_attributes = True
-        
-class CuentaUpdateEstado(BaseModel):
-    activar: bool
     class Config:
         from_attributes = True

@@ -12,9 +12,9 @@ const LoginForm = ({ actions, store }) => {
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        const result = await actions.iniciar_sesion(data);
+        const succes = await actions.iniciar_sesion(data);
 
-        if (result === true) {
+        if (succes) {
             if (store.isAuthenticated) {
                 if (store.access_role === "ADMINISTRADOR") {
                     navigate("/home/administrador");
@@ -29,7 +29,7 @@ const LoginForm = ({ actions, store }) => {
                 });
             }
         } else {
-            toast.error(result, {
+            toast.error("Usuario o contraseña incorrectos", {
                 duration: 3500,
                 position: "top-center",
             });
@@ -100,7 +100,7 @@ const LoginForm = ({ actions, store }) => {
                 </form>
                 <p className="text-center text-gray-500 mt-4">
                     ¿Olvidaste tu contraseña?{" "}
-                    <a href="/recuperar/password" className="text-blue-600 hover:underline">
+                    <a href="#" className="text-blue-600 hover:underline">
                         Recuperar
                     </a>
                 </p>

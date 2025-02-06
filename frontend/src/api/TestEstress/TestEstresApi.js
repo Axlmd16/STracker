@@ -4,11 +4,6 @@ const TestEstresApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data.data;
     },
 
-    getTestEstres: async (id_test) => {
-        const response = await api.get("/test_estres/" + id_test);
-        return response.data.data;
-    },
-
     createTestEstres: async (docente) => {
         const response = await api.post("/test_estres", docente);
         return response.data;
