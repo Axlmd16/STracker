@@ -23,7 +23,7 @@ function LoginPage({ actions, store }) {
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
-                        backgroundImage: `url('/src/util/imgs/psicologo_test.png')`,
+                        backgroundImage: `url('/src/util/imgs/cerebro.jpg')`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                     }}
