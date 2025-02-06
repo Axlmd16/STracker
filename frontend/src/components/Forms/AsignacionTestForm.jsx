@@ -48,12 +48,19 @@ function AsignacionTestForm({
         }
     }, [actions]);
 
-    const fetchEstudiantesYGrupos = useCallback(async () => {
+    const fetchGrupos = useCallback(async () => {
+        try {
+            const gruposData = await actions.getGroupsByAsignatura(id);
+            setGrupos(gruposData);
+        } catch (error) {
+            // toast.error("Error al cargar los estudiantes o grupos");
+        }
+    }, [actions, id]);
+    
+    const fetchEstudiantes = useCallback(async () => {
         try {
             const estudiantesData = await actions.getStudentsBySubject(id);
-            const gruposData = await actions.getGroupsByAsignatura(id);
             setEstudiantes(estudiantesData);
-            setGrupos(gruposData);
         } catch (error) {
             // toast.error("Error al cargar los estudiantes o grupos");
         }
@@ -61,8 +68,9 @@ function AsignacionTestForm({
 
     useEffect(() => {
         fetchTestEstres();
-        fetchEstudiantesYGrupos();
-    }, [fetchTestEstres, fetchEstudiantesYGrupos]);
+        fetchGrupos();
+        fetchEstudiantes();
+    }, [fetchTestEstres, fetchEstudiantes, fetchGrupos]);
 
     const onSubmit = async (data) => {
 
@@ -267,7 +275,7 @@ function AsignacionTestForm({
                                 <option value="">Seleccione un grupo</option>
                                 {grupos.map((group) => (
                                     <option key={group.grupo_id} value={group.grupo_id}>
-                                        {group.nombre_grupo}
+                                        {group.nombre}
                                     </option>
                                 ))}
                             </select>
