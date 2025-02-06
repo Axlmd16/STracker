@@ -54,7 +54,7 @@ function AsignacionTestForm({
             setEstudiantes(estudiantesData);
             setGrupos(gruposData); 
         } catch (error) {
-            toast.error("Error al cargar los estudiantes o grupos");
+            // toast.error("Error al cargar los estudiantes o grupos");
         }
     }, [actions, id]);
 

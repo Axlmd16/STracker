@@ -4,6 +4,11 @@ const GroupApi = ({ getStore, getActions, setStore, api }) => ({
         return response.data.data;
     },
 
+    getAllGroupsForAsignature: async (id_asignatura) => {
+        const response = await api.get(`/grupo/asignatura/${id_asignatura}`);
+        return response.data.data;
+    },
+
     getStudentsForGroup: async (id_group) => {
         const response = await api.get(`/grupos/estudiantes/${id_group}`);
         return response.data.data;

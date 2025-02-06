@@ -47,12 +47,12 @@ function Navbar({ actions, store, rol }) {
             {/* Icons and User Dropdown */}
             <div className="navbar-end flex items-center gap-2">
                 {/* Search Icon */}
-                <button
+                {/* <button
                     className="btn btn-ghost btn-circle"
                     aria-label="Buscar"
                 >
                     <Search size="24" />
-                </button>
+                </button> */}
 
                 {/* //* CODIGO ANTIGUO POR SI ACASO */}
                 {/* Notification Icon */}
@@ -107,9 +107,9 @@ function Navbar({ actions, store, rol }) {
                         <li>
                             <Link to="/login/perfil">Perfil</Link>
                         </li>
-                        <li>
+                        {/* <li>
                             <Link to="#">Ajustes</Link>
-                        </li>
+                        </li> */}
                         <li>
                             <button onClick={actions.cerrar_sesion}>
                                 Cerrar Sesión

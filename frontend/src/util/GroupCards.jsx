@@ -51,16 +51,17 @@ function GroupCards({ data, handleDelete, idAsignatura }) {
 
                                 <div className="flex justify-end mt-6 space-x-2">
                                     <button
-                                        className="btn btn-sm btn-warning"
+                                        className="btn btn-sm btn-warning" 
+                                        style={{ backgroundColor: '#6891d8', borderColor: '#6891d8' }}
                                         onClick={() => handleNavigate(group.id)}
                                     >
-                                        <Edit size={16} />
+                                        <Edit size={16} className="text-white" />
                                     </button>
                                     <button
                                         className="btn btn-sm btn-error"
                                         onClick={() => confirmDelete(group.id)}
                                     >
-                                        <Trash2 size={16} />
+                                        <Trash2 size={16} className="text-white"/>
                                     </button>
                                 </div>
                             </div>
