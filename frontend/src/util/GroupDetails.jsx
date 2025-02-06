@@ -10,11 +10,11 @@ function GroupDetails({ actions, store }) {
     const { id, idAsignatura } = useParams();
     const [group, setGroup] = useState(null);
     const [students, setStudents] = useState([]);
-    const [allStudents, setAllStudents] = useState([]);  
+    const [allStudents, setAllStudents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedStudents, setSelectedStudents] = useState([]);
-    const [warningMessage, setWarningMessage] = useState(''); 
+    const [warningMessage, setWarningMessage] = useState('');
 
     useEffect(() => {
         const fetchGroupDetails = async () => {
@@ -47,7 +47,7 @@ function GroupDetails({ actions, store }) {
         if (selectedStudents.includes(studentId)) {
             setSelectedStudents(selectedStudents.filter((id) => id !== studentId));
         } else {
-            setSelectedStudents([...selectedStudents, studentId]); 
+            setSelectedStudents([...selectedStudents, studentId]);
         }
     };
 
@@ -64,8 +64,8 @@ function GroupDetails({ actions, store }) {
 
             const updatedStudents = await actions.getStudentsForGroup(id);
             setStudents(updatedStudents);
-            setSelectedStudents([]); 
-            setModalOpen(false); 
+            setSelectedStudents([]);
+            setModalOpen(false);
         } catch (error) {
             console.error("Error adding students:", error);
         }
@@ -76,7 +76,7 @@ function GroupDetails({ actions, store }) {
             setWarningMessage('Debes tener al menos dos estudiantes en el grupo');
             setTimeout(() => {
                 setWarningMessage('');
-            }, 5000); 
+            }, 5000);
             return;
         }
 
@@ -135,7 +135,6 @@ function GroupDetails({ actions, store }) {
 
             <div className="px-10">
                 <div className="flex flex-col h-full">
-                    {/* Breadcrumbs */}
                     <div className="px-6 py-3 flex items-center space-x-2 text-sm text-gray-600 border-b">
                         <BreadCrumbs items={breadcrumbItems} />
                     </div>
@@ -148,25 +147,22 @@ function GroupDetails({ actions, store }) {
 
                 {group ? (
                     <div className="space-y-8">
-                        {/* Tarjeta de grupo */}
-                        <div className="bg-gradient-to-r from-teal-600 via-cyan-600 to-cyan-500 p-6 rounded-lg shadow-lg">
+                        <div className="bg-gradient-to-r from-gray-300 via-gray-300 to-gray-200 p-6 rounded-lg shadow-lg">
                             <div className="flex items-center space-x-4">
-                                <FaUsers className="text-4xl text-white" />
+                                <FaUsers className="text-4xl text-black" />
                                 <div>
-                                    <h2 className="text-3xl font-semibold text-white">{group.nombre}</h2>
-                                    <p className="mt-2 text-lg text-white">{group.nro_estudiantes} Estudiantes</p>
+                                    <h2 className="text-3xl font-semibold text-black">{group.nombre}</h2>
+                                    {/* <p className="mt-2 text-lg text-black">{group.nro_estudiantes} Estudiantes</p> */}
                                 </div>
                             </div>
                         </div>
 
-                        {/* Mostrar el mensaje de advertencia */}
                         {warningMessage && (
                             <div className="bg-red-500 text-white p-4 rounded-md mt-4 text-center">
                                 {warningMessage}
                             </div>
                         )}
 
-                        {/* Estudiantes */}
                         <div className="bg-gray-100 p-6 rounded-lg shadow-md">
                             <h3 className="text-xl font-semibold text-gray-800 flex items-center space-x-2">
                                 <FaUserGraduate className="text-2xl text-blue-600" />
@@ -193,12 +189,11 @@ function GroupDetails({ actions, store }) {
                             </ul>
                         </div>
 
-                        {/* Botón para abrir el modal */}
                         <div className="mt-6 text-center">
                             <button
                                 onClick={() => {
                                     setModalOpen(true);
-                                    setSelectedStudents([]); // Limpiar la selección al abrir el modal
+                                    setSelectedStudents([]); 
                                 }}
                                 className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all text-sm"
                             >
@@ -206,11 +201,9 @@ function GroupDetails({ actions, store }) {
                             </button>
                         </div>
 
-                        {/* Modal para seleccionar estudiantes */}
                         {modalOpen && (
                             <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out">
                                 <div className="bg-white w-full max-w-4xl p-8 rounded-lg shadow-lg relative">
-                                    {/* Botón X para cerrar el modal */}
                                     <button
                                         onClick={() => setModalOpen(false)}
                                         className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-2xl"
@@ -220,7 +213,6 @@ function GroupDetails({ actions, store }) {
 
                                     <h2 className="text-xl font-semibold text-gray-800 mb-6">Seleccionar Estudiantes</h2>
                                     <div className="space-y-4">
-                                        {/* Lista de estudiantes disponibles */}
                                         <ul className="space-y-3">
                                             {availableStudents.map((student) => (
                                                 <li
@@ -229,7 +221,10 @@ function GroupDetails({ actions, store }) {
                                                     onClick={() => handleToggleSelectStudent(student.id)}
                                                 >
                                                     <div>{student.nombres} {student.apellidos}</div>
-                                                    <div className="text-sm">{selectedStudents.includes(student.id) ? 'Seleccionado' : 'Seleccionar'}</div>
+                                                    {/* <div className="text-sm bg-green-500 text-white px-2 py-1 rounded">{selectedStudents.includes(student.id) ? 'Seleccionado' : 'Seleccionar'}</div> */}
+                                                    <div className={`text-sm px-2 py-1 rounded ${selectedStudents.includes(student.id) ? 'bg-blue-500 text-white' : 'bg-green-500 text-white'}`}>
+                                                        {selectedStudents.includes(student.id) ? 'Seleccionado' : 'Seleccionar'}
+                                                    </div>
                                                 </li>
                                             ))}
                                         </ul>
