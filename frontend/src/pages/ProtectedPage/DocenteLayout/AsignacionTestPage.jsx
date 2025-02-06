@@ -75,14 +75,14 @@ function AsignacionTestPage({ actions, store }) {
     const fetchAsignacionTest = useCallback(async () => {
         setPending(true);
         try {
-            const data = await actions.getAllAsignacionTest();
+            const data = await actions.getAllAsignacionTestForAsignature(id);
             setDataTable(data);
         } catch (error) {
             console.error("Error al cargar los datos:", error);
         } finally {
             setPending(false);
         }
-    }, [actions]);
+    }, [actions, id]);
 
     useEffect(() => {
         fetchAsignacionTest();
@@ -119,23 +119,23 @@ function AsignacionTestPage({ actions, store }) {
             </div>
             <div className="flex-grow ml-16 mt-16 p-6 overflow-y-auto fixed top-0 left-0 right-0 bottom-0 bg-base-200">
                 <div className="flex flex-col h-full">
-                    <div className="px-6 py-3 flex items-center space-x-2 text-sm text-gray-600 border-b">
+                    <div className="px-6 py-3 flex items-center space-x-2 text-sm text-white border-b">
                         <BreadCrumbs items={breadcrumbItems} />
                     </div>
-                    <div className="relative w-full h-40 p-6 rounded-md shadow-md">
-                        <div
+                    <div className="relative w-full h-40 p-6 rounded-md shadow-md bg-white">
+                        {/* <div
                             className="absolute inset-0 bg-cover bg-center"
                             style={{
-                                backgroundImage: `url('/src/util/imgs/Background-test.png')`,
+                                // backgroundImage: `url('/src/util/imgs/Background-test.png')`,
                                 filter: "opacity(0.2)",
                                 zIndex: -1,
                             }}
-                        ></div>
-                        <h1 className="text-3xl font-bold text-sky-700">
+                        ></div> */}
+                        <h1 className="text-3xl font-semibold text-black">
                             Asignación de Test
                         </h1>
                         <div className="flex items-center mt-4">
-                            <p className="text-sm font-semibold text-sky-600 mt-2">
+                            <p className="text-sm text-black mt-2">
                                 Crear, editar, eliminar y listar asignaciones de
                                 tests
                             </p>

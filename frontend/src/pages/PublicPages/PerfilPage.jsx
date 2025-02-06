@@ -73,34 +73,34 @@ function PerfilPage({ actions, store }) {
     }
 
     return (
-        <div className="max-w-7xl mx-auto p-6 bg-gradient-to-r from-white to-white rounded-lg shadow-lg">
+        <div className="max-w-7xl mx-auto p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg shadow-lg">
             <div className={`grid ${asignaturasEstudiante.length > 0 ? 'grid-cols-2' : 'grid-cols-1'} gap-8`}>
                 {/* Información del Usuario */}
-                <div className={`bg-gradient-to-br from-white via-gray-50 to-gray-100 p-8 rounded-lg shadow-2xl relative max-h-[500px] overflow-hidden ${asignaturasEstudiante.length === 0 ? 'mx-auto' : ''}`}>
-                    <div className="absolute -top-4 -left-6 w-24 h-24 bg-violet-200 rounded-full opacity-30"></div>
-                    <div className="absolute -bottom-6 -right-8 w-32 h-32 bg-violet-300 rounded-full opacity-30"></div>
-                    <h2 className="text-3xl font-bold text-center text-indigo-400 mb-6">
+                <div className={`bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 p-8 rounded-lg shadow-2xl relative max-h-[500px] overflow-hidden ${asignaturasEstudiante.length === 0 ? 'mx-auto' : ''}`}>
+                    <div className="absolute -top-4 -left-6 w-24 h-24 bg-gray-300 rounded-full opacity-20"></div>
+                    <div className="absolute -bottom-6 -right-8 w-32 h-32 bg-gray-400 rounded-full opacity-20"></div>
+                    <h2 className="text-3xl font-bold text-center text-gray-700 mb-6">
                         Información del Usuario
                     </h2>
                     <div className="space-y-6">
                         <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
-                            <span className="font-semibold text-indigo-400">Nombres:</span>
+                            <span className="font-semibold text-gray-700">Nombres:</span>
                             <span className="text-gray-800">{userInfo.nombres}</span>
                         </div>
                         <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
-                            <span className="font-semibold text-indigo-400">Apellidos:</span>
+                            <span className="font-semibold text-gray-700">Apellidos:</span>
                             <span className="text-gray-800">{userInfo.apellidos}</span>
                         </div>
                         <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
-                            <span className="font-semibold text-indigo-400">Teléfono:</span>
+                            <span className="font-semibold text-gray-700">Teléfono:</span>
                             <span className="text-gray-800">{userInfo.telefono}</span>
                         </div>
                         <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
-                            <span className="font-semibold text-indigo-400">Cédula:</span>
+                            <span className="font-semibold text-gray-700">Cédula:</span>
                             <span className="text-gray-800">{userInfo.cedula}</span>
                         </div>
                         <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
-                            <span className="font-semibold text-indigo-400">Email:</span>
+                            <span className="font-semibold text-gray-700">Email:</span>
                             <span className="text-gray-800">{userInfo.email}</span>
                         </div>
                     </div>
@@ -108,10 +108,10 @@ function PerfilPage({ actions, store }) {
 
                 {/* Sección de Asignaturas (solo si hay asignaturas) */}
                 {asignaturasEstudiante.length > 0 && (
-                    <div className="bg-gradient-to-br from-white via-gray-50 to-gray-100 p-8 rounded-lg shadow-2xl relative overflow-hidden">
-                        <div className="absolute -top-4 -left-6 w-24 h-24 bg-blue-200 rounded-full opacity-30"></div>
-                        <div className="absolute -bottom-6 -right-8 w-32 h-32 bg-blue-300 rounded-full opacity-30"></div>
-                        <h3 className="text-3xl text-center font-bold text-indigo-400 mb-8">Mis Asignaturas</h3>
+                    <div className="bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 p-8 rounded-lg shadow-2xl relative overflow-hidden">
+                        <div className="absolute -top-4 -left-6 w-24 h-24 bg-gray-300 rounded-full opacity-20"></div>
+                        <div className="absolute -bottom-6 -right-8 w-32 h-32 bg-gray-400 rounded-full opacity-20"></div>
+                        <h3 className="text-3xl text-center font-bold text-gray-700 mb-8">Mis Asignaturas</h3>
                         <div className="space-y-6">
                             {asignaturasPaginaActual.map((asignatura) => {
                                 const fechaFin = new Date(asignatura.fecha_fin);
@@ -121,32 +121,32 @@ function PerfilPage({ actions, store }) {
                                 return (
                                     <div
                                         key={asignatura.id}
-                                        className={`bg-white p-6 rounded-lg shadow-lg border-l-4 ${isFinalizada ? 'border-red-400' : 'border-blue-400'}`}
+                                        className={`bg-white p-6 rounded-lg shadow-lg border-l-4 ${isFinalizada ? 'border-red-400' : 'border-gray-500'}`}
                                     >
-                                        <h4 className="text-xl font-bold text-indigo-400 mb-4 text-center">
+                                        <h4 className="text-xl font-bold text-gray-700 mb-4 text-center">
                                             {asignatura.nombre}
                                         </h4>
                                         <div
-                                            className={`bg-gradient-to-br ${isFinalizada ? 'from-violet-400 to-red-400' : 'from-violet-400 to-cyan-400'} p-4 rounded-md shadow-sm`}
+                                            className={`bg-gradient-to-br ${isFinalizada ? 'from-gray-200 to-gray-100' : 'from-gray-200 to-gray-100'} p-4 rounded-md shadow-sm`}
                                         >
                                             <ul className="space-y-3">
                                                 <li className="flex items-center justify-between">
-                                                    <span className="font-semibold text-white">Número de horas:</span>
-                                                    <span className="text-white font-semibold">{asignatura.nro_horas} horas</span>
+                                                    <span className="font-semibold text-gray-800">Número de horas:</span>
+                                                    <span className="text-gray-800 font-semibold">{asignatura.nro_horas} horas</span>
                                                 </li>
                                                 <li className="flex items-center justify-between">
-                                                    <span className="font-semibold text-white">Paralelo:</span>
-                                                    <span className="text-white font-semibold">{asignatura.paralelo}</span>
+                                                    <span className="font-semibold text-gray-800">Paralelo:</span>
+                                                    <span className="text-gray-800 font-semibold">{asignatura.paralelo}</span>
                                                 </li>
                                                 <li className="flex items-center justify-between">
-                                                    <span className="font-semibold text-white">Fecha de Inicio:</span>
-                                                    <span className="text-white font-semibold">
+                                                    <span className="font-semibold text-gray-800">Fecha de Inicio:</span>
+                                                    <span className="text-gray-800 font-semibold">
                                                         {new Date(asignatura.fecha_inicio).toLocaleDateString()}
                                                     </span>
                                                 </li>
                                                 <li className="flex items-center justify-between">
-                                                    <span className="font-semibold text-white">Fecha de Fin:</span>
-                                                    <span className="text-white font-semibold">
+                                                    <span className="font-semibold text-gray-800">Fecha de Fin:</span>
+                                                    <span className="text-gray-800 font-semibold">
                                                         {new Date(asignatura.fecha_fin).toLocaleDateString()}
                                                     </span>
                                                 </li>
@@ -154,7 +154,7 @@ function PerfilPage({ actions, store }) {
                                         </div>
 
                                         {isFinalizada && (
-                                            <div className="text-center text-red-500 font-semibold mt-4">
+                                            <div className="text-center text-red-400 font-semibold mt-4">
                                                 Finalizada
                                             </div>
                                         )}
@@ -169,7 +169,7 @@ function PerfilPage({ actions, store }) {
                                 <button
                                     onClick={() => handlePageChange(paginaActual - 1)}
                                     disabled={paginaActual === 1}
-                                    className="btn btn-sm btn-outline"
+                                    className="btn btn-sm btn-outline text-gray-600"
                                 >
                                     <ChevronLeft size={16} />
                                 </button>
@@ -181,7 +181,7 @@ function PerfilPage({ actions, store }) {
                                 <button
                                     onClick={() => handlePageChange(paginaActual + 1)}
                                     disabled={paginaActual === totalPages}
-                                    className="btn btn-sm btn-outline"
+                                    className="btn btn-sm btn-outline text-gray-600"
                                 >
                                     <ChevronRight size={16} />
                                 </button>

@@ -71,21 +71,17 @@ class CuentaControl:
             db.refresh(cuenta)  
             return cuenta
 
-    # def login(self, data):
-    #     with DatabaseEngine.get_session() as db:
-    #         cuenta = db.query(Cuenta).filter(Cuenta.username == data.username).first()
-    #         if not cuenta:
-    #             return None
-    #         if cuenta.password != data.password:
-    #         # if self.manejador_encriptado.verify(data.password, cuenta.password) == False:
-    #             return None
-    #         return cuenta
     def login(self, data):
         with DatabaseEngine.get_session() as db:
             cuenta = db.query(Cuenta).filter(Cuenta.username == data.username).first()
-            if not cuenta or cuenta.password != data.password:  # Combinamos las dos condiciones
+            if not cuenta:
+                return None
+            # if cuenta.password != data.password:
+            # if self.manejador_encriptado.verify(data.password, cuenta.password) == False:
+            if cuenta.password != data.password and self.manejador_encriptado.verify(data.password, cuenta.password) == False:
                 return None
             return cuenta
+
 
     def combinar_usuario_cuenta(self, cuenta):
         with DatabaseEngine.get_session() as db:

@@ -55,14 +55,14 @@ function GroupPage({ actions, store }) {
   const fetchGroups = useCallback(async () => {
     setPending(true);
     try {
-      const data = await actions.getAllGroups();
+      const data = await actions.getAllGroupsForAsignature(id);
       setDataTable(data); 
     } catch (error) {
       console.error("Error al cargar los datos:", error);
     } finally {
       setPending(false);
     }
-  }, [actions]);
+  }, [actions, id]);
 
   useEffect(() => {
     fetchGroups(); 
@@ -104,7 +104,7 @@ function GroupPage({ actions, store }) {
           <div className="px-6 py-3 flex items-center space-x-2 text-sm text-gray-600 border-b">
             <BreadCrumbs items={breadcrumbItems} />
           </div>
-          <div className="relative w-full h-40 p-6 rounded-md shadow-md">
+          <div className="relative w-full h-40 p-6 rounded-md shadow-md bg-white">
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{
@@ -113,11 +113,11 @@ function GroupPage({ actions, store }) {
                 zIndex: -1,
               }}
             ></div>
-            <h1 className="text-3xl font-bold text-sky-700">
+            <h1 className="text-3xl font-semibold text-black">
               Gestión de Grupos
             </h1>
             <div className="flex items-center mt-4">
-              <p className="text-sm font-semibold text-sky-600 mt-2">
+              <p className="text-sm text-black mt-2">
                 Crear, editar, eliminar y listar grupos
               </p>
               <div className="ml-auto">

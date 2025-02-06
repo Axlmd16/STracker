@@ -87,7 +87,7 @@
 
 
 /* PARA EL BOTNO PARA ABRIR FORMULARIO */
-.wave-button {
+/* .wave-button {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -131,7 +131,41 @@
 
 .wave-button:hover .button-content {
     transform: scale(1.05);
+} */
+
+.wave-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: #6891d8; 
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
+
+.wave-button:hover {
+    background-color: #547cc1; 
+}
+
+.button-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 1;
+}
+
+.icon {
+    margin-right: 0.5rem;
+}
+
+
 
 /* ESTILOS PARA BOTONES*/
 .btn-custom {

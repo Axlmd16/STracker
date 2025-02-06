@@ -70,7 +70,7 @@ class AsignacionTestController:
                 """)
                 result = db.execute(query, {'asignatura_id': asignatura_id}).fetchall()
                 
-                grupos = [{'grupo_id': row[0], 'nombre_grupo': row[1]} for row in result]
+                grupos = [{'id': row[0], 'nombre': row[1]} for row in result]
                 print(grupos)
                 return grupos
 
